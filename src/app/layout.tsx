@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Georama } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Navbar from "@/components/general/Navbar";
+import Navbar from "@/components/general/navbar/Navbar";
 
 const georama = Georama({
   variable: "--font-georama",
