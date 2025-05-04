@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Georama } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Navbar from "@/components/general/Navbar";
 
 const georama = Georama({
   variable: "--font-georama",
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(georama.className, "antialiased bg-primary")}>
+        <Navbar />
         {children}
       </body>
     </html>
