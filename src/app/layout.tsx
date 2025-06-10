@@ -20,11 +20,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className={cn(georama.className, "antialiased bg-primary")} lang="en">
-      <body>
-        <div className="container max-w-[85%] mx-auto h-full pt-12">
+    <html
+      className={cn(georama.className, "antialiased bg-primary h-full")}
+      lang="en"
+    >
+      <body className="h-full ">
+        <div className="h-full flex flex-col max-w-[85%] mx-auto pt-12">
           <Navbar />
-          {children}
+          <div className="flex-grow">{children}</div>
         </div>
       </body>
     </html>
