@@ -12,4 +12,5 @@
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-additional: var(--additional);
+  --container-box: 85%;
 }
