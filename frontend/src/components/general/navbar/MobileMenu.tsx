@@ -1,40 +1,96 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { FaBars, FaRegTimesCircle } from "react-icons/fa";
+import MobileLink from "./MobileLink";
+import { CartItem } from "@/types";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
-import { FaBars } from "react-icons/fa";
 
-export default function MobileMenu() {
+export default function MobileMenu({
+  mapLinks,
+}: {
+  mapLinks: Map<string, string>;
+}) {
   const [menuOn, setMenuOn] = useState<boolean>(false);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  const SwitchButton = () => (
-    <Button
-      variant="ghost"
-      className={
-        "flex xl:hidden justify-center items-center text-base z-[999999999]"
-      }
-      onClick={() => setMenuOn(!menuOn)}
-    >
-      Menu
-      <FaBars />
-    </Button>
-  );
-
+  useEffect(() => {
+    const stored = localStorage.getItem("cart");
+    if (stored) setCartItems(JSON.parse(stored));
+  }, []);
   return (
-    <div>
-      <SwitchButton />
-      <div
-        className={cn(
-          "w-screen h-screen backdrop-blur-lg absolute left-0 top-0 z-10 justify-center items-center transform transition-transform duration-500 ease-in-out",
-          menuOn ? "translate-x-0" : "translate-x-full",
-        )}
+    <div className="relative flex xl:hidden">
+      <Button
+        variant="ghost"
+        className="justify-center items-center text-base z-40 relative"
+        onClick={() => setMenuOn(!menuOn)}
       >
-        <div className="flex max-w-box w-full justify-end h-full">
-          <div className="h-30 flex items-center justify-center">
-            <SwitchButton />
-          </div>
+        Menu
+        <div className="flex items-center justify-center relative w-5 h-5 ">
+          <AnimatePresence mode="wait">
+            {!menuOn ? (
+              <motion.span
+                key="bars"
+                initial={{ opacity: 0, rotate: 90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: -90 }}
+                transition={{ duration: 0.3 }}
+              >
+                <FaBars />
+              </motion.span>
+            ) : (
+              <motion.span
+                key="times"
+                initial={{ opacity: 0, rotate: -90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: 90 }}
+                transition={{ duration: 0.3 }}
+              >
+                <FaRegTimesCircle />
+              </motion.span>
+            )}
+          </AnimatePresence>
         </div>
-      </div>
+      </Button>
+      <AnimatePresence>
+        {menuOn && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.1 }}
+            className="flex justify-center  fixed top-0 left-0 w-screen h-screen backdrop-blur-lg z-10 py-20"
+          >
+            <div className="flex items-start flex-col max-w-box w-full text-xl my-5">
+              {Array.from(mapLinks).map(([href, content]) => (
+                <MobileLink
+                  key={href}
+                  href={href}
+                  content={content}
+                  setMenuOn={setMenuOn}
+                />
+              ))}
+              <div className="flex flex-row items-center justify-center">
+                <MobileLink
+                  href="/cart"
+                  content="Koszyk"
+                  setMenuOn={setMenuOn}
+                />
+
+                <div
+                  className={cn(
+                    "rounded-full bg-primary text-md w-[25px] h-[25px] flex items-center justify-center ",
+                    cartItems.length == 0 ? "hidden" : "",
+                  )}
+                >
+                  {cartItems.length}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

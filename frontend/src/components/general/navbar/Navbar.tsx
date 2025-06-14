@@ -17,7 +17,7 @@ export default function Navbar() {
     <div className="flex justify-center items-center h-30">
       <div className="flex items-center justify-between w-full max-w-box">
         <div className="flex items-center ">
-          <Link className="flex justify-center items-center" href="/">
+          <Link className="flex justify-center items-center z-50" href="/">
             <Image src={logo} alt="Logo" width={170} height={50} />
           </Link>
           <NavbarLinks mapLinks={mapLinks} />
