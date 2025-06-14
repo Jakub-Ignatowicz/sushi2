@@ -29,10 +29,10 @@ namespace SushiZume.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("ApartamentNumber")
+                    b.Property<string>("ApartmentNumber")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("apartamentNumber");
+                        .HasColumnName("apartmentNumber");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -113,8 +113,9 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("notesForOrder");
 
-                    b.Property<int>("PaymentMethod")
-                        .HasColumnType("integer")
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("paymentMethod");
 
                     b.Property<int>("PeopleCount")

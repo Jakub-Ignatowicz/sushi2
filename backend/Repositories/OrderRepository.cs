@@ -6,29 +6,47 @@ using Microsoft.EntityFrameworkCore;
 
 public class OrderRepository(SushiContext context) : Repository<Order>(context), IOrderRepository
 {
-    public Task<List<Order>> GetNewOrdersAsync()
-    {
-        return _context.Orders.Where(o => o.IsNew).ToListAsync();
-    }
-
-    public async Task<List<Order>> GetOrdersAsync(int skip, int pageSize)
-    {
-        return await _context.Orders
+    protected override IQueryable<Order> DefaultQuery =>
+        base.DefaultQuery
             .Include(o => o.OrderProducts)
             .ThenInclude(op => op.Product)
+            .ThenInclude(p => p.Items)
+            .Include(p => p.Address);
+
+    public new async Task<List<Order>> GetAllAsync()
+    {
+        return await DefaultQuery
+            .ToListAsync();
+    }
+
+    public async Task<List<Order>> GetAllNewAsync()
+    {
+        return await DefaultQuery
+            .Where(o => o.IsNew)
+            .ToListAsync();
+    }
+
+    public async Task<List<Order>> GetWithPaginationAsync(int skip, int pageSize)
+    {
+        return await DefaultQuery
             .OrderByDescending(o => o.CreatedAt)
             .Skip(skip)
             .Take(pageSize)
             .ToListAsync();
     }
 
-    public async Task<int> GetOrderCountAsync()
+
+    public async Task<bool> MarkAsDoneAsync(Guid id)
     {
-        return await _context.Orders.CountAsync();
+        return await context.Orders
+            .Where(o => o.Id == id)
+            .ExecuteUpdateAsync(o => o.SetProperty(x => x.IsDone, true)) > 0;
     }
 
-    public void MarkAsNotNew(Order order)
+    public async Task<bool> MarkAsNotNew(Order order)
     {
-        _context.Orders.Update(order);
+        return await context.Orders
+            .Where(o => o.Id == order.Id)
+            .ExecuteUpdateAsync(o => o.SetProperty(x => x.IsNew, false)) > 0;
     }
 }

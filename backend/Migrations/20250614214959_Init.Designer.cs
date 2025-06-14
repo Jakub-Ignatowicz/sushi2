@@ -12,8 +12,8 @@ using SushiZume.Data;
 namespace SushiZume.Migrations
 {
     [DbContext(typeof(SushiContext))]
-    [Migration("20250614190247_Init2")]
-    partial class Init2
+    [Migration("20250614214959_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,10 +32,10 @@ namespace SushiZume.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("ApartamentNumber")
+                    b.Property<string>("ApartmentNumber")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("apartamentNumber");
+                        .HasColumnName("apartmentNumber");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -116,8 +116,9 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("notesForOrder");
 
-                    b.Property<int>("PaymentMethod")
-                        .HasColumnType("integer")
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("paymentMethod");
 
                     b.Property<int>("PeopleCount")

@@ -12,9 +12,9 @@ public class OrderProduct
     public int Quantity { get; set; }
 
     [Column("orderId")] public Guid OrderId { get; set; }
-    [ForeignKey(nameof(OrderId))] public Order Order { get; set; }
+    public Order Order { get; set; }
     [Column("productId")] public Guid ProductId { get; set; }
-    [ForeignKey(nameof(ProductId))] public Product Product { get; set; }
+    public Product Product { get; set; }
 }
 
 public class OrderProductConfiguration : IEntityTypeConfiguration<OrderProduct>
