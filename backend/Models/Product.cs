@@ -18,9 +18,10 @@ public class Product
     [Column("visible")] public bool IsVisible { get; set; }
     [Column("imagePath")] public string ImagePath { get; set; }
     [Column("amount")] public double Amount { get; set; }
+
     [Column("amountName")] public string AmountUnit { get; set; }
-    [Column("categoryId")] public Guid CategoryId { get; set; }
-    [ForeignKey(nameof(CategoryId))] public Category Category { get; set; }
-    public List<OrderProduct> OrderProducts { get; set; }
-    public List<ProductItem> ProductItems { get; set; }
+
+    public List<ProductCategory> Categories { get; set; } = [];
+    public List<OrderProduct> OrderProducts { get; set; } = [];
+    public List<ProductItem> Items { get; set; } = [];
 }

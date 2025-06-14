@@ -30,5 +30,5 @@ public class Order
     [Column("notesForOrder")] public string Notes { get; set; }
     [Required, Column("addressId")] public Guid AddressId { get; set; }
     [ForeignKey(nameof(AddressId))] public Address Address { get; set; }
-    public List<OrderProduct> OrderProducts { get; set; }
+    public List<OrderProduct> OrderProducts { get; set; } = [];
 }

@@ -1,7 +1,7 @@
 namespace SushiZume.DTOs;
 
 public record ProductDto(
-    string Id,
+    Guid Id,
     string Name,
     decimal Price,
     bool IsAvailable,
@@ -9,5 +9,5 @@ public record ProductDto(
     string ImagePath,
     double Amount,
     string AmountUnit,
-    List<ProductItemDto> ProductItems
+    List<ProductItemDto> Items
 );

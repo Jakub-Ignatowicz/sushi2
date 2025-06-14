@@ -26,6 +26,10 @@ public class ProductService(IProductRepository productRepo, IMapper mapper) : IP
     public async Task<Product> AddProductAsync(ProductPostDto dto)
     {
         var product = mapper.Map<Product>(dto);
+
+        if (product.Categories.Count == 0)
+            throw new ArgumentException("Produkt musi mieć co najmniej jedną kategorię.");
+
         await productRepo.AddAsync(product);
         await productRepo.SaveChangesAsync();
         return product;

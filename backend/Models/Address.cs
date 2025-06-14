@@ -25,5 +25,5 @@ public class Address
 
     [Column("floor")] public int? Floor { get; set; }
 
-    public List<Order> Orders { get; set; }
+    public List<Order> Orders { get; set; } = [];
 }

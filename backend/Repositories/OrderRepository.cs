@@ -14,6 +14,8 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
     public async Task<List<Order>> GetOrdersAsync(int skip, int pageSize)
     {
         return await _context.Orders
+            .Include(o => o.OrderProducts)
+            .ThenInclude(op => op.Product)
             .OrderByDescending(o => o.CreatedAt)
             .Skip(skip)
             .Take(pageSize)

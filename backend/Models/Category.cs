@@ -11,5 +11,5 @@ public class Category
     [Required, MinLength(1), Column("name")]
     public string Name { get; set; } = string.Empty;
 
-    public List<Product> Products { get; set; }
+    public List<ProductCategory> Products { get; set; } = [];
 }

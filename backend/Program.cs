@@ -44,7 +44,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Middleware
-app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+// app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.MapControllers();
 // app.UseHttpsRedirection();
