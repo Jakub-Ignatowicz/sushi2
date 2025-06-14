@@ -1,6 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { CartItem } from "@/types";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaShoppingBasket } from "react-icons/fa";
 
@@ -13,17 +14,20 @@ export default function ShoppingCart() {
   }, []);
 
   return (
-    <div className="relative border-2 w-[50px] h-[50px] flex items-center justify-center rounded-full">
-      <FaShoppingBasket size={28} />
+    <Link
+      href="/cart"
+      className="hidden xl:flex relative  w-[50px] h-[50px] items-center justify-center rounded-full cursor-pointer"
+    >
+      <FaShoppingBasket size={32} />
 
       <div
         className={cn(
-          "absolute top-0 right-0 rounded-full bg-additional text-sm w-[20px] h-[20px] flex items-center justify-center translate-x-1/4 -translate-y-1/4",
+          "absolute top-1 right-1 rounded-full bg-primary text-sm w-[20px] h-[20px] flex items-center justify-center translate-x-1/4 -translate-y-1/4",
           cartItems.length == 0 ? "hidden" : "",
         )}
       >
         {cartItems.length}
       </div>
-    </div>
+    </Link>
   );
 }
