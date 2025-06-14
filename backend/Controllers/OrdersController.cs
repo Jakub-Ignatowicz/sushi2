@@ -16,6 +16,13 @@ public class OrdersController(IOrderService orderService) : ControllerBase
         return Ok(orders);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetOrderById(Guid id)
+    {
+        var order = await orderService.GetOrderByIdAsync(id);
+        return Ok(order);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateOrder([FromBody] OrderPostDto dto)
     {
@@ -30,8 +37,8 @@ public class OrdersController(IOrderService orderService) : ControllerBase
         return Ok(count);
     }
 
-    [HttpGet("{id}/seen")]
-    public async Task<IActionResult> MarkAsSeen(string id)
+    [HttpPost("{id}/seen")]
+    public async Task<IActionResult> MarkAsSeen(Guid id)
     {
         var order = await orderService.MarkAsNotNewAsync(id);
         return Ok(order);

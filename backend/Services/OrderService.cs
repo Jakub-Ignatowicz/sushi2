@@ -19,11 +19,6 @@ public class OrderService(IOrderRepository orderRepo, IMapper mapper) : IOrderSe
         return orderRepo.GetNewOrdersAsync();
     }
 
-    public Task<Order?> GetOrderByIdAsync(string id)
-    {
-        return orderRepo.GetByIdAsync(id);
-    }
-
     public async Task<Order> CreateOrderAsync(OrderPostDto dto)
     {
         var order = mapper.Map<Order>(dto);
@@ -32,10 +27,17 @@ public class OrderService(IOrderRepository orderRepo, IMapper mapper) : IOrderSe
         return order;
     }
 
-    public async Task<bool> MarkAsDoneAsync(string id)
+    public async Task<Order> GetOrderByIdAsync(Guid id)
     {
         var order = await orderRepo.GetByIdAsync(id);
-        if (order == null) return false;
+        if (order == null)
+            throw new KeyNotFoundException($"Order with ID {id} not found.");
+        return order;
+    }
+
+    public async Task<bool> MarkAsDoneAsync(Guid id)
+    {
+        var order = await GetOrderByIdAsync(id);
 
         order.IsDone = true;
         orderRepo.Update(order);
@@ -44,7 +46,7 @@ public class OrderService(IOrderRepository orderRepo, IMapper mapper) : IOrderSe
         return true;
     }
 
-    public async Task<bool> MarkAsNotNewAsync(string id)
+    public async Task<bool> MarkAsNotNewAsync(Guid id)
     {
         var order = await orderRepo.GetByIdAsync(id);
         if (order == null) return false;

@@ -13,7 +13,7 @@ public class ProductService(IProductRepository productRepo, IMapper mapper) : IP
         return await productRepo.GetAllProductsAsync();
     }
 
-    public Task<Product?> GetProductByIdAsync(string id)
+    public Task<Product> GetProductByIdAsync(Guid id)
     {
         throw new NotImplementedException();
     }
