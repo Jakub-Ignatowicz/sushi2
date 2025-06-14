@@ -10,19 +10,24 @@ public class Address
 {
     [Column("id")] public Guid Id { get; init; } = Guid.NewGuid();
 
-    [Required, MinLength(1), Column("city")]
+    [Column("city")]
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Miasto jest wymagane.")]
     public string City { get; set; } = string.Empty;
 
-    [Required, MinLength(1), Column("district")]
+    [Column("district")]
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Dzielnica jest wymagana.")]
     public string District { get; set; } = string.Empty;
 
-    [Required, MinLength(1), Column("street")]
+    [Column("street")]
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Ulica jest wymagana.")]
     public string Street { get; set; } = string.Empty;
 
-    [Required, MinLength(1), Column("homeNumber")]
+    [Column("homeNumber")]
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Numer domu jest wymagany.")]
     public string HomeNumber { get; set; } = string.Empty;
 
-    [Required, MinLength(1), Column("apartmentNumber")]
+    [Column("apartmentNumber")]
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Numer mieszkania jest wymagany.")]
     public string ApartmentNumber { get; set; } = string.Empty;
 
     [Column("floor")] public int? Floor { get; set; }

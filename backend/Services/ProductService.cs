@@ -22,6 +22,11 @@ public class ProductService(IProductRepository productRepo, IMapper mapper, ICat
         return await productRepo.GetAllAsync();
     }
 
+    public async Task<List<Product>> GetAllAvailableAsync()
+    {
+        return await productRepo.GetAllAvailableAsync();
+    }
+
 
     public async Task<Product> AddAsync(ProductPostDto dto)
     {

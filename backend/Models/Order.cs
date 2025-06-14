@@ -16,13 +16,16 @@ public class Order
 {
     [Column("id")] public Guid Id { get; init; } = Guid.NewGuid();
 
-    [Required, MinLength(1), Column("email")]
+    [Required, Column("email")]
+    [EmailAddress(ErrorMessage = "E-mail jest nieprawidłowy.")]
     public string Email { get; set; } = string.Empty;
 
-    [Required, MinLength(1), Column("phone")]
+    [Required, Column("phone")]
+    [RegularExpression(@"^\d{9}$", ErrorMessage = "Numer telefonu musi składać się z 9 cyfr.")]
     public string PhoneNumber { get; set; } = string.Empty;
 
-    [Range(1, int.MaxValue), Column("peopleCount")]
+    [Range(1, int.MaxValue, ErrorMessage = "Liczba osób musi być większa niż 0.")]
+    [Column("peopleCount")]
     public int PeopleCount { get; set; }
 
     [Required, Column("paymentMethod")] public OrderPaymentMethod PaymentMethod { get; set; }

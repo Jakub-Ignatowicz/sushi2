@@ -4,4 +4,5 @@ namespace SushiZume.Repositories.Interfaces;
 
 public interface IProductRepository : IRepository<Product>
 {
+    Task<List<Product>> GetAllAvailableAsync();
 }

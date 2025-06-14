@@ -12,21 +12,21 @@ using Microsoft.AspNetCore.Mvc;
 public class OrdersController(IOrderService orderService, IMapper mapper) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetOrdersWithPagination(int page = 1, int pageSize = 10)
+    public async Task<ActionResult<List<OrderDto>>> GetOrdersWithPagination(int page = 1, int pageSize = 10)
     {
         var orders = await orderService.GetWithPaginationAsync(page, pageSize);
         return Ok(mapper.Map<List<OrderDto>>(orders));
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetOrderById(Guid id)
+    public async Task<ActionResult<OrderDto>> GetOrderById(Guid id)
     {
         var order = await orderService.GetByIdAsync(id);
         return Ok(mapper.Map<OrderDto>(order));
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOrder([FromBody] OrderPostDto dto)
+    public async Task<ActionResult<OrderDto>> CreateOrder([FromBody] OrderPostDto dto)
     {
         var createdOrder = await orderService.AddAsync(dto);
 
@@ -35,14 +35,14 @@ public class OrdersController(IOrderService orderService, IMapper mapper) : Cont
     }
 
     [HttpGet("count")]
-    public async Task<IActionResult> GetOrderCount()
+    public async Task<ActionResult<int>> GetOrderCount()
     {
         var count = await orderService.GetCountAsync();
         return Ok(count);
     }
 
     [HttpPost("{id}/seen")]
-    public async Task<IActionResult> MarkAsSeen(Guid id)
+    public async Task<ActionResult<bool>> MarkAsSeen(Guid id)
     {
         var order = await orderService.MarkAsNotNewAsync(id);
         return Ok(order);

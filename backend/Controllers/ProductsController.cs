@@ -16,8 +16,14 @@ public class ProductsController(IProductService productService, IMapper mapper) 
     public async Task<ActionResult<List<ProductDto>>> GetProducts()
     {
         var all = await productService.GetAllAsync();
-        var dtos = mapper.Map<List<ProductDto>>(all);
-        return Ok(dtos);
+        return Ok(mapper.Map<List<ProductDto>>(all));
+    }
+
+    [HttpGet("/available")]
+    public async Task<ActionResult<List<ProductDto>>> GetAvailableProducts()
+    {
+        var all = await productService.GetAllAvailableAsync();
+        return mapper.Map<List<ProductDto>>(all);
     }
 
     [HttpPost]

@@ -11,15 +11,10 @@ public class MappingProfile : Profile
         CreateMap<ProductCategory, CategoryDto>()
             .ConstructUsing(pc => new CategoryDto(pc.Category.Id, pc.Category.Name));
         CreateMap<Product, ProductDto>().ReverseMap();
-
         CreateMap<ProductItem, ProductItemDto>().ReverseMap();
-
         CreateMap<Order, OrderDto>().ReverseMap();
-
         CreateMap<OrderProduct, OrderDto_OrderProductDto>().ReverseMap();
-
         CreateMap<Address, AddressDto>().ReverseMap();
-
         CreateMap<Category, CategoryDto>().ReverseMap();
 
         // Post

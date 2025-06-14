@@ -8,18 +8,23 @@ namespace SushiZume.Models;
 [Table("Product")]
 public class Product
 {
-    [Key, Column("id")] public Guid Id { get; init; } = Guid.NewGuid();
+    [Column("id")] public Guid Id { get; init; } = Guid.NewGuid();
 
-    [Required, MinLength(1), Column("name")]
+    [Column("name")]
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Nazwa jest wymagana.")]
     public string Name { get; set; } = string.Empty;
 
-    [Range(0, double.MaxValue), Column("price")]
+    [Column("price")]
+    [Range(0.01, double.MaxValue, ErrorMessage = "Cena musi być większa niż 0.")]
     public double Price { get; set; }
 
-    [Column("available")] public bool IsAvailable { get; set; }
-    [Column("visible")] public bool IsVisible { get; set; }
+    [Column("available")] public bool IsAvailable { get; set; } = true;
+    [Column("visible")] public bool IsVisible { get; set; } = true;
     [Column("imagePath")] public string ImagePath { get; set; }
-    [Column("amount")] public double Amount { get; set; }
+
+    [Column("amount")]
+    [Range(0.01, double.MaxValue, ErrorMessage = "Ilość musi być większa niż 0.")]
+    public double Amount { get; set; }
 
     [Column("amountName")] public string AmountUnit { get; set; }
 
@@ -32,6 +37,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
+        builder.HasKey(p => p.Id);
+
         builder.HasMany(p => p.Categories)
             .WithOne(pc => pc.Product)
             .HasForeignKey(pc => pc.ProductId);

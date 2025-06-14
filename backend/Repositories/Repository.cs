@@ -1,5 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using SushiZume.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SushiZume.Data;
 
 namespace SushiZume.Repositories;
@@ -8,7 +10,6 @@ public class Repository<T> : IRepository<T> where T : class
 {
     private readonly SushiContext _context;
     private readonly DbSet<T> _dbSet;
-
     protected virtual IQueryable<T> DefaultQuery => _dbSet.AsQueryable();
 
     public Repository(SushiContext context)
@@ -28,7 +29,20 @@ public class Repository<T> : IRepository<T> where T : class
 
     public void Delete(T entity) => _dbSet.Remove(entity);
 
-    public Task SaveChangesAsync() => _context.SaveChangesAsync();
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var entries = _context.ChangeTracker.Entries()
+            .Where(e => e.State is EntityState.Added or EntityState.Modified);
+
+        foreach (var entry in entries)
+        {
+            var entity = entry.Entity;
+            var validationContext = new ValidationContext(entity);
+            Validator.ValidateObject(entity, validationContext, validateAllProperties: true);
+        }
+
+        return await _context.SaveChangesAsync(cancellationToken);
+    }
 
     public Task<int> GetCountAsync() => DefaultQuery.CountAsync();
 }

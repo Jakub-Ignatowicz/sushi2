@@ -8,9 +8,10 @@ namespace SushiZume.Models;
 [Table("Category")]
 public class Category
 {
-    [Column("id")] public Guid Id { get; set; } = Guid.NewGuid();
+    [Column("id")] public Guid Id { get; init; } = Guid.NewGuid();
 
-    [Required, MinLength(1), Column("name")]
+    [Column("name")]
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Nazwa kategorii jest wymagana.")]
     public string Name { get; set; } = string.Empty;
 
     public List<ProductCategory> Products { get; set; } = [];

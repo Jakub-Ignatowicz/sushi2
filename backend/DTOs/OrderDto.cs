@@ -10,6 +10,7 @@ public record OrderDto(
     string Email,
     string PhoneNumber,
     AddressDto Address,
+    int PeopleCount,
     bool IsDone,
     bool IsNew,
     string Notes,

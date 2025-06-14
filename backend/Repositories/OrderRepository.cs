@@ -43,10 +43,10 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
             .ExecuteUpdateAsync(o => o.SetProperty(x => x.IsDone, true)) > 0;
     }
 
-    public async Task<bool> MarkAsNotNew(Order order)
+    public async Task<bool> MarkAsNotNewAsync(Guid id)
     {
         return await context.Orders
-            .Where(o => o.Id == order.Id)
+            .Where(o => o.Id == id)
             .ExecuteUpdateAsync(o => o.SetProperty(x => x.IsNew, false)) > 0;
     }
 }
