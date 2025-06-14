@@ -1,8 +1,3 @@
-export type CartItem = {
-  id: number;
-  amount: number;
-};
-
 export type Product = {
   id: string;
   name: string;
