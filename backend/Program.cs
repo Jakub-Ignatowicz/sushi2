@@ -1,6 +1,7 @@
 using SushiZume.Data;
 using Microsoft.EntityFrameworkCore;
 using SushiZume.Mapping;
+using SushiZume.Middleware;
 using SushiZume.Repositories;
 using SushiZume.Repositories.Interfaces;
 using SushiZume.Services;
@@ -41,6 +42,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Middleware
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.MapControllers();
 // app.UseHttpsRedirection();

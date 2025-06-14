@@ -47,7 +47,7 @@ namespace SushiZume.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
                     phone = table.Column<string>(type: "text", nullable: false),
-                    peopleNumber = table.Column<int>(type: "integer", nullable: false),
+                    peopleCount = table.Column<int>(type: "integer", nullable: false),
                     paymentMethod = table.Column<string>(type: "text", nullable: false),
                     @new = table.Column<bool>(name: "new", type: "boolean", nullable: false),
                     done = table.Column<bool>(type: "boolean", nullable: false),

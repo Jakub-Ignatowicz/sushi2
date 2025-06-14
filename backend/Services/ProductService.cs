@@ -13,7 +13,7 @@ public class ProductService(IProductRepository productRepo, IMapper mapper) : IP
         return await productRepo.GetAllProductsAsync();
     }
 
-    public Task<Product?> GetProductByIdAsync(string id)
+    public Task<Product> GetProductByIdAsync(Guid id)
     {
         throw new NotImplementedException();
     }
@@ -27,6 +27,7 @@ public class ProductService(IProductRepository productRepo, IMapper mapper) : IP
     {
         var product = mapper.Map<Product>(dto);
         await productRepo.AddAsync(product);
+        await productRepo.SaveChangesAsync();
         return product;
     }
 

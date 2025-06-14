@@ -1,3 +1,4 @@
+using SushiZume.DTOs;
 using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Controllers;
@@ -15,6 +16,20 @@ public class OrdersController(IOrderService orderService) : ControllerBase
         return Ok(orders);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetOrderById(Guid id)
+    {
+        var order = await orderService.GetOrderByIdAsync(id);
+        return Ok(order);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateOrder([FromBody] OrderPostDto dto)
+    {
+        var createdOrder = await orderService.CreateOrderAsync(dto);
+        return Ok(createdOrder);
+    }
+
     [HttpGet("count")]
     public async Task<IActionResult> GetOrderCount()
     {
@@ -22,8 +37,8 @@ public class OrdersController(IOrderService orderService) : ControllerBase
         return Ok(count);
     }
 
-    [HttpGet("{id}/seen")]
-    public async Task<IActionResult> MarkAsSeen(string id)
+    [HttpPost("{id}/seen")]
+    public async Task<IActionResult> MarkAsSeen(Guid id)
     {
         var order = await orderService.MarkAsNotNewAsync(id);
         return Ok(order);
