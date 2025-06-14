@@ -1,13 +1,14 @@
 using SushiZume.Models;
+using SushiZume.Repositories.Interfaces;
 using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Services;
 
-public class ProductService : IProductService
+public class ProductService(IProductRepository productRepo) : IProductService
 {
-    public Task<List<Product>> GetAllProductsAsync()
+    public async Task<List<Product>> GetAllProductsAsync()
     {
-        throw new NotImplementedException();
+        return await productRepo.GetAllProductsAsync();
     }
 
     public Task<Product?> GetProductByIdAsync(string id)

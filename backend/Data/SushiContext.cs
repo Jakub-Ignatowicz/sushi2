@@ -9,7 +9,8 @@ public class SushiContext(DbContextOptions<SushiContext> options) : DbContext(op
     public DbSet<Category> Categories { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderProduct> OrderProducts { get; set; }
-    public DbSet<Product?> Products { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<ProductItem> ProductItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
