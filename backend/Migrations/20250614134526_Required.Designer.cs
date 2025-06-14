@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SushiZume.Data;
@@ -11,9 +12,11 @@ using SushiZume.Data;
 namespace SushiZume.Migrations
 {
     [DbContext(typeof(SushiContext))]
-    partial class SushiContextModelSnapshot : ModelSnapshot
+    [Migration("20250614134526_Required")]
+    partial class Required
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,10 +220,10 @@ namespace SushiZume.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("number");
 
-                    b.Property<string>("NumberSuffix")
+                    b.Property<string>("NumberPostfix")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("numberSuffix");
+                        .HasColumnName("numberPostfix");
 
                     b.Property<string>("ProductId")
                         .IsRequired()

@@ -7,6 +7,9 @@ namespace SushiZume.Models;
 public class Category
 {
     [Key, Column("id")] public string Id { get; set; }
-    [Column("name")] public string Name { get; set; }
+
+    [Required, MinLength(1), Column("name")]
+    public string Name { get; set; } = string.Empty;
+
     public List<Product> Products { get; set; }
 }

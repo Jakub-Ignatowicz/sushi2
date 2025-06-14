@@ -7,8 +7,13 @@ namespace SushiZume.Models;
 public class Product
 {
     [Key, Column("id")] public string Id { get; set; }
-    [Required, Column("name")] public string Name { get; set; }
-    [Required, Column("price")] public int Price { get; set; }
+
+    [Required, MinLength(1), Column("name")]
+    public string Name { get; set; } = string.Empty;
+
+    [Range(0, double.MaxValue), Column("price")]
+    public double Price { get; set; }
+
     [Column("available")] public bool IsAvailable { get; set; }
     [Column("visible")] public bool IsVisible { get; set; }
     [Column("imagePath")] public string ImagePath { get; set; }
