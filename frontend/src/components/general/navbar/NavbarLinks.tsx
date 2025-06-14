@@ -1,7 +1,11 @@
 import { cn } from "@/lib/utils";
 import NavbarLink from "./NavbarLink";
 
-export default function NavbarLinks() {
+export default function NavbarLinks({
+  mapLinks,
+}: {
+  mapLinks: Map<string, string>;
+}) {
   return (
     <div
       className={cn(

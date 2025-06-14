@@ -6,6 +6,13 @@ import NavbarLinks from "./NavbarLinks";
 import MobileMenu from "./MobileMenu";
 
 export default function Navbar() {
+  const mapLinks = new Map<string, string>([
+    ["/", "Strona Główna"],
+    ["/order", "Zamów Online"],
+    ["/news", "Aktualności"],
+    ["/about", "O nas"],
+  ]);
+
   return (
     <div className="flex justify-center items-center h-30">
       <div className="flex items-center justify-between w-full max-w-box">
@@ -13,9 +20,9 @@ export default function Navbar() {
           <Link className="flex justify-center items-center" href="/">
             <Image src={logo} alt="Logo" width={170} height={50} />
           </Link>
-          <NavbarLinks />
+          <NavbarLinks mapLinks={mapLinks} />
         </div>
-        <MobileMenu />
+        <MobileMenu mapLinks={mapLinks} />
         <ShoppingCart />
       </div>
     </div>
