@@ -21,11 +21,12 @@ public class ProductsController(IProductService productService, IMapper mapper) 
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProductDto>> AddProductAsync(ProductDto productDto)
+    public async Task<ActionResult<ProductDto>> AddProductAsync(ProductPostDto dto)
     {
         // var product = mapper.Map<Product>(productDto);
         // await productService.AddProductAsync(product);
         // return CreatedAtAction(nameof(GetProductsAsync), new { id = product.Id }, mapper.Map<ProductDto>(product));
-        return Ok();
+        var product = await productService.AddProductAsync(dto);
+        return mapper.Map<ProductDto>(product);
     }
 }

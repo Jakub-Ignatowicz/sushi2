@@ -12,8 +12,8 @@ using SushiZume.Data;
 namespace SushiZume.Migrations
 {
     [DbContext(typeof(SushiContext))]
-    [Migration("20250614120655_AddProductItem")]
-    partial class AddProductItem
+    [Migration("20250614141720_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,8 +27,9 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.Address", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<string>("ApartamentNumber")
@@ -46,7 +47,7 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("district");
 
-                    b.Property<int>("Floor")
+                    b.Property<int?>("Floor")
                         .HasColumnType("integer")
                         .HasColumnName("floor");
 
@@ -67,8 +68,9 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.Category", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<string>("Name")
@@ -83,13 +85,13 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.Order", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("AddressId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uuid")
                         .HasColumnName("addressId");
 
                     b.Property<DateTime>("CreatedAt")
@@ -123,8 +125,9 @@ namespace SushiZume.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("peopleNumber");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("integer")
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("phone");
 
                     b.HasKey("Id");
@@ -136,12 +139,12 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.OrderProduct", b =>
                 {
-                    b.Property<string>("OrderId")
-                        .HasColumnType("text")
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid")
                         .HasColumnName("orderId");
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("text")
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
                         .HasColumnName("productId");
 
                     b.Property<int>("Quantity")
@@ -157,8 +160,9 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.Product", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<double>("Amount")
@@ -170,15 +174,9 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("amountName");
 
-                    b.Property<string>("CategoryId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
                         .HasColumnName("categoryId");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("description");
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
@@ -198,8 +196,8 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("integer")
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision")
                         .HasColumnName("price");
 
                     b.HasKey("Id");
@@ -211,8 +209,9 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.ProductItem", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<string>("Description")
@@ -224,14 +223,13 @@ namespace SushiZume.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("number");
 
-                    b.Property<string>("NumberPostfix")
+                    b.Property<string>("NumberSuffix")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("numberPostfix");
+                        .HasColumnName("numberSuffix");
 
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
                         .HasColumnName("productId");
 
                     b.HasKey("Id");

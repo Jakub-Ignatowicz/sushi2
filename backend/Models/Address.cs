@@ -6,7 +6,7 @@ namespace SushiZume.Models;
 [Table("Address")]
 public class Address
 {
-    [Key, Column("id")] public string Id { get; set; }
+    [Key, Column("id")] public Guid Id { get; set; } = Guid.NewGuid();
 
     [Required, MinLength(1), Column("city")]
     public string City { get; set; } = string.Empty;

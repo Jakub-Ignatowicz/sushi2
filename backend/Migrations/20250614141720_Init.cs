@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SushiZume.Migrations
 {
     /// <inheritdoc />
-    public partial class AddProductItem : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,13 +15,13 @@ namespace SushiZume.Migrations
                 name: "Address",
                 columns: table => new
                 {
-                    id = table.Column<string>(type: "text", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     city = table.Column<string>(type: "text", nullable: false),
                     district = table.Column<string>(type: "text", nullable: false),
                     street = table.Column<string>(type: "text", nullable: false),
                     homeNumber = table.Column<string>(type: "text", nullable: false),
                     apartamentNumber = table.Column<string>(type: "text", nullable: false),
-                    floor = table.Column<int>(type: "integer", nullable: false)
+                    floor = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -32,7 +32,7 @@ namespace SushiZume.Migrations
                 name: "Category",
                 columns: table => new
                 {
-                    id = table.Column<string>(type: "text", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -44,16 +44,16 @@ namespace SushiZume.Migrations
                 name: "Order",
                 columns: table => new
                 {
-                    id = table.Column<string>(type: "text", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
-                    phone = table.Column<int>(type: "integer", nullable: false),
+                    phone = table.Column<string>(type: "text", nullable: false),
                     peopleNumber = table.Column<int>(type: "integer", nullable: false),
                     paymentMethod = table.Column<string>(type: "text", nullable: false),
                     @new = table.Column<bool>(name: "new", type: "boolean", nullable: false),
                     done = table.Column<bool>(type: "boolean", nullable: false),
                     createdAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     notesForOrder = table.Column<string>(type: "text", nullable: false),
-                    addressId = table.Column<string>(type: "text", nullable: false)
+                    addressId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,16 +70,15 @@ namespace SushiZume.Migrations
                 name: "Product",
                 columns: table => new
                 {
-                    id = table.Column<string>(type: "text", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
-                    price = table.Column<int>(type: "integer", nullable: false),
+                    price = table.Column<double>(type: "double precision", nullable: false),
                     available = table.Column<bool>(type: "boolean", nullable: false),
                     visible = table.Column<bool>(type: "boolean", nullable: false),
                     imagePath = table.Column<string>(type: "text", nullable: false),
                     amount = table.Column<double>(type: "double precision", nullable: false),
                     amountName = table.Column<string>(type: "text", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
-                    categoryId = table.Column<string>(type: "text", nullable: false)
+                    categoryId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,8 +95,8 @@ namespace SushiZume.Migrations
                 name: "OrderProduct",
                 columns: table => new
                 {
-                    orderId = table.Column<string>(type: "text", nullable: false),
-                    productId = table.Column<string>(type: "text", nullable: false),
+                    orderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    productId = table.Column<Guid>(type: "uuid", nullable: false),
                     quantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -121,11 +120,11 @@ namespace SushiZume.Migrations
                 name: "ProductItem",
                 columns: table => new
                 {
-                    id = table.Column<string>(type: "text", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     number = table.Column<int>(type: "integer", nullable: false),
-                    numberPostfix = table.Column<string>(type: "text", nullable: false),
-                    productId = table.Column<string>(type: "text", nullable: false)
+                    numberSuffix = table.Column<string>(type: "text", nullable: false),
+                    productId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {

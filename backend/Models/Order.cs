@@ -12,7 +12,7 @@ public enum OrderPaymentMethod
 [Table("Order")]
 public class Order
 {
-    [Key, Column("id")] public string Id { get; set; }
+    [Key, Column("id")] public Guid Id { get; set; } = Guid.NewGuid();
 
     [Required, MinLength(1), Column("email")]
     public string Email { get; set; } = string.Empty;
@@ -28,7 +28,7 @@ public class Order
     [Column("done")] public bool IsDone { get; set; } = false;
     [Column("createdAt")] public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     [Column("notesForOrder")] public string Notes { get; set; }
-    [Required, Column("addressId")] public string AddressId { get; set; } = string.Empty;
+    [Required, Column("addressId")] public Guid AddressId { get; set; }
     [ForeignKey(nameof(AddressId))] public Address Address { get; set; }
     public List<OrderProduct> OrderProducts { get; set; }
 }

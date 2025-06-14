@@ -9,15 +9,14 @@ public static class DataInitializer
         if (context.Categories.Any()) return;
 
         // Categories
-        var pizzaCategory = new Category { Id = Guid.NewGuid().ToString(), Name = "Pizza" };
-        var drinksCategory = new Category { Id = Guid.NewGuid().ToString(), Name = "Drinks" };
+        var pizzaCategory = new Category { Id = Guid.NewGuid(), Name = "Pizza" };
+        var drinksCategory = new Category { Id = Guid.NewGuid(), Name = "Drinks" };
 
         context.Categories.AddRange(pizzaCategory, drinksCategory);
 
         // Products
         var margherita = new Product
         {
-            Id = Guid.NewGuid().ToString(),
             Name = "Margherita",
             Price = 25,
             IsAvailable = true,
@@ -30,7 +29,6 @@ public static class DataInitializer
 
         var cola = new Product
         {
-            Id = Guid.NewGuid().ToString(),
             Name = "Cola",
             Price = 5,
             IsAvailable = true,
@@ -47,7 +45,6 @@ public static class DataInitializer
         context.ProductItems.AddRange(
             new ProductItem
             {
-                Id = Guid.NewGuid().ToString(),
                 ProductId = margherita.Id,
                 Description = "Tomato sauce",
                 Number = 1,
@@ -55,7 +52,6 @@ public static class DataInitializer
             },
             new ProductItem
             {
-                Id = Guid.NewGuid().ToString(),
                 ProductId = margherita.Id,
                 Description = "Mozzarella",
                 Number = 2,
@@ -65,7 +61,6 @@ public static class DataInitializer
         // Addresses
         var address1 = new Address
         {
-            Id = Guid.NewGuid().ToString(),
             City = "New York",
             District = "Manhattan",
             Street = "5th Avenue",
@@ -79,7 +74,6 @@ public static class DataInitializer
         // Orders
         var order1 = new Order
         {
-            Id = Guid.NewGuid().ToString(),
             Email = "customer@example.com",
             PhoneNumber = "1234567890",
             PeopleNumber = 2,

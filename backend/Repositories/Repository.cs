@@ -4,7 +4,6 @@ using SushiZume.Data;
 
 namespace SushiZume.Repositories;
 
-
 public class Repository<T> : IRepository<T> where T : class
 {
     protected readonly SushiContext _context;
@@ -37,4 +36,3 @@ public class Repository<T> : IRepository<T> where T : class
 
     public Task SaveChangesAsync() => _context.SaveChangesAsync();
 }
-

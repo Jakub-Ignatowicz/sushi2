@@ -1,10 +1,12 @@
+using AutoMapper;
+using SushiZume.DTOs;
 using SushiZume.Models;
 using SushiZume.Repositories.Interfaces;
 using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Services;
 
-public class ProductService(IProductRepository productRepo) : IProductService
+public class ProductService(IProductRepository productRepo, IMapper mapper) : IProductService
 {
     public async Task<List<Product>> GetAllProductsAsync()
     {
@@ -21,9 +23,11 @@ public class ProductService(IProductRepository productRepo) : IProductService
         throw new NotImplementedException();
     }
 
-    public Task AddProductAsync(Product product)
+    public async Task<Product> AddProductAsync(ProductPostDto dto)
     {
-        throw new NotImplementedException();
+        var product = mapper.Map<Product>(dto);
+        await productRepo.AddAsync(product);
+        return product;
     }
 
     public void UpdateProduct(Product product)
