@@ -12,30 +12,32 @@ using Microsoft.AspNetCore.Mvc;
 public class OrdersController(IOrderService orderService, IMapper mapper) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetOrders(int page = 1, int pageSize = 10)
+    public async Task<IActionResult> GetOrdersWithPagination(int page = 1, int pageSize = 10)
     {
-        var orders = await orderService.GetOrdersAsync(page, pageSize);
+        var orders = await orderService.GetWithPaginationAsync(page, pageSize);
         return Ok(mapper.Map<List<OrderDto>>(orders));
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetOrderById(Guid id)
     {
-        var order = await orderService.GetOrderByIdAsync(id);
+        var order = await orderService.GetByIdAsync(id);
         return Ok(mapper.Map<OrderDto>(order));
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateOrder([FromBody] OrderPostDto dto)
     {
-        var createdOrder = await orderService.CreateOrderAsync(dto);
-        return Ok(mapper.Map<OrderDto>(createdOrder));
+        var createdOrder = await orderService.AddAsync(dto);
+
+        var fresh = await orderService.GetByIdAsync(createdOrder.Id);
+        return Ok(mapper.Map<OrderDto>(fresh));
     }
 
     [HttpGet("count")]
     public async Task<IActionResult> GetOrderCount()
     {
-        var count = await orderService.GetOrderCountAsync();
+        var count = await orderService.GetCountAsync();
         return Ok(count);
     }
 

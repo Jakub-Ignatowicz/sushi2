@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SushiZume.Migrations
 {
     /// <inheritdoc />
-    public partial class ManyCategories : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace SushiZume.Migrations
                     district = table.Column<string>(type: "text", nullable: false),
                     street = table.Column<string>(type: "text", nullable: false),
                     homeNumber = table.Column<string>(type: "text", nullable: false),
-                    apartamentNumber = table.Column<string>(type: "text", nullable: false),
+                    apartmentNumber = table.Column<string>(type: "text", nullable: false),
                     floor = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -81,7 +81,7 @@ namespace SushiZume.Migrations
                         column: x => x.addressId,
                         principalTable: "Address",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,7 +93,7 @@ namespace SushiZume.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductCategory", x => new { x.categoryId, x.productId });
+                    table.PrimaryKey("PK_ProductCategory", x => new { x.productId, x.categoryId });
                     table.ForeignKey(
                         name: "FK_ProductCategory_Category_categoryId",
                         column: x => x.categoryId,
@@ -165,9 +165,9 @@ namespace SushiZume.Migrations
                 column: "productId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductCategory_productId",
+                name: "IX_ProductCategory_categoryId",
                 table: "ProductCategory",
-                column: "productId");
+                column: "categoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductItem_productId",

@@ -6,8 +6,8 @@ public record OrderPostDto(
     string Email,
     string PhoneNumber,
     int PeopleCount,
-    string Note,
+    string Notes,
     OrderPaymentMethod PaymentMethod,
     AddressPostDto Address,
-    List<OrderProductPostDto> Products
+    List<OrderProductPostDto> OrderProducts
 );

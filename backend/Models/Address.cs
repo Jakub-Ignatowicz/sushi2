@@ -1,12 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SushiZume.Models;
 
 [Table("Address")]
 public class Address
 {
-    [Key, Column("id")] public Guid Id { get; set; } = Guid.NewGuid();
+    [Column("id")] public Guid Id { get; init; } = Guid.NewGuid();
 
     [Required, MinLength(1), Column("city")]
     public string City { get; set; } = string.Empty;
@@ -20,10 +22,23 @@ public class Address
     [Required, MinLength(1), Column("homeNumber")]
     public string HomeNumber { get; set; } = string.Empty;
 
-    [Required, MinLength(1), Column("apartamentNumber")]
-    public string ApartamentNumber { get; set; } = string.Empty;
+    [Required, MinLength(1), Column("apartmentNumber")]
+    public string ApartmentNumber { get; set; } = string.Empty;
 
     [Column("floor")] public int? Floor { get; set; }
 
     public List<Order> Orders { get; set; } = [];
+}
+
+public class AddressConfiguration : IEntityTypeConfiguration<Address>
+{
+    public void Configure(EntityTypeBuilder<Address> builder)
+    {
+        builder.HasKey(a => a.Id);
+
+        builder.HasMany(a => a.Orders)
+            .WithOne(o => o.Address)
+            .HasForeignKey(o => o.AddressId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
 }

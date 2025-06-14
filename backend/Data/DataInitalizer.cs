@@ -77,7 +77,7 @@ public static class DataInitializer
             District = "Manhattan",
             Street = "5th Avenue",
             HomeNumber = "123",
-            ApartamentNumber = "45B",
+            ApartmentNumber = "45B",
             Floor = 4
         };
 

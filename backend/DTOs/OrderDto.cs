@@ -1,6 +1,6 @@
 namespace SushiZume.DTOs;
 
-public record OrderDtoOrderProductDto(
+public record OrderDto_OrderProductDto(
     int Quantity,
     ProductDto Product
 );
@@ -14,5 +14,5 @@ public record OrderDto(
     bool IsNew,
     string Notes,
     DateTime CreatedAt,
-    List<OrderDtoOrderProductDto> OrderProducts
+    List<OrderDto_OrderProductDto> OrderProducts
 );

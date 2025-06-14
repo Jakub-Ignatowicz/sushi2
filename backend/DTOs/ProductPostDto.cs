@@ -6,5 +6,6 @@ public record ProductPostDto(
     string ImagePath,
     double Amount,
     string AmountUnit,
+    List<Guid> CategoryIds,
     List<ProductItemPostDto> ProductItems
 );

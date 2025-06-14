@@ -8,26 +8,23 @@ using SushiZume.Models;
 
 public class OrderService(IOrderRepository orderRepo, IMapper mapper) : IOrderService
 {
-    public Task<List<Order>> GetOrdersAsync(int page, int pageSize)
+    public async Task<List<Order>> GetWithPaginationAsync(int page, int pageSize)
     {
         var skip = (page - 1) * pageSize;
-        return orderRepo.GetOrdersAsync(skip, pageSize);
+        return await orderRepo.GetWithPaginationAsync(skip, pageSize);
     }
 
-    public Task<List<Order>> GetAllNewOrdersAsync()
-    {
-        return orderRepo.GetNewOrdersAsync();
-    }
-
-    public async Task<Order> CreateOrderAsync(OrderPostDto dto)
+    public async Task<Order> AddAsync(OrderPostDto dto)
     {
         var order = mapper.Map<Order>(dto);
+
         await orderRepo.AddAsync(order);
         await orderRepo.SaveChangesAsync();
+
         return order;
     }
 
-    public async Task<Order> GetOrderByIdAsync(Guid id)
+    public async Task<Order> GetByIdAsync(Guid id)
     {
         var order = await orderRepo.GetByIdAsync(id);
         if (order == null)
@@ -37,7 +34,7 @@ public class OrderService(IOrderRepository orderRepo, IMapper mapper) : IOrderSe
 
     public async Task<bool> MarkAsDoneAsync(Guid id)
     {
-        var order = await GetOrderByIdAsync(id);
+        var order = await GetByIdAsync(id);
 
         order.IsDone = true;
         orderRepo.Update(order);
@@ -58,8 +55,8 @@ public class OrderService(IOrderRepository orderRepo, IMapper mapper) : IOrderSe
         return true;
     }
 
-    public async Task<int> GetOrderCountAsync()
+    public async Task<int> GetCountAsync()
     {
-        return await orderRepo.GetOrderCountAsync();
+        return await orderRepo.GetCountAsync();
     }
 }

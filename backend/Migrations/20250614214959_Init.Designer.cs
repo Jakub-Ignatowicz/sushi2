@@ -12,8 +12,8 @@ using SushiZume.Data;
 namespace SushiZume.Migrations
 {
     [DbContext(typeof(SushiContext))]
-    [Migration("20250614174752_ManyCategories2")]
-    partial class ManyCategories2
+    [Migration("20250614214959_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,10 +32,10 @@ namespace SushiZume.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("ApartamentNumber")
+                    b.Property<string>("ApartmentNumber")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("apartamentNumber");
+                        .HasColumnName("apartmentNumber");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -203,17 +203,17 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.ProductCategory", b =>
                 {
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("categoryId");
-
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid")
                         .HasColumnName("productId");
 
-                    b.HasKey("CategoryId", "ProductId");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("categoryId");
 
-                    b.HasIndex("ProductId");
+                    b.HasKey("ProductId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("ProductCategory");
                 });
@@ -255,7 +255,7 @@ namespace SushiZume.Migrations
                     b.HasOne("SushiZume.Models.Address", "Address")
                         .WithMany("Orders")
                         .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Address");
@@ -282,17 +282,21 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.ProductCategory", b =>
                 {
-                    b.HasOne("SushiZume.Models.Category", null)
+                    b.HasOne("SushiZume.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SushiZume.Models.Product", null)
+                    b.HasOne("SushiZume.Models.Product", "Product")
                         .WithMany("Categories")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SushiZume.Models.ProductItem", b =>
