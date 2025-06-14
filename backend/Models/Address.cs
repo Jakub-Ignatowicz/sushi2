@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SushiZume.Models;
 
@@ -26,4 +28,17 @@ public class Address
     [Column("floor")] public int? Floor { get; set; }
 
     public List<Order> Orders { get; set; } = [];
+}
+
+public class AddressConfiguration : IEntityTypeConfiguration<Address>
+{
+    public void Configure(EntityTypeBuilder<Address> builder)
+    {
+        builder.HasKey(a => a.Id);
+
+        builder.HasMany(a => a.Orders)
+            .WithOne(o => o.Address)
+            .HasForeignKey(o => o.AddressId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
 }

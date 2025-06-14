@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SushiZume.Migrations
 {
     /// <inheritdoc />
-    public partial class ManyCategories : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -66,7 +66,7 @@ namespace SushiZume.Migrations
                     email = table.Column<string>(type: "text", nullable: false),
                     phone = table.Column<string>(type: "text", nullable: false),
                     peopleCount = table.Column<int>(type: "integer", nullable: false),
-                    paymentMethod = table.Column<string>(type: "text", nullable: false),
+                    paymentMethod = table.Column<int>(type: "integer", nullable: false),
                     @new = table.Column<bool>(name: "new", type: "boolean", nullable: false),
                     done = table.Column<bool>(type: "boolean", nullable: false),
                     createdAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -81,28 +81,28 @@ namespace SushiZume.Migrations
                         column: x => x.addressId,
                         principalTable: "Address",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ProductCategory",
                 columns: table => new
                 {
-                    productId = table.Column<Guid>(type: "uuid", nullable: false),
-                    categoryId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductCategory", x => new { x.categoryId, x.productId });
+                    table.PrimaryKey("PK_ProductCategory", x => new { x.ProductId, x.CategoryId });
                     table.ForeignKey(
-                        name: "FK_ProductCategory_Category_categoryId",
-                        column: x => x.categoryId,
+                        name: "categoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductCategory_Product_productId",
-                        column: x => x.productId,
+                        name: "productId",
+                        column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -116,14 +116,14 @@ namespace SushiZume.Migrations
                     description = table.Column<string>(type: "text", nullable: false),
                     number = table.Column<int>(type: "integer", nullable: false),
                     numberSuffix = table.Column<string>(type: "text", nullable: false),
-                    productId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductItem", x => x.id);
                     table.ForeignKey(
-                        name: "FK_ProductItem_Product_productId",
-                        column: x => x.productId,
+                        name: "productId",
+                        column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -165,14 +165,14 @@ namespace SushiZume.Migrations
                 column: "productId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductCategory_productId",
+                name: "IX_ProductCategory_CategoryId",
                 table: "ProductCategory",
-                column: "productId");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductItem_productId",
+                name: "IX_ProductItem_ProductId",
                 table: "ProductItem",
-                column: "productId");
+                column: "ProductId");
         }
 
         /// <inheritdoc />

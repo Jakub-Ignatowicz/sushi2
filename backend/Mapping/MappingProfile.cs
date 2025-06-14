@@ -8,6 +8,8 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        CreateMap<ProductCategory, CategoryDto>()
+            .ConstructUsing(pc => new CategoryDto(pc.Category.Id, pc.Category.Name));
         CreateMap<Product, ProductDto>().ReverseMap();
         CreateMap<Product, ProductPostDto>().ReverseMap();
 
@@ -22,5 +24,7 @@ public class MappingProfile : Profile
 
         CreateMap<Address, AddressPostDto>().ReverseMap();
         CreateMap<Address, AddressDto>().ReverseMap();
+
+        CreateMap<Category, CategoryDto>().ReverseMap();
     }
 }

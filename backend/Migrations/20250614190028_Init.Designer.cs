@@ -12,8 +12,8 @@ using SushiZume.Data;
 namespace SushiZume.Migrations
 {
     [DbContext(typeof(SushiContext))]
-    [Migration("20250614174037_ManyCategories")]
-    partial class ManyCategories
+    [Migration("20250614190028_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -116,9 +116,8 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("notesForOrder");
 
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("integer")
                         .HasColumnName("paymentMethod");
 
                     b.Property<int>("PeopleCount")
@@ -203,17 +202,15 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.ProductCategory", b =>
                 {
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("categoryId");
-
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("productId");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("CategoryId", "ProductId");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("ProductId");
+                    b.HasKey("ProductId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("ProductCategory");
                 });
@@ -240,8 +237,7 @@ namespace SushiZume.Migrations
                         .HasColumnName("numberSuffix");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("productId");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -255,7 +251,7 @@ namespace SushiZume.Migrations
                     b.HasOne("SushiZume.Models.Address", "Address")
                         .WithMany("Orders")
                         .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Address");
@@ -282,17 +278,23 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.ProductCategory", b =>
                 {
-                    b.HasOne("SushiZume.Models.Category", null)
+                    b.HasOne("SushiZume.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("categoryId");
 
-                    b.HasOne("SushiZume.Models.Product", null)
+                    b.HasOne("SushiZume.Models.Product", "Product")
                         .WithMany("Categories")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("productId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SushiZume.Models.ProductItem", b =>
@@ -301,7 +303,8 @@ namespace SushiZume.Migrations
                         .WithMany("Items")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("productId");
 
                     b.Navigation("Product");
                 });

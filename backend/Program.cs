@@ -21,6 +21,7 @@ builder.Services.AddDbContext<SushiContext>(options => options.UseNpgsql(connect
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 // Register services
 builder.Services.AddScoped<IOrderService, OrderService>();
@@ -49,6 +50,7 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 // app.UseHttpsRedirection();
 
+// Initialize database
 using var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<SushiContext>();
 await DataInitializer.SeedAsync(context);

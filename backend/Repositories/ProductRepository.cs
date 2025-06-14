@@ -17,6 +17,8 @@ public class ProductRepository(SushiContext context) : Repository<Product>(conte
     {
         return await _context.Products
             .Include(p => p.Items)
+            .Include(p => p.Categories)
+            .ThenInclude(pc => pc.Category)
             .ToListAsync();
     }
 
