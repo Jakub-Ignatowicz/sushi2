@@ -3,6 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SushiZume.Models;
 
+public enum OrderPaymentMethod
+{
+    Cash
+}
+
 [Table("Order")]
 public class Order
 {
@@ -10,10 +15,10 @@ public class Order
     [Column("email")] public string Email { get; set; }
     [Column("phone")] public int PhoneNumber { get; set; }
     [Column("peopleNumber")] public int PeopleNumber { get; set; }
-    [Column("paymentMethod")] public string PaymentMethod { get; set; }
-    [Column("new")] public bool IsNew { get; set; }
-    [Column("done")] public bool IsDone { get; set; }
-    [Column("createdAt")] public DateTime CreatedAt { get; set; }
+    [Column("paymentMethod")] public OrderPaymentMethod PaymentMethod { get; set; }
+    [Column("new")] public bool IsNew { get; set; } = true;
+    [Column("done")] public bool IsDone { get; set; } = false;
+    [Column("createdAt")] public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     [Column("notesForOrder")] public string Notes { get; set; }
     [Column("addressId")] public string AddressId { get; set; }
     [ForeignKey(nameof(AddressId))] public Address Address { get; set; }
