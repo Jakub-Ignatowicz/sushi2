@@ -1,14 +1,11 @@
-using SushiZume.Data;
-using SushiZume.Models;
-using SushiZume.Repositories;
+namespace SushiZume.Repositories;
+
+using Data;
+using Models;
 using Microsoft.EntityFrameworkCore;
 
-public class OrderRepository : Repository<Order>, IOrderRepository
+public class OrderRepository(SushiContext context) : Repository<Order>(context), IOrderRepository
 {
-    public OrderRepository(SushiContext context) : base(context)
-    {
-    }
-
     public Task<List<Order>> GetNewOrdersAsync()
     {
         return _context.Orders.Where(o => o.IsNew).ToListAsync();
