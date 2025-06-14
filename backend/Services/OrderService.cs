@@ -9,9 +9,10 @@ public class OrderService : IOrderService
         _orderRepo = orderRepo;
     }
 
-    public Task<List<Order>> GetAllOrdersAsync()
+    public Task<List<Order>> GetOrdersAsync(int page, int pageSize)
     {
-        return _orderRepo.GetAllAsync();
+        var skip = (page - 1) * pageSize;
+        return _orderRepo.GetOrdersAsync(skip, pageSize);
     }
 
     public Task<List<Order>> GetAllNewOrdersAsync()
@@ -38,20 +39,24 @@ public class OrderService : IOrderService
         order.IsDone = true;
         _orderRepo.Update(order);
         await _orderRepo.SaveChangesAsync();
-        
+
         return true;
     }
-    
+
     public async Task<bool> MarkAsNotNewAsync(string id)
     {
         var order = await _orderRepo.GetByIdAsync(id);
         if (order == null) return false;
-        
+
         order.IsNew = false;
         _orderRepo.Update(order);
         await _orderRepo.SaveChangesAsync();
-        
+
         return true;
     }
-}
 
+    public async Task<int> GetOrderCountAsync()
+    {
+        return await _orderRepo.GetOrderCountAsync();
+    }
+}

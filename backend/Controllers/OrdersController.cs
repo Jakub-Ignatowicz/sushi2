@@ -7,10 +7,17 @@ using Microsoft.AspNetCore.Mvc;
 public class OrdersController(IOrderService orderService) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetOrders(int page = 1, int pageSize = 10)
     {
-        var orders = await orderService.GetAllOrdersAsync();
+        var orders = await orderService.GetOrdersAsync(page, pageSize);
         return Ok(orders);
+    }
+
+    [HttpGet("count")]
+    public async Task<IActionResult> GetOrderCount()
+    {
+        var count = await orderService.GetOrderCountAsync();
+        return Ok(count);
     }
 
     [HttpGet("{id}/seen")]
