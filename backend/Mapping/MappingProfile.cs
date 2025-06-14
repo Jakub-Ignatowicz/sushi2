@@ -17,5 +17,7 @@ public class MappingProfile : Profile
         CreateMap<Order, OrderPostDto>().ReverseMap();
 
         CreateMap<OrderProduct, OrderProductPostDto>().ReverseMap();
+
+        CreateMap<Address, AddressPostDto>().ReverseMap();
     }
 }
