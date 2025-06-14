@@ -1,3 +1,5 @@
+namespace SushiZume.Services.Interfaces;
+
 using SushiZume.Models;
 
 public interface IOrderService

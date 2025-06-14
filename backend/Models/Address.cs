@@ -6,26 +6,24 @@ namespace SushiZume.Models;
 [Table("Address")]
 public class Address
 {
-    [Key, Column("id")]
-    public string Id { get; set; }
+    [Key, Column("id")] public Guid Id { get; set; } = Guid.NewGuid();
 
-    [Column("city")]
-    public string City { get; set; }
+    [Required, MinLength(1), Column("city")]
+    public string City { get; set; } = string.Empty;
 
-    [Column("district")]
-    public string District { get; set; }
+    [Required, MinLength(1), Column("district")]
+    public string District { get; set; } = string.Empty;
 
-    [Column("street")]
-    public string Street { get; set; }
+    [Required, MinLength(1), Column("street")]
+    public string Street { get; set; } = string.Empty;
 
-    [Column("homeNumber")]
-    public string HomeNumber { get; set; }
+    [Required, MinLength(1), Column("homeNumber")]
+    public string HomeNumber { get; set; } = string.Empty;
 
-    [Column("apartamentNumber")]
-    public string ApartamentNumber { get; set; }
+    [Required, MinLength(1), Column("apartamentNumber")]
+    public string ApartamentNumber { get; set; } = string.Empty;
 
-    [Column("floor")]
-    public int Floor { get; set; }
+    [Column("floor")] public int? Floor { get; set; }
 
     public List<Order> Orders { get; set; }
 }
