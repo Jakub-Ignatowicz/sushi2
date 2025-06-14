@@ -16,13 +16,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html className={cn(georama.className, "antialiased  h-full")} lang="en">
       <body className="h-full bg-background">
         <div className="h-full flex flex-col justify-start mx-auto">
+          {modal}
           <Navbar />
           <div className="flex-grow">{children}</div>
         </div>
