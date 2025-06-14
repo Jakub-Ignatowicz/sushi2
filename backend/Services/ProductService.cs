@@ -27,6 +27,7 @@ public class ProductService(IProductRepository productRepo, IMapper mapper) : IP
     {
         var product = mapper.Map<Product>(dto);
         await productRepo.AddAsync(product);
+        await productRepo.SaveChangesAsync();
         return product;
     }
 

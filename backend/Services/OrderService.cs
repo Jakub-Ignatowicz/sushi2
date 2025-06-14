@@ -1,10 +1,12 @@
+using AutoMapper;
+using SushiZume.DTOs;
 using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Services;
 
 using SushiZume.Models;
 
-public class OrderService(IOrderRepository orderRepo) : IOrderService
+public class OrderService(IOrderRepository orderRepo, IMapper mapper) : IOrderService
 {
     public Task<List<Order>> GetOrdersAsync(int page, int pageSize)
     {
@@ -22,10 +24,12 @@ public class OrderService(IOrderRepository orderRepo) : IOrderService
         return orderRepo.GetByIdAsync(id);
     }
 
-    public async Task CreateOrderAsync(Order order)
+    public async Task<Order> CreateOrderAsync(OrderPostDto dto)
     {
+        var order = mapper.Map<Order>(dto);
         await orderRepo.AddAsync(order);
         await orderRepo.SaveChangesAsync();
+        return order;
     }
 
     public async Task<bool> MarkAsDoneAsync(string id)

@@ -76,7 +76,7 @@ public static class DataInitializer
         {
             Email = "customer@example.com",
             PhoneNumber = "1234567890",
-            PeopleNumber = 2,
+            PeopleCount = 2,
             PaymentMethod = OrderPaymentMethod.Cash,
             IsNew = true,
             IsDone = false,

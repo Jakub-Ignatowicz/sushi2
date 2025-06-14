@@ -1,3 +1,4 @@
+using SushiZume.DTOs;
 using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Controllers;
@@ -13,6 +14,13 @@ public class OrdersController(IOrderService orderService) : ControllerBase
     {
         var orders = await orderService.GetOrdersAsync(page, pageSize);
         return Ok(orders);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateOrder([FromBody] OrderPostDto dto)
+    {
+        var createdOrder = await orderService.CreateOrderAsync(dto);
+        return Ok(createdOrder);
     }
 
     [HttpGet("count")]

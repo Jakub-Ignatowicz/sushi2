@@ -20,8 +20,8 @@ public class Order
     [Required, MinLength(1), Column("phone")]
     public string PhoneNumber { get; set; } = string.Empty;
 
-    [Range(1, int.MaxValue), Column("peopleNumber")]
-    public int PeopleNumber { get; set; }
+    [Range(1, int.MaxValue), Column("peopleCount")]
+    public int PeopleCount { get; set; }
 
     [Required, Column("paymentMethod")] public OrderPaymentMethod PaymentMethod { get; set; }
     [Column("new")] public bool IsNew { get; set; } = true;
