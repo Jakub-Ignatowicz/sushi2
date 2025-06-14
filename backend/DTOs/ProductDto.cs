@@ -9,5 +9,5 @@ public record ProductDto(
     string ImagePath,
     double Amount,
     string AmountUnit,
-    List<ProductItemDto> ProductItems
+    List<ProductItemDto> Items
 );

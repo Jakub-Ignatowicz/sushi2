@@ -16,7 +16,7 @@ public class ProductRepository(SushiContext context) : Repository<Product>(conte
     public async Task<List<Product>> GetAllProductsAsync()
     {
         return await _context.Products
-            .Include(p => p.ProductItems)
+            .Include(p => p.Items)
             .ToListAsync();
     }
 

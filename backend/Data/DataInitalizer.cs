@@ -9,8 +9,8 @@ public static class DataInitializer
         if (context.Categories.Any()) return;
 
         // Categories
-        var pizzaCategory = new Category { Id = Guid.NewGuid(), Name = "Pizza" };
-        var drinksCategory = new Category { Id = Guid.NewGuid(), Name = "Drinks" };
+        var pizzaCategory = new Category { Name = "Pizza" };
+        var drinksCategory = new Category { Name = "Drinks" };
 
         context.Categories.AddRange(pizzaCategory, drinksCategory);
 
@@ -24,8 +24,14 @@ public static class DataInitializer
             ImagePath = "margherita.jpg",
             Amount = 1,
             AmountUnit = "pcs",
-            CategoryId = pizzaCategory.Id
         };
+        margherita.Categories.AddRange(
+            new ProductCategory()
+            {
+                CategoryId = pizzaCategory.Id,
+                ProductId = margherita.Id
+            }
+        );
 
         var cola = new Product
         {
@@ -36,12 +42,18 @@ public static class DataInitializer
             ImagePath = "cola.jpg",
             Amount = 0.5,
             AmountUnit = "L",
-            CategoryId = drinksCategory.Id
         };
+        cola.Categories.AddRange(
+            new ProductCategory()
+            {
+                CategoryId = drinksCategory.Id,
+                ProductId = cola.Id
+            }
+        );
 
         context.Products.AddRange(margherita, cola);
 
-        // ProductItems for Margherita
+        // Items for Margherita
         context.ProductItems.AddRange(
             new ProductItem
             {

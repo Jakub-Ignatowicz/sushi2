@@ -10,6 +10,7 @@ public class SushiContext(DbContextOptions<SushiContext> options) : DbContext(op
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderProduct> OrderProducts { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<ProductItem> ProductItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,22 +38,34 @@ public class SushiContext(DbContextOptions<SushiContext> options) : DbContext(op
             .WithMany(o => o.OrderProducts)
             .HasForeignKey(op => op.OrderId);
 
+        modelBuilder.Entity<Product>()
+            .HasMany(p => p.OrderProducts)
+            .WithOne(op => op.Product);
+
+
         // OrderProduct → Product
         modelBuilder.Entity<OrderProduct>()
             .HasOne(op => op.Product)
             .WithMany(p => p.OrderProducts)
             .HasForeignKey(op => op.ProductId);
 
-        // Product → Category
-        modelBuilder.Entity<Product>()
-            .HasOne(p => p.Category)
-            .WithMany(c => c.Products)
-            .HasForeignKey(p => p.CategoryId);
+        modelBuilder.Entity<ProductCategory>(entity =>
+        {
+            entity.HasKey(pc => new { pc.CategoryId, pc.ProductId });
+
+            entity.HasOne<Product>()
+                .WithMany(p => p.Categories)
+                .HasForeignKey(pc => pc.ProductId);
+
+            entity.HasOne<Category>()
+                .WithMany(c => c.Products)
+                .HasForeignKey(pc => pc.CategoryId);
+        });
 
         // Product → ProductItem[]
         modelBuilder.Entity<ProductItem>()
             .HasOne(p => p.Product)
-            .WithMany(p => p.ProductItems)
+            .WithMany(p => p.Items)
             .HasForeignKey(p => p.ProductId);
     }
 }

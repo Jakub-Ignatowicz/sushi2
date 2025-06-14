@@ -13,7 +13,7 @@ namespace SushiZume.Controllers;
 public class ProductsController(IProductService productService, IMapper mapper) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<ProductDto>>> GetProductsAsync()
+    public async Task<ActionResult<List<ProductDto>>> GetProducts()
     {
         var all = await productService.GetAllProductsAsync();
         var dtos = mapper.Map<List<ProductDto>>(all);
@@ -21,11 +21,8 @@ public class ProductsController(IProductService productService, IMapper mapper) 
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProductDto>> AddProductAsync(ProductPostDto dto)
+    public async Task<ActionResult<ProductDto>> AddProduct(ProductPostDto dto)
     {
-        // var product = mapper.Map<Product>(productDto);
-        // await productService.AddProductAsync(product);
-        // return CreatedAtAction(nameof(GetProductsAsync), new { id = product.Id }, mapper.Map<ProductDto>(product));
         var product = await productService.AddProductAsync(dto);
         return mapper.Map<ProductDto>(product);
     }

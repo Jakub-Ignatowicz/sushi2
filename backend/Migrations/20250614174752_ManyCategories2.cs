@@ -5,24 +5,18 @@
 namespace SushiZume.Migrations
 {
     /// <inheritdoc />
-    public partial class PeopleCount : Migration
+    public partial class ManyCategories2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "peopleNumber",
-                table: "Order",
-                newName: "peopleCount");
+
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "peopleCount",
-                table: "Order",
-                newName: "peopleNumber");
+
         }
     }
 }
