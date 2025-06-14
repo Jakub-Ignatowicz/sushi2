@@ -10,7 +10,7 @@ const AdminPage = () => {
   const router = useRouter();
 
   return (
-    <div className="flex w-full h-[100vh] flex-col items-center justify-center">
+    <div className="flex w-full h-full flex-col items-center justify-center">
       <Label className="text-xl pb-4 text-2xl font-semibold text-muted-foreground">
         Panel administratora
       </Label>
