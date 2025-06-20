@@ -61,4 +61,25 @@ public class ProductsController(IProductService productService, IMapper mapper) 
         var result = await productService.AddItemsAsync(productId, dtos);
         return Ok();
     }
+
+    [HttpDelete("{productId:guid}/items")]
+    public async Task<ActionResult> RemoveProductItems(Guid productId, [FromBody] List<Guid> itemIds)
+    {
+        await productService.RemoveItemsAsync(productId, itemIds);
+        return Ok();
+    }
+
+    [HttpPost("{productId:guid}/categories")]
+    public async Task<ActionResult> AddProductCategories(Guid productId, [FromBody] List<Guid> categoryIds)
+    {
+        var result = await productService.AddCategoriesAsync(productId, categoryIds);
+        return Ok(result);
+    }
+
+    [HttpDelete("{productId:guid}/categories")]
+    public async Task<ActionResult> RemoveProductCategories(Guid productId, [FromBody] List<Guid> categoryIds)
+    {
+        var result = await productService.RemoveCategoriesAsync(productId, categoryIds);
+        return Ok(result);
+    }
 }
