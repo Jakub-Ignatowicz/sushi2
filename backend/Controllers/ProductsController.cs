@@ -27,9 +27,31 @@ public class ProductsController(IProductService productService, IMapper mapper) 
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProductDto>> AddProduct(ProductPostDto dto)
+    public async Task<ActionResult<ProductDto>> CreateProduct(ProductPostDto dto)
     {
         var product = await productService.AddAsync(dto);
+        var created = await productService.GetByIdAsync(product.Id);
+        return mapper.Map<ProductDto>(created);
+    }
+
+    [HttpPost("{productId:guid}/available")]
+    public async Task<ActionResult<ProductDto>> SetProductAvailable(Guid productId, [FromBody] bool available)
+    {
+        var product = await productService.SetAvailableAsync(productId, available);
         return mapper.Map<ProductDto>(product);
+    }
+
+    [HttpPost("{productId:guid}")]
+    public async Task<ActionResult<ProductDto>> UpdateProduct(Guid productId, [FromBody] ProductUpdateDto dto)
+    {
+        var product = await productService.UpdateAsync(productId, dto);
+        return mapper.Map<ProductDto>(product);
+    }
+
+    [HttpPost("{productId:guid}/items")]
+    public async Task<ActionResult> AddProductItems(Guid productId, [FromBody] List<ProductItemPostDto> dtos)
+    {
+        var result = await productService.AddItemsAsync(productId, dtos);
+        return Ok();
     }
 }

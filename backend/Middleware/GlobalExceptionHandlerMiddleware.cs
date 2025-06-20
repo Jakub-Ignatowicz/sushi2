@@ -1,3 +1,6 @@
+using System.ComponentModel.DataAnnotations;
+using System.Dynamic;
+
 namespace SushiZume.Middleware;
 
 using System.Net;
@@ -7,7 +10,15 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 
-public class GlobalExceptionHandlerMiddleware(RequestDelegate next)
+public class ErrorResponse
+{
+    public int Status { get; set; }
+    public string Title { get; set; }
+    public List<dynamic>? Errors { get; set; }
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+}
+
+public class GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger)
 {
     public async Task Invoke(HttpContext context)
     {
@@ -15,46 +26,43 @@ public class GlobalExceptionHandlerMiddleware(RequestDelegate next)
         {
             await next(context);
         }
+        catch (ValidationException ex)
+        {
+            logger.LogError(ex, "Validation error occurred.");
+
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            context.Response.ContentType = "application/json";
+
+            var errors = ex.ValidationResult.MemberNames.Select(field =>
+                {
+                    dynamic item = new ExpandoObject();
+                    item.field = field;
+                    item.message = ex.ValidationResult.ErrorMessage ?? ex.Message;
+                    return item;
+                }
+            ).ToList();
+
+            if (errors.Count == 0)
+                errors.Add(new { field = "UnknownField", message = ex.Message });
+
+            await context.Response.WriteAsJsonAsync(new ErrorResponse
+            {
+                Status = context.Response.StatusCode,
+                Title = "One or more validation errors occurred.",
+                Errors = errors
+            });
+        }
         catch (Exception ex)
         {
-            await HandleExceptionAsync(context, ex);
+            logger.LogError(ex, "Unexpected error");
+
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            await context.Response.WriteAsJsonAsync(new ErrorResponse
+            {
+                Status = context.Response.StatusCode,
+                Title = "An unexpected error occurred.",
+                Errors = new List<object> { new { message = ex.Message } }
+            });
         }
-    }
-
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
-    {
-        context.Response.ContentType = "application/json";
-
-        // Default to 500 error
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-        // Map specific exceptions to status codes if needed
-        if (exception is ArgumentException)
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-
-        var errors = new List<string>();
-
-        if (exception is System.ComponentModel.DataAnnotations.ValidationException ve)
-        {
-            errors.Add(ve.Message);
-        }
-        else if (exception is ArgumentException argEx)
-        {
-            errors.Add(argEx.Message);
-        }
-        else
-        {
-            errors.Add(exception.Message);
-        }
-
-        var errorResponse = new
-        {
-            status = "error",
-            errors = errors
-        };
-
-        var result = JsonSerializer.Serialize(errorResponse);
-
-        return context.Response.WriteAsync(result);
     }
 }

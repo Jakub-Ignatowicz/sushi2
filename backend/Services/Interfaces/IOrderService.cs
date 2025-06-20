@@ -10,6 +10,7 @@ public interface IOrderService
     Task<Order> GetByIdAsync(Guid id);
     Task<Order> AddAsync(OrderPostDto dto);
     Task<bool> MarkAsDoneAsync(Guid id);
-    Task<bool> MarkAsNotNewAsync(Guid id);
+    Task<bool> MarkAsSeenAsync(Guid id);
     Task<int> GetCountAsync();
+    Task<bool> MarkAsResolvedAsync(Guid orderId);
 }

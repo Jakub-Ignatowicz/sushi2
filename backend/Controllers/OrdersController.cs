@@ -28,10 +28,9 @@ public class OrdersController(IOrderService orderService, IMapper mapper) : Cont
     [HttpPost]
     public async Task<ActionResult<OrderDto>> CreateOrder([FromBody] OrderPostDto dto)
     {
-        var createdOrder = await orderService.AddAsync(dto);
-
-        var fresh = await orderService.GetByIdAsync(createdOrder.Id);
-        return Ok(mapper.Map<OrderDto>(fresh));
+        var order = await orderService.AddAsync(dto);
+        var created = await orderService.GetByIdAsync(order.Id);
+        return mapper.Map<OrderDto>(created);
     }
 
     [HttpGet("count")]
@@ -41,10 +40,18 @@ public class OrdersController(IOrderService orderService, IMapper mapper) : Cont
         return Ok(count);
     }
 
-    [HttpPost("{id}/seen")]
-    public async Task<ActionResult<bool>> MarkAsSeen(Guid id)
+    [HttpPost("{orderId:guid}/seen")]
+    public async Task<ActionResult<bool>> MarkAsSeen(Guid orderId)
     {
-        var order = await orderService.MarkAsNotNewAsync(id);
+        var order = await orderService.MarkAsSeenAsync(orderId);
         return Ok(order);
     }
+    
+    [HttpPost("{orderId:guid}/resolved")]
+    public async Task<ActionResult<bool>> MarkAsResolved(Guid orderId)
+    {
+        var order = await orderService.MarkAsResolvedAsync(orderId);
+        return Ok(order);
+    }
+        
 }

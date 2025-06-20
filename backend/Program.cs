@@ -22,6 +22,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductItemRepository, ProductItemRepository>();
 
 // Register services
 builder.Services.AddScoped<IOrderService, OrderService>();
@@ -45,7 +46,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Middleware
-// app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.MapControllers();
 // app.UseHttpsRedirection();

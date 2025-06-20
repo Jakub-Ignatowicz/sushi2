@@ -46,7 +46,7 @@ namespace SushiZume.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
-                    price = table.Column<double>(type: "double precision", nullable: false),
+                    price = table.Column<decimal>(type: "numeric", nullable: false),
                     available = table.Column<bool>(type: "boolean", nullable: false),
                     visible = table.Column<bool>(type: "boolean", nullable: false),
                     imagePath = table.Column<string>(type: "text", nullable: false),

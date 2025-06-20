@@ -8,7 +8,7 @@ namespace SushiZume.Models;
 [Table("ProductItem")]
 public class ProductItem
 {
-    [Column("id")] public Guid Id { get; set; }
+    [Column("id")] public Guid Id { get; init; } = Guid.NewGuid();
 
     [Column("description")]
     [Required(AllowEmptyStrings = false, ErrorMessage = "Opis produktu jest wymagany.")]

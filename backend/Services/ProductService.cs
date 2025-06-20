@@ -1,4 +1,5 @@
 using AutoMapper;
+using SushiZume.Data;
 using SushiZume.DTOs;
 using SushiZume.Models;
 using SushiZume.Repositories.Interfaces;
@@ -6,7 +7,12 @@ using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Services;
 
-public class ProductService(IProductRepository productRepo, IMapper mapper, ICategoryRepository categoryRepo)
+public class ProductService(
+    IProductRepository productRepo,
+    IMapper mapper,
+    ICategoryRepository categoryRepo,
+    IProductItemRepository productItemRepo,
+    SushiContext context)
     : IProductService
 {
     public async Task<Product> GetByIdAsync(Guid id)
@@ -30,29 +36,78 @@ public class ProductService(IProductRepository productRepo, IMapper mapper, ICat
 
     public async Task<Product> AddAsync(ProductPostDto dto)
     {
-        var categoryIds = dto.CategoryIds;
-
-        if (categoryIds == null || categoryIds.Count == 0)
-            throw new ArgumentException("Produkt musi mieć co najmniej jedną kategorię.");
-
         var product = mapper.Map<Product>(dto);
-
-        foreach (var categoryId in categoryIds)
-        {
-            var category = await categoryRepo.GetByIdAsync(categoryId);
-
-            if (category == null)
-                throw new KeyNotFoundException($"Kategoria o ID [{categoryId}] nie została znaleziona.");
-
-            product.Categories.Add(new ProductCategory()
-            {
-                ProductId = product.Id,
-                CategoryId = categoryId,
-            });
-        }
 
         await productRepo.AddAsync(product);
         await productRepo.SaveChangesAsync();
+
+        return product;
+    }
+
+    public async Task<Product> UpdateAsync(Guid productId, ProductUpdateDto dto)
+    {
+        var product = await GetByIdAsync(productId);
+        product = dto.ToProduct(product);
+
+        await productRepo.SaveChangesAsync();
+        return product;
+    }
+
+    public async Task<bool> AddCategoriesAsync(Guid productId, List<Guid> categoryIds)
+    {
+        var productCategories = categoryIds
+            .Select(id => new ProductCategory
+            {
+                ProductId = productId,
+                CategoryId = id,
+            }).ToList();
+
+        context.ProductCategories.AddRange(productCategories);
+
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> RemoveCategoriesAsync(Guid productId, List<Guid> categoryIds)
+    {
+        var productCategories = context.ProductCategories
+            .Where(pc => pc.ProductId == productId && categoryIds.Contains(pc.CategoryId))
+            .ToList();
+        context.ProductCategories.RemoveRange(productCategories);
+
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> AddItemsAsync(Guid productId, List<ProductItemPostDto> dtos)
+    {
+        var productItems = mapper.Map<List<ProductItem>>(dtos);
+        foreach (var item in productItems)
+            item.ProductId = productId;
+        context.ProductItems.AddRange(productItems);
+
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> RemoveItemsAsync(Guid productId, List<Guid> itemIds)
+    {
+        var productItems = context.ProductItems
+            .Where(i => i.ProductId == productId && itemIds.Contains(i.Id))
+            .ToList();
+        context.ProductItems.RemoveRange(productItems);
+
+        await productRepo.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<Product> SetAvailableAsync(Guid productId, bool available)
+    {
+        var product = await GetByIdAsync(productId);
+        product.IsAvailable = available;
+
+        context.Products.Update(product);
+        await context.SaveChangesAsync();
         return product;
     }
 }

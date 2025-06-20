@@ -16,7 +16,7 @@ public class Product
 
     [Column("price")]
     [Range(0.01, double.MaxValue, ErrorMessage = "Cena musi być większa niż 0.")]
-    public double Price { get; set; }
+    public decimal Price { get; set; }
 
     [Column("available")] public bool IsAvailable { get; set; } = true;
     [Column("visible")] public bool IsVisible { get; set; } = true;

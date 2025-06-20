@@ -189,8 +189,8 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision")
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric")
                         .HasColumnName("price");
 
                     b.HasKey("Id");

@@ -1,3 +1,5 @@
+using SushiZume.Models;
+
 namespace SushiZume.DTOs;
 
 public record ProductItemPostDto(

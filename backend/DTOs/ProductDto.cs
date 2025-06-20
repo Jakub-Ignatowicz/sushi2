@@ -5,10 +5,10 @@ namespace SushiZume.DTOs;
 public record ProductDto(
     Guid Id,
     string Name,
-    decimal Price,
     string ImagePath,
-    double Amount,
     string AmountUnit,
+    decimal Price,
+    double Amount,
     List<CategoryDto> Categories,
     List<ProductItemDto> Items
 );

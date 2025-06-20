@@ -12,7 +12,7 @@ using SushiZume.Data;
 namespace SushiZume.Migrations
 {
     [DbContext(typeof(SushiContext))]
-    [Migration("20250614214959_Init")]
+    [Migration("20250618195238_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -192,8 +192,8 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision")
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric")
                         .HasColumnName("price");
 
                     b.HasKey("Id");
