@@ -110,4 +110,13 @@ public class ProductService(
         await context.SaveChangesAsync();
         return product;
     }
+
+    public async Task<Product> SetVisibleAsync(Guid productId, bool visible)
+    {
+        var product = await GetByIdAsync(productId);
+        product.IsVisible = visible;
+
+        await context.SaveChangesAsync();
+        return product;
+    }
 }

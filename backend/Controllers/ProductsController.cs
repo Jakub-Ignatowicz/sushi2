@@ -41,6 +41,13 @@ public class ProductsController(IProductService productService, IMapper mapper) 
         return mapper.Map<ProductDto>(product);
     }
 
+    [HttpPost("{productId:guid}/visible")]
+    public async Task<ActionResult<ProductDto>> SetProductVisible(Guid productId, [FromBody] bool visible)
+    {
+        var product = await productService.SetVisibleAsync(productId, visible);
+        return mapper.Map<ProductDto>(product);
+    }
+
     [HttpPost("{productId:guid}")]
     public async Task<ActionResult<ProductDto>> UpdateProduct(Guid productId, [FromBody] ProductUpdateDto dto)
     {

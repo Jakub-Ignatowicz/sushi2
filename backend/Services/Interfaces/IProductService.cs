@@ -16,4 +16,5 @@ public interface IProductService
     Task<bool> AddItemsAsync(Guid productId, List<ProductItemPostDto> dtos);
     Task<bool> RemoveItemsAsync(Guid productId, List<Guid> itemIds);
     Task<Product> SetAvailableAsync(Guid productId, bool available);
+    Task<Product> SetVisibleAsync(Guid productId, bool visible);
 }

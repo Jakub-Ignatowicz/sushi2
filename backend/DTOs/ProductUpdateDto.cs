@@ -8,7 +8,9 @@ public record ProductUpdateDto(
     string? ImagePath,
     string? AmountUnit,
     decimal? Price,
-    double? Amount
+    double? Amount,
+    bool? Available,
+    bool? Visible
 )
 {
     public Product ToProduct(Product src)
@@ -18,6 +20,8 @@ public record ProductUpdateDto(
         src.AmountUnit = AmountUnit ?? src.AmountUnit;
         src.Price = Price ?? src.Price;
         src.Amount = Amount ?? src.Amount;
+        src.IsAvailable = Available ?? src.IsAvailable;
+        src.IsVisible = Visible ?? src.IsVisible;
 
         return src;
     }
