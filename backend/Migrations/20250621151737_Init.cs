@@ -52,7 +52,7 @@ namespace SushiZume.Migrations
                     firstName = table.Column<string>(type: "text", nullable: true),
                     lastName = table.Column<string>(type: "text", nullable: true),
                     createdAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Roles = table.Column<int[]>(type: "integer[]", nullable: false)
+                    Role = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

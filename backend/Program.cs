@@ -1,3 +1,4 @@
+using FluentValidation;
 using SushiZume.Data;
 using Microsoft.EntityFrameworkCore;
 using SushiZume.Mapping;
@@ -17,16 +18,13 @@ builder.Services.AddOpenApi();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<SushiContext>(options => options.UseNpgsql(connectionString));
 
-// Validation
-// builder.Services.AddControllers()
-//     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<YourEntityValidator>());
-
 // Register repositories
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductItemRepository, ProductItemRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Register services
 builder.Services.AddScoped<IOrderService, OrderService>();
@@ -35,6 +33,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddControllers();
+
+// Validation
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -61,12 +62,3 @@ var context = scope.ServiceProvider.GetRequiredService<SushiContext>();
 await DataInitializer.SeedAsync(context);
 
 app.Run();
-
-
-// var runTask = app.RunAsync();
-//
-// using var scope = app.Services.CreateScope();
-// var context = scope.ServiceProvider.GetRequiredService<SushiContext>();
-// await DataInitializer.SeedAsync(context);
-//
-// await runTask; // Keep the app running

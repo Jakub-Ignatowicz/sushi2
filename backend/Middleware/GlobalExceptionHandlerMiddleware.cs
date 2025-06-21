@@ -14,7 +14,7 @@ public class ErrorResponse
 {
     public int Status { get; set; }
     public string Title { get; set; }
-    public List<dynamic>? Errors { get; set; }
+    public dynamic Errors { get; set; }
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 }
 
@@ -25,6 +25,25 @@ public class GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<Glob
         try
         {
             await next(context);
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            context.Response.ContentType = "application/json";
+
+            var errors = ex.Errors
+                .GroupBy(e => e.PropertyName)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(e => e.ErrorMessage).ToArray()
+                );
+
+            await context.Response.WriteAsJsonAsync(new ErrorResponse
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Validation failed",
+                Errors = errors
+            });
         }
         catch (ValidationException ex)
         {

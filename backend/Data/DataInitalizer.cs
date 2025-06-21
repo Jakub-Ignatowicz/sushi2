@@ -90,7 +90,7 @@ public static class DataInitializer
             PhoneNumber = "123456890",
             FirstName = "John",
             LastName = "Doe",
-            Roles = new List<AccountRole> { AccountRole.User },
+            Role = UserRole.Normal,
             Addresses = new List<Address> { address1 }
         };
         context.Users.Add(user);

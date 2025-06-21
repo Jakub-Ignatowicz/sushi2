@@ -1,5 +1,6 @@
 using AutoMapper;
 using SushiZume.DTOs;
+using SushiZume.Enums;
 using SushiZume.Models;
 
 namespace SushiZume.Mapping;
@@ -41,19 +42,25 @@ public class MappingProfile : Profile
         CreateMap<OrderPostDto, Order>();
         CreateMap<OrderProductPostDto, OrderProduct>();
         CreateMap<UserPostDto_Guest, User>();
-        CreateMap<UserPostDto_User, User>();
+        CreateMap<UserPostDto_Normal, User>();
         CreateMap<UserPostDto, User>()
-            .ConvertUsing((src, dest, context) =>
+            .ConvertUsing((src, _, context) =>
             {
-                if (src.User is not null && src.Guest is not null)
-                    throw new ArgumentException("UserPostDto cannot have both User and Guest populated.", nameof(src));
+                if (src.Normal is not null)
+                {
+                    var user = context.Mapper.Map<User>(src.Normal);
+                    user.Role = UserRole.Normal;
+                    return user;
+                }
 
-                if (src.User is not null)
-                    return context.Mapper.Map<User>(src.User);
                 if (src.Guest is not null)
-                    return context.Mapper.Map<User>(src.Guest);
-
-                throw new ArgumentException("UserPostDto must have either User or Guest populated.", nameof(src));
+                {
+                    var guest = context.Mapper.Map<User>(src.Guest);
+                    guest.Role = UserRole.Guest;
+                    return guest;
+                }
+                
+                throw new ArgumentException("Invalid UserPostDto type");
             });
     }
 }

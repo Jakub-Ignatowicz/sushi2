@@ -12,7 +12,7 @@ using SushiZume.Data;
 namespace SushiZume.Migrations
 {
     [DbContext(typeof(SushiContext))]
-    [Migration("20250621124233_Init")]
+    [Migration("20250621151737_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -282,13 +282,12 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("phone");
 
-                    b.Property<int[]>("Roles")
-                        .IsRequired()
-                        .HasColumnType("integer[]");
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.Address", b =>

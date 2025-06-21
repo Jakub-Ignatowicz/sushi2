@@ -3,12 +3,13 @@ using SushiZume.Models;
 
 namespace SushiZume.DTOs;
 
-public record UserPostDto_User(
-    string Email,
+public record UserPostDto_Normal(
     string Password,
+    string ConfirmPassword,
     string FirstName,
     string LastName,
-    string PhoneNumber
+    string PhoneNumber,
+    string Email
 );
 
 public record UserPostDto_Guest(
@@ -18,5 +19,5 @@ public record UserPostDto_Guest(
 
 public record UserPostDto(
     UserPostDto_Guest? Guest,
-    UserPostDto_User? User
+    UserPostDto_Normal? Normal
 );

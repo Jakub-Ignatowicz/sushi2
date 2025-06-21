@@ -8,15 +8,37 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        builder.ToTable("User");
+
         builder.HasKey(u => u.Id);
+
+        builder.Property(u => u.Id)
+            .IsRequired()
+            .HasColumnName("id");
+
+        builder.Property(u => u.Email)
+            .HasColumnName("email");
+
+        builder.Property(u => u.PhoneNumber)
+            .HasColumnName("phone");
+
+        builder.Property(u => u.PasswordHash)
+            .HasColumnName("passwordHash");
+
+        builder.Property(u => u.FirstName)
+            .HasColumnName("firstName");
+
+        builder.Property(u => u.LastName)
+            .HasColumnName("lastName");
+
+        builder.Property(u => u.CreatedAt)
+            .HasColumnName("createdAt");
 
         builder.HasMany(u => u.Orders)
             .WithOne(o => o.User)
             .HasForeignKey(o => o.UserId)
             .OnDelete(DeleteBehavior.Cascade);
-        //
-        // builder.HasMany(p => p.Orders);
 
-        builder.Property(u => u.Roles).HasConversion<List<string>>();
+        // builder.Property(u => u.Roles).HasConversion<List<string>>();
     }
 }
