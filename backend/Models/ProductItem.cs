@@ -1,7 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SushiZume.Models;
 
@@ -25,17 +23,4 @@ public class ProductItem
 
     [Column("productId")] public Guid ProductId { get; set; }
     public Product Product { get; set; } = null!;
-}
-
-public class ProductItemConfiguration : IEntityTypeConfiguration<ProductItem>
-{
-    public void Configure(EntityTypeBuilder<ProductItem> builder)
-    {
-        builder.HasKey(pi => pi.Id);
-
-        builder.HasOne(pi => pi.Product)
-            .WithMany(p => p.Items)
-            .HasForeignKey(pi => pi.ProductId)
-            .OnDelete(DeleteBehavior.Cascade);
-    }
 }

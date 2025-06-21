@@ -18,10 +18,10 @@ public class OrdersController(IOrderService orderService, IMapper mapper) : Cont
         return Ok(mapper.Map<List<OrderDto>>(orders));
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<OrderDto>> GetOrderById(Guid id)
+    [HttpGet("{orderId:guid}")]
+    public async Task<ActionResult<OrderDto>> GetOrderById(Guid orderId)
     {
-        var order = await orderService.GetByIdAsync(id);
+        var order = await orderService.GetByIdAsync(orderId);
         return Ok(mapper.Map<OrderDto>(order));
     }
 
@@ -46,12 +46,11 @@ public class OrdersController(IOrderService orderService, IMapper mapper) : Cont
         var order = await orderService.MarkAsSeenAsync(orderId);
         return Ok(order);
     }
-    
+
     [HttpPost("{orderId:guid}/resolved")]
     public async Task<ActionResult<bool>> MarkAsResolved(Guid orderId)
     {
         var order = await orderService.MarkAsResolvedAsync(orderId);
         return Ok(order);
     }
-        
 }

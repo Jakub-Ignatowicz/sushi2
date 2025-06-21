@@ -1,3 +1,5 @@
+using SushiZume.Configurations;
+
 namespace SushiZume.Data;
 
 using Microsoft.EntityFrameworkCore;
