@@ -1,3 +1,4 @@
+using SushiZume.Enums;
 using SushiZume.Models;
 
 namespace SushiZume.Data;
@@ -6,7 +7,7 @@ public static class DataInitializer
 {
     public static async Task SeedAsync(SushiContext context)
     {
-        if (context.Categories.Any()) return;
+        if (context.Products.Any()) return;
 
         // Categories
         var pizzaCategory = new Category { Name = "Pizza" };
@@ -83,18 +84,27 @@ public static class DataInitializer
 
         context.Addresses.Add(address1);
 
+        var user = new User
+        {
+            Email = "cwel@gmail.com",
+            PhoneNumber = "123456890",
+            FirstName = "John",
+            LastName = "Doe",
+            Roles = new List<AccountRole> { AccountRole.User },
+            Addresses = new List<Address> { address1 }
+        };
+        context.Users.Add(user);
+
         // Orders
         var order1 = new Order
         {
-            Email = "customer@example.com",
-            PhoneNumber = "1234567890",
             PeopleCount = 2,
             PaymentMethod = OrderPaymentMethod.Cash,
             IsNew = true,
             IsDone = false,
-            CreatedAt = DateTime.UtcNow,
             Notes = "No onions please",
-            AddressId = address1.Id
+            AddressId = address1.Id,
+            UserId = user.Id,
         };
 
         context.Orders.Add(order1);

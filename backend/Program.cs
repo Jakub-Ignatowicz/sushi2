@@ -17,6 +17,10 @@ builder.Services.AddOpenApi();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<SushiContext>(options => options.UseNpgsql(connectionString));
 
+// Validation
+// builder.Services.AddControllers()
+//     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<YourEntityValidator>());
+
 // Register repositories
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
@@ -27,6 +31,7 @@ builder.Services.AddScoped<IProductItemRepository, ProductItemRepository>();
 // Register services
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddControllers();
@@ -47,7 +52,6 @@ if (app.Environment.IsDevelopment())
 
 // Middleware
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
-
 app.MapControllers();
 // app.UseHttpsRedirection();
 
@@ -57,3 +61,12 @@ var context = scope.ServiceProvider.GetRequiredService<SushiContext>();
 await DataInitializer.SeedAsync(context);
 
 app.Run();
+
+
+// var runTask = app.RunAsync();
+//
+// using var scope = app.Services.CreateScope();
+// var context = scope.ServiceProvider.GetRequiredService<SushiContext>();
+// await DataInitializer.SeedAsync(context);
+//
+// await runTask; // Keep the app running

@@ -12,23 +12,6 @@ namespace SushiZume.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Address",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    city = table.Column<string>(type: "text", nullable: false),
-                    district = table.Column<string>(type: "text", nullable: false),
-                    street = table.Column<string>(type: "text", nullable: false),
-                    homeNumber = table.Column<string>(type: "text", nullable: false),
-                    apartmentNumber = table.Column<string>(type: "text", nullable: false),
-                    floor = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Address", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Category",
                 columns: table => new
                 {
@@ -59,29 +42,21 @@ namespace SushiZume.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order",
+                name: "User",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    email = table.Column<string>(type: "text", nullable: false),
-                    phone = table.Column<string>(type: "text", nullable: false),
-                    peopleCount = table.Column<int>(type: "integer", nullable: false),
-                    paymentMethod = table.Column<string>(type: "text", nullable: false),
-                    @new = table.Column<bool>(name: "new", type: "boolean", nullable: false),
-                    done = table.Column<bool>(type: "boolean", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: true),
+                    phone = table.Column<string>(type: "text", nullable: true),
+                    passwordHash = table.Column<string>(type: "text", nullable: true),
+                    firstName = table.Column<string>(type: "text", nullable: true),
+                    lastName = table.Column<string>(type: "text", nullable: true),
                     createdAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    notesForOrder = table.Column<string>(type: "text", nullable: false),
-                    addressId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Roles = table.Column<int[]>(type: "integer[]", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Order_Address_addressId",
-                        column: x => x.addressId,
-                        principalTable: "Address",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_User", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -130,6 +105,60 @@ namespace SushiZume.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Address",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    city = table.Column<string>(type: "text", nullable: false),
+                    district = table.Column<string>(type: "text", nullable: false),
+                    street = table.Column<string>(type: "text", nullable: false),
+                    homeNumber = table.Column<string>(type: "text", nullable: false),
+                    apartmentNumber = table.Column<string>(type: "text", nullable: false),
+                    floor = table.Column<int>(type: "integer", nullable: true),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Address", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Address_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    peopleCount = table.Column<int>(type: "integer", nullable: false),
+                    paymentMethod = table.Column<string>(type: "text", nullable: false),
+                    @new = table.Column<bool>(name: "new", type: "boolean", nullable: false),
+                    done = table.Column<bool>(type: "boolean", nullable: false),
+                    createdAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    notesForOrder = table.Column<string>(type: "text", nullable: false),
+                    addressId = table.Column<Guid>(type: "uuid", nullable: false),
+                    userId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Order_Address_addressId",
+                        column: x => x.addressId,
+                        principalTable: "Address",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Order_User_userId",
+                        column: x => x.userId,
+                        principalTable: "User",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderProduct",
                 columns: table => new
                 {
@@ -155,9 +184,19 @@ namespace SushiZume.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Address_UserId",
+                table: "Address",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Order_addressId",
                 table: "Order",
                 column: "addressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_userId",
+                table: "Order",
+                column: "userId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderProduct_productId",
@@ -198,6 +237,9 @@ namespace SushiZume.Migrations
 
             migrationBuilder.DropTable(
                 name: "Address");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }

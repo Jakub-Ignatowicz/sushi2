@@ -58,7 +58,12 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("street");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Address");
                 });
@@ -95,11 +100,6 @@ namespace SushiZume.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("createdAt");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("email");
-
                     b.Property<bool>("IsDone")
                         .HasColumnType("boolean")
                         .HasColumnName("done");
@@ -122,14 +122,15 @@ namespace SushiZume.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("peopleCount");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("phone");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("userId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Order");
                 });
@@ -247,6 +248,53 @@ namespace SushiZume.Migrations
                     b.ToTable("ProductItem");
                 });
 
+            modelBuilder.Entity("SushiZume.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text")
+                        .HasColumnName("firstName");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text")
+                        .HasColumnName("lastName");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text")
+                        .HasColumnName("passwordHash");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text")
+                        .HasColumnName("phone");
+
+                    b.Property<int[]>("Roles")
+                        .IsRequired()
+                        .HasColumnType("integer[]");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
+                });
+
+            modelBuilder.Entity("SushiZume.Models.Address", b =>
+                {
+                    b.HasOne("SushiZume.Models.User", null)
+                        .WithMany("Addresses")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("SushiZume.Models.Order", b =>
                 {
                     b.HasOne("SushiZume.Models.Address", "Address")
@@ -255,7 +303,15 @@ namespace SushiZume.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("SushiZume.Models.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Address");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SushiZume.Models.OrderProduct", b =>
@@ -329,6 +385,13 @@ namespace SushiZume.Migrations
                     b.Navigation("Items");
 
                     b.Navigation("OrderProducts");
+                });
+
+            modelBuilder.Entity("SushiZume.Models.User", b =>
+                {
+                    b.Navigation("Addresses");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

@@ -40,5 +40,20 @@ public class MappingProfile : Profile
         CreateMap<ProductItemPostDto, ProductItem>();
         CreateMap<OrderPostDto, Order>();
         CreateMap<OrderProductPostDto, OrderProduct>();
+        CreateMap<UserPostDto_Guest, User>();
+        CreateMap<UserPostDto_User, User>();
+        CreateMap<UserPostDto, User>()
+            .ConvertUsing((src, dest, context) =>
+            {
+                if (src.User is not null && src.Guest is not null)
+                    throw new ArgumentException("UserPostDto cannot have both User and Guest populated.", nameof(src));
+
+                if (src.User is not null)
+                    return context.Mapper.Map<User>(src.User);
+                if (src.Guest is not null)
+                    return context.Mapper.Map<User>(src.Guest);
+
+                throw new ArgumentException("UserPostDto must have either User or Guest populated.", nameof(src));
+            });
     }
 }

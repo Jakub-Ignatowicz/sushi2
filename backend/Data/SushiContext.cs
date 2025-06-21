@@ -12,15 +12,17 @@ public class SushiContext(DbContextOptions<SushiContext> options) : DbContext(op
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<ProductItem> ProductItems { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new AddressConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderConfiguration());
         modelBuilder.ApplyConfiguration(new OrderProductConfiguration());
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
-        modelBuilder.ApplyConfiguration(new ProductItemConfiguration());
         modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
-        modelBuilder.ApplyConfiguration(new OrderConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductItemConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
     }
 }

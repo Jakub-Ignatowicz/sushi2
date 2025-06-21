@@ -1,3 +1,4 @@
+using SushiZume.Enums;
 using SushiZume.Models;
 
 namespace SushiZume.DTOs;

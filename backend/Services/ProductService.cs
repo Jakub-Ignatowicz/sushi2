@@ -97,7 +97,7 @@ public class ProductService(
             .ToList();
         context.ProductItems.RemoveRange(productItems);
 
-        await productRepo.SaveChangesAsync();
+        await context.SaveChangesAsync();
         return true;
     }
 
