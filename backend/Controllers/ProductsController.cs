@@ -23,7 +23,7 @@ public class ProductsController(
     public async Task<ActionResult<List<ProductDto>>> GetProducts()
     {
         var all = await productService.GetAllAsync();
-        return Ok(mapper.Map<List<ProductDto>>(all));
+        return mapper.Map<List<ProductDto>>(all);
     }
 
     [HttpGet("/available")]
@@ -72,14 +72,14 @@ public class ProductsController(
         await Task.WhenAll(dtos.Select(dto => productItemValidator.ValidateAndThrowAsync(dto)));
 
         await productService.AddItemsAsync(productId, dtos);
-        return Ok();
+        return NoContent();
     }
 
     [HttpDelete("{productId:guid}/items")]
     public async Task<ActionResult> RemoveProductItems(Guid productId, [FromBody] List<Guid> itemIds)
     {
         await productService.RemoveItemsAsync(productId, itemIds);
-        return Ok();
+        return NoContent();
     }
 
     [HttpPost("{productId:guid}/categories")]

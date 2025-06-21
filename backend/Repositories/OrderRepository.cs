@@ -49,4 +49,11 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
             .Where(o => o.Id == id)
             .ExecuteUpdateAsync(o => o.SetProperty(x => x.IsNew, false)) > 0;
     }
+
+    public async Task<List<Order>> GetByUserIdAsync(Guid userId)
+    {
+        return await DefaultQuery
+            .Where(o => o.UserId == userId)
+            .ToListAsync();
+    }
 }

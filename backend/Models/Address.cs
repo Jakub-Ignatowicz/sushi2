@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SushiZume.Models;
 
-[Table("Address")]
 public class Address
 {
     public Guid Id { get; init; } = Guid.NewGuid();
@@ -13,6 +12,8 @@ public class Address
     public string HomeNumber { get; set; }
     public string ApartmentNumber { get; set; }
     public int? Floor { get; set; }
+    public Guid UserId { get; set; }
 
+    public User User { get; set; }
     public List<Order> Orders { get; set; } = [];
 }

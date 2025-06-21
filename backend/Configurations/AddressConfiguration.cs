@@ -34,6 +34,9 @@ public class AddressConfiguration : IEntityTypeConfiguration<Address>
             .HasColumnName("floor")
             .IsRequired(false);
 
+        builder.Property(a => a.UserId)
+            .HasColumnName("userId");
+
         builder.HasMany(a => a.Orders)
             .WithOne(o => o.Address)
             .HasForeignKey(o => o.AddressId)

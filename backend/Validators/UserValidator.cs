@@ -51,3 +51,20 @@ public class UserValidator : AbstractValidator<UserPostDto>
         });
     }
 }
+
+public class ChangePasswordValidator : AbstractValidator<ChangePasswordDto>
+{
+    public ChangePasswordValidator()
+    {
+        RuleFor(x => x.OldPassword)
+            .NotEmpty().WithMessage("Stare hasło jest wymagane.");
+
+        RuleFor(x => x.NewPassword)
+            .NotEmpty().WithMessage("Nowe hasło jest wymagane.")
+            .MinimumLength(6).WithMessage("Nowe hasło musi mieć co najmniej 6 znaków.")
+            .MaximumLength(100).WithMessage("Nowe hasło nie może przekraczać 100 znaków.");
+
+        RuleFor(x => x.ConfirmNewPassword)
+            .Equal(x => x.NewPassword).WithMessage("Hasła muszą się zgadzać.");
+    }
+}
