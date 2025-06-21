@@ -8,7 +8,7 @@ namespace SushiZume.Extensions;
 
 public static class JwtExtensions
 {
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration config)
+    public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration config)
     {
         var secret = config["Jwt:Secret"]!;
 
@@ -29,7 +29,5 @@ public static class JwtExtensions
             });
 
         services.AddAuthorization();
-
-        return services;
     }
 }

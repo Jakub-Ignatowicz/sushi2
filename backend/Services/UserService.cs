@@ -21,6 +21,9 @@ public class UserService(
     {
         var user = mapper.Map<User>(dto);
 
+        if (user.Email != null && await DoesEmailExistAsync(user.Email))
+            throw new InvalidOperationException($"Email {user.Email} is already in use.");
+
         await userRepo.AddAsync(user);
         await userRepo.SaveChangesAsync();
 
@@ -53,12 +56,30 @@ public class UserService(
         return addresses;
     }
 
+    private static bool VerifyPassword(User user, string password)
+    {
+        return !string.IsNullOrEmpty(user.PasswordHash) && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+    }
+
+    public async Task ResetPasswordAsync(Guid tokenId, UserResetPasswordDto dto)
+    {
+        var token = await GetPasswordResetTokenAsync(tokenId);
+
+        if (token == null || token.ExpiryDate < DateTime.UtcNow)
+            throw new UnauthorizedAccessException("Invalid or expired password reset token.");
+
+        var user = await GetByIdAsync(token.UserId);
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+        await userRepo.SaveChangesAsync();
+    }
+
     public async Task ChangePasswordAsync(Guid userId, UserChangePasswordDto dto)
     {
         var user = await GetByIdAsync(userId);
 
-        if (user.IsGuest)
-            throw new InvalidOperationException("Guest users cannot change their password.");
+        if (!VerifyPassword(user, dto.OldPassword))
+            throw new UnauthorizedAccessException("Old password is incorrect.");
 
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
         await userRepo.SaveChangesAsync();
@@ -96,5 +117,34 @@ public class UserService(
             return null;
 
         return await GetByIdAsync(user.Id);
+    }
+
+    public async Task<bool> DoesEmailExistAsync(string email)
+    {
+        return await context.Users.AnyAsync(u => u.Email == email && !u.IsGuest);
+    }
+
+    public async Task GeneratePasswordResetToken(string email)
+    {
+        var user = await userRepo.GetByEmailAsync(email);
+
+        if (user == null)
+            throw new KeyNotFoundException($"User with email {email} not found.");
+
+        var resetToken = new PasswordResetToken
+        {
+            ExpiryDate = DateTime.UtcNow.AddMinutes(15),
+            UserId = user.Id
+        };
+
+        context.PasswordResetTokens.Add(resetToken);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<PasswordResetToken?> GetPasswordResetTokenAsync(Guid tokenId)
+    {
+        return await context.PasswordResetTokens
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == tokenId);
     }
 }

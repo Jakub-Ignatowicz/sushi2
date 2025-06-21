@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SushiZume.Attributes;
 using SushiZume.DTOs;
 using SushiZume.Enums;
 using SushiZume.Services.Interfaces;
@@ -43,6 +44,8 @@ public class UsersController(
         return mapper.Map<UserDto>(user);
     }
 
+    [Authorize]
+    [SameUserOnly]
     [HttpGet("{userId:guid}/orders")]
     public async Task<ActionResult<List<OrderDto>>> GetUserOrders(Guid userId)
     {
@@ -50,7 +53,8 @@ public class UsersController(
         return mapper.Map<List<OrderDto>>(orders);
     }
 
-    [Authorize(Roles = nameof(UserRole.Normal))]
+    [Authorize]
+    [SameUserOnly]
     [HttpGet("{userId:guid}/addresses")]
     public async Task<ActionResult<List<AddressDto>>> GetUserAddresses(Guid userId)
     {
@@ -58,7 +62,8 @@ public class UsersController(
         return mapper.Map<List<AddressDto>>(addresses);
     }
 
-    [Authorize(Roles = nameof(UserRole.Normal))]
+    [Authorize]
+    [SameUserOnly]
     [HttpPost("{userId:guid}/addresses")]
     public async Task<ActionResult<Guid>> AddAddress(Guid userId, [FromBody] AddressPostDto dto)
     {
@@ -68,7 +73,8 @@ public class UsersController(
         return Ok(addressId);
     }
 
-    [Authorize(Roles = nameof(UserRole.Normal))]
+    [Authorize]
+    [SameUserOnly]
     [HttpDelete("{userId:guid}/addresses/{addressId:guid}")]
     public async Task<ActionResult> DeleteAddress(Guid userId, Guid addressId)
     {
@@ -76,7 +82,8 @@ public class UsersController(
         return NoContent();
     }
 
-    [Authorize(Roles = nameof(UserRole.Normal))]
+    [Authorize]
+    [SameUserOnly]
     [HttpPost("{userId:guid}/password")]
     public async Task<ActionResult> ChangePassword(Guid userId, [FromBody] UserChangePasswordDto dto)
     {

@@ -68,3 +68,17 @@ public class ChangePasswordValidator : AbstractValidator<UserChangePasswordDto>
             .Equal(x => x.NewPassword).WithMessage("Hasła muszą się zgadzać.");
     }
 }
+
+public class UserResetPasswordValidator : AbstractValidator<UserResetPasswordDto>
+{
+    public UserResetPasswordValidator()
+    {
+        RuleFor(x => x.Password)
+            .NotEmpty().WithMessage("Hasło jest wymagane.")
+            .MinimumLength(6).WithMessage("Hasło musi mieć co najmniej 6 znaków.")
+            .MaximumLength(100).WithMessage("Hasło nie może przekraczać 100 znaków.");
+
+        RuleFor(x => x.ConfirmPassword)
+            .Equal(x => x.Password).WithMessage("Hasła muszą się zgadzać.");
+    }
+}

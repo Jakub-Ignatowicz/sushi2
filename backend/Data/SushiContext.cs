@@ -14,6 +14,7 @@ public class SushiContext(DbContextOptions<SushiContext> options) : DbContext(op
     public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<ProductItem> ProductItems { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
