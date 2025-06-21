@@ -1,10 +1,13 @@
+using SushiZume.Enums;
+
 namespace SushiZume.DTOs;
 
 public record UserDto(
     Guid Id,
-    string Email,
-    string FirstName,
-    string LastName,
+    string? Email,
+    string? FirstName,
+    string? LastName,
+    string? FullName,
     DateTime CreatedAt,
-    DateTime? UpdatedAt
+    UserRole Role
 );

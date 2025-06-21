@@ -51,12 +51,12 @@ public class ProductUpdateValidator : AbstractValidator<ProductUpdateDto>
             .GreaterThan(0).When(p => p.Amount.HasValue).WithMessage("Ilość produktu musi być większa niż 0.");
 
         RuleFor(p => p.ImagePath)
-            .Must(BeAValidUrl).When(p => !string.IsNullOrEmpty(p.ImagePath))
-            .WithMessage("Ścieżka do obrazu musi być poprawnym adresem URL.");
+            .Must(BeAValidUrl).WithMessage("Ścieżka do obrazu musi być poprawnym adresem URL.")
+            .When(p => !string.IsNullOrEmpty(p.ImagePath));
 
         RuleFor(p => p.AmountUnit)
-            .MaximumLength(50).When(p => !string.IsNullOrEmpty(p.AmountUnit))
-            .WithMessage("Jednostka miary nie może przekraczać 50 znaków.");
+            .MaximumLength(50).WithMessage("Jednostka miary nie może przekraczać 50 znaków.")
+            .When(p => !string.IsNullOrEmpty(p.AmountUnit));
     }
 
     private bool BeAValidUrl(string url)

@@ -17,7 +17,7 @@ public class User
     public UserRole Role { get; set; }
     public ICollection<Address> Addresses { get; init; } = [];
     public ICollection<Order> Orders { get; init; } = [];
-    public string FullName => $"{FirstName} {LastName}".Trim();
+    public string? FullName => IsNormal ? $"{FirstName} {LastName}".Trim() : null;
     public bool IsAdmin => Role == UserRole.Admin;
     public bool IsGuest => Role == UserRole.Guest;
     public bool IsNormal => Role == UserRole.Normal;
