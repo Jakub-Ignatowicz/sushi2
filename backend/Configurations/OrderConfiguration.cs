@@ -8,7 +8,39 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 {
     public void Configure(EntityTypeBuilder<Order> builder)
     {
+        builder.ToTable("Order");
+
         builder.HasKey(o => o.Id);
+
+        builder.Property(o => o.Id)
+            .HasColumnName("id");
+
+        builder.Property(o => o.PeopleCount)
+            .HasColumnName("peopleCount");
+
+        builder.Property(o => o.PaymentMethod)
+            .HasColumnName("paymentMethod");
+
+        builder.Property(o => o.IsNew)
+            .HasColumnName("new")
+            .HasDefaultValue(true);
+
+        builder.Property(o => o.IsDone)
+            .HasColumnName("done")
+            .HasDefaultValue(false);
+
+        builder.Property(o => o.CreatedAt)
+            .HasColumnName("createdAt");
+
+        builder.Property(o => o.Notes)
+            .HasColumnName("notesForOrder")
+            .IsRequired(false);
+
+        builder.Property(o => o.AddressId)
+            .HasColumnName("addressId");
+
+        builder.Property(o => o.UserId)
+            .HasColumnName("userId");
 
         builder.Property(o => o.PaymentMethod)
             .HasConversion<string>();

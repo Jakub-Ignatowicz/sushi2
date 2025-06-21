@@ -30,8 +30,8 @@ namespace SushiZume.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     price = table.Column<decimal>(type: "numeric", nullable: false),
-                    available = table.Column<bool>(type: "boolean", nullable: false),
-                    visible = table.Column<bool>(type: "boolean", nullable: false),
+                    available = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
+                    visible = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
                     imagePath = table.Column<string>(type: "text", nullable: false),
                     amount = table.Column<double>(type: "double precision", nullable: false),
                     amountName = table.Column<string>(type: "text", nullable: false)
@@ -52,7 +52,7 @@ namespace SushiZume.Migrations
                     firstName = table.Column<string>(type: "text", nullable: true),
                     lastName = table.Column<string>(type: "text", nullable: true),
                     createdAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Role = table.Column<int>(type: "integer", nullable: false)
+                    role = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,8 +89,8 @@ namespace SushiZume.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
-                    number = table.Column<int>(type: "integer", nullable: false),
-                    numberSuffix = table.Column<string>(type: "text", nullable: false),
+                    number = table.Column<double>(type: "double precision", nullable: false),
+                    numberSuffix = table.Column<string>(type: "text", nullable: true, defaultValue: "x"),
                     productId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -134,10 +134,10 @@ namespace SushiZume.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     peopleCount = table.Column<int>(type: "integer", nullable: false),
                     paymentMethod = table.Column<string>(type: "text", nullable: false),
-                    @new = table.Column<bool>(name: "new", type: "boolean", nullable: false),
-                    done = table.Column<bool>(type: "boolean", nullable: false),
+                    @new = table.Column<bool>(name: "new", type: "boolean", nullable: false, defaultValue: true),
+                    done = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     createdAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    notesForOrder = table.Column<string>(type: "text", nullable: false),
+                    notesForOrder = table.Column<string>(type: "text", nullable: true),
                     addressId = table.Column<Guid>(type: "uuid", nullable: false),
                     userId = table.Column<Guid>(type: "uuid", nullable: false)
                 },

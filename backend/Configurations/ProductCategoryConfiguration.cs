@@ -8,7 +8,15 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
 {
     public void Configure(EntityTypeBuilder<ProductCategory> builder)
     {
+        builder.ToTable("ProductCategory");
+
         builder.HasKey(pc => new { pc.ProductId, pc.CategoryId });
+
+        builder.Property(pc => pc.ProductId)
+            .HasColumnName("productId");
+
+        builder.Property(pc => pc.CategoryId)
+            .HasColumnName("categoryId");
 
         builder.HasOne(pc => pc.Product)
             .WithMany(p => p.Categories)

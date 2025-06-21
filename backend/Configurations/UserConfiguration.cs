@@ -34,11 +34,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.CreatedAt)
             .HasColumnName("createdAt");
 
+        builder.Property(u => u.Role)
+            .HasColumnName("role")
+            .HasConversion<string>();
+
         builder.HasMany(u => u.Orders)
             .WithOne(o => o.User)
             .HasForeignKey(o => o.UserId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        // builder.Property(u => u.Roles).HasConversion<List<string>>();
     }
 }

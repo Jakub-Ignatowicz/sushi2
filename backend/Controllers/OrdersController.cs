@@ -1,7 +1,9 @@
 using AutoMapper;
+using FluentValidation;
 using SushiZume.DTOs;
 using SushiZume.Models;
 using SushiZume.Services.Interfaces;
+using SushiZume.Validators;
 
 namespace SushiZume.Controllers;
 
@@ -9,7 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-public class OrdersController(IOrderService orderService, IMapper mapper) : ControllerBase
+public class OrdersController(IOrderService orderService, IMapper mapper, IValidator<OrderPostDto> validator)
+    : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<OrderDto>>> GetOrdersWithPagination(int page = 1, int pageSize = 10)
@@ -28,6 +31,8 @@ public class OrdersController(IOrderService orderService, IMapper mapper) : Cont
     [HttpPost]
     public async Task<ActionResult<OrderDto>> CreateOrder([FromBody] OrderPostDto dto)
     {
+        await validator.ValidateAndThrowAsync(dto);
+
         var order = await orderService.AddAsync(dto);
         var created = await orderService.GetByIdAsync(order.Id);
         return mapper.Map<OrderDto>(created);

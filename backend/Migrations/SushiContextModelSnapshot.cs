@@ -65,7 +65,7 @@ namespace SushiZume.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Address");
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.Category", b =>
@@ -82,7 +82,7 @@ namespace SushiZume.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.Order", b =>
@@ -101,15 +101,18 @@ namespace SushiZume.Migrations
                         .HasColumnName("createdAt");
 
                     b.Property<bool>("IsDone")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(false)
                         .HasColumnName("done");
 
                     b.Property<bool>("IsNew")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(true)
                         .HasColumnName("new");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("notesForOrder");
 
@@ -132,7 +135,7 @@ namespace SushiZume.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Order");
+                    b.ToTable("Order", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.OrderProduct", b =>
@@ -153,7 +156,7 @@ namespace SushiZume.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderProduct");
+                    b.ToTable("OrderProduct", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.Product", b =>
@@ -178,11 +181,15 @@ namespace SushiZume.Migrations
                         .HasColumnName("imagePath");
 
                     b.Property<bool>("IsAvailable")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(true)
                         .HasColumnName("available");
 
                     b.Property<bool>("IsVisible")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(true)
                         .HasColumnName("visible");
 
                     b.Property<string>("Name")
@@ -196,7 +203,7 @@ namespace SushiZume.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.ProductCategory", b =>
@@ -213,7 +220,7 @@ namespace SushiZume.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("ProductCategory");
+                    b.ToTable("ProductCategory", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.ProductItem", b =>
@@ -228,13 +235,14 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("integer")
+                    b.Property<double>("Number")
+                        .HasColumnType("double precision")
                         .HasColumnName("number");
 
                     b.Property<string>("NumberSuffix")
-                        .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("text")
+                        .HasDefaultValue("x")
                         .HasColumnName("numberSuffix");
 
                     b.Property<Guid>("ProductId")
@@ -245,7 +253,7 @@ namespace SushiZume.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductItem");
+                    b.ToTable("ProductItem", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.User", b =>
@@ -279,8 +287,10 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("phone");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("role");
 
                     b.HasKey("Id");
 

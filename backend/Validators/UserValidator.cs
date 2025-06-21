@@ -4,15 +4,15 @@ using SushiZume.DTOs;
 
 namespace SushiZume.Validators;
 
-public class UserRegistrationValidator : AbstractValidator<UserPostDto>
+public class UserValidator : AbstractValidator<UserPostDto>
 {
-    public UserRegistrationValidator()
+    public UserValidator()
     {
         RuleFor(x => x)
             .Must(dto => dto.Guest is not null ^ dto.Normal is not null)
             .WithMessage("Tylko jedna forma rejestracji jest dozwolona: gość lub normalna.");
 
-        When(u => u.Guest is not null || u.Normal is not null, () =>
+        When(u => u.Guest is not null, () =>
         {
             RuleFor(x => x.Guest!.PhoneNumber)
                 .NotEmpty().WithMessage("Numer telefonu jest wymagany.")
@@ -25,6 +25,14 @@ public class UserRegistrationValidator : AbstractValidator<UserPostDto>
 
         When(u => u.Normal is not null, () =>
         {
+            RuleFor(x => x.Normal!.PhoneNumber)
+                .NotEmpty().WithMessage("Numer telefonu jest wymagany.")
+                .Matches(@"^\d{9}$").WithMessage("Numer telefonu musi składać się z 9 cyfr.");
+
+            RuleFor(x => x.Normal!.Email)
+                .NotEmpty().WithMessage("Email jest wymagany.")
+                .EmailAddress().WithMessage("Email musi być poprawnym adresem email.");
+
             RuleFor(x => x.Normal!.Password)
                 .NotEmpty().WithMessage("Hasło jest wymagane.")
                 .MinimumLength(6).WithMessage("Hasło musi mieć co najmniej 6 znaków.")

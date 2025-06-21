@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SushiZume.DTOs;
@@ -10,7 +11,13 @@ namespace SushiZume.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductsController(IProductService productService, IMapper mapper) : ControllerBase
+public class ProductsController(
+    IProductService productService,
+    IMapper mapper,
+    IValidator<ProductItemPostDto> productItemValidator,
+    IValidator<ProductUpdateDto> productUpdateValidator,
+    IValidator<ProductPostDto> validator
+) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<ProductDto>>> GetProducts()
@@ -29,6 +36,8 @@ public class ProductsController(IProductService productService, IMapper mapper) 
     [HttpPost]
     public async Task<ActionResult<ProductDto>> CreateProduct(ProductPostDto dto)
     {
+        await validator.ValidateAndThrowAsync(dto);
+
         var product = await productService.AddAsync(dto);
         var created = await productService.GetByIdAsync(product.Id);
         return mapper.Map<ProductDto>(created);
@@ -51,6 +60,8 @@ public class ProductsController(IProductService productService, IMapper mapper) 
     [HttpPost("{productId:guid}")]
     public async Task<ActionResult<ProductDto>> UpdateProduct(Guid productId, [FromBody] ProductUpdateDto dto)
     {
+        await productUpdateValidator.ValidateAndThrowAsync(dto);
+
         var product = await productService.UpdateAsync(productId, dto);
         return mapper.Map<ProductDto>(product);
     }
@@ -58,7 +69,9 @@ public class ProductsController(IProductService productService, IMapper mapper) 
     [HttpPost("{productId:guid}/items")]
     public async Task<ActionResult> AddProductItems(Guid productId, [FromBody] List<ProductItemPostDto> dtos)
     {
-        var result = await productService.AddItemsAsync(productId, dtos);
+        await Task.WhenAll(dtos.Select(dto => productItemValidator.ValidateAndThrowAsync(dto)));
+
+        await productService.AddItemsAsync(productId, dtos);
         return Ok();
     }
 

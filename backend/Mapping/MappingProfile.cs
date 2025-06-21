@@ -49,6 +49,7 @@ public class MappingProfile : Profile
                 if (src.Normal is not null)
                 {
                     var user = context.Mapper.Map<User>(src.Normal);
+                    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(src.Normal.Password);
                     user.Role = UserRole.Normal;
                     return user;
                 }
@@ -59,7 +60,7 @@ public class MappingProfile : Profile
                     guest.Role = UserRole.Guest;
                     return guest;
                 }
-                
+
                 throw new ArgumentException("Invalid UserPostDto type");
             });
     }
