@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SushiZume.Data;
 using SushiZume.DTOs;
@@ -52,7 +53,7 @@ public class UserService(
         return addresses;
     }
 
-    public async Task ChangePasswordAsync(Guid userId, ChangePasswordDto dto)
+    public async Task ChangePasswordAsync(Guid userId, UserChangePasswordDto dto)
     {
         var user = await GetByIdAsync(userId);
 
@@ -82,5 +83,18 @@ public class UserService(
 
         addressRepo.Delete(address);
         await addressRepo.SaveChangesAsync();
+    }
+
+    public async Task<User?> Authenticate(string email, string password)
+    {
+        var user = await context.Users.SingleOrDefaultAsync(u => u.Email == email);
+
+        if (user == null || user.IsGuest)
+            return null;
+
+        if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+            return null;
+
+        return await GetByIdAsync(user.Id);
     }
 }

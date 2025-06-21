@@ -10,7 +10,8 @@ public interface IUserService
     Task<List<User>> GetAllAsync();
     Task<List<Order>> GetOrdersAsync(Guid userId);
     Task<List<Address>> GetAddressesAsync(Guid userId);
-    Task ChangePasswordAsync(Guid userId, ChangePasswordDto dto);
+    Task ChangePasswordAsync(Guid userId, UserChangePasswordDto dto);
     Task<Guid> AddAddressAsync(Guid userId, AddressPostDto dto);
     Task DeleteAddressAsync(Guid userId, Guid addressId);
+    Task<User?> Authenticate(string email, string password);
 }

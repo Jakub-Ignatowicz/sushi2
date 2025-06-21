@@ -1,6 +1,7 @@
 using FluentValidation;
 using SushiZume.Data;
 using Microsoft.EntityFrameworkCore;
+using SushiZume.Extensions;
 using SushiZume.Mapping;
 using SushiZume.Middleware;
 using SushiZume.Repositories;
@@ -31,7 +32,15 @@ builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJwtService, JwtService>(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+    var secret = config["Jwt:Secret"]!;
+    var expiry = int.Parse(config["Jwt:ExpiryMinutes"]!);
+    return new JwtService(secret, expiry);
+});
 
+builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddControllers();
 
@@ -55,7 +64,10 @@ if (app.Environment.IsDevelopment())
 // Middleware
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.MapControllers();
-// app.UseHttpsRedirection();
+
+// Auth
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Initialize database
 using var scope = app.Services.CreateScope();

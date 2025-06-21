@@ -1,6 +1,6 @@
 namespace SushiZume.DTOs;
 
-public record ChangePasswordDto(
+public record UserChangePasswordDto(
     string OldPassword,
     string NewPassword,
     string ConfirmNewPassword

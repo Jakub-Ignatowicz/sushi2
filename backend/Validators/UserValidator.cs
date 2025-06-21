@@ -52,7 +52,7 @@ public class UserValidator : AbstractValidator<UserPostDto>
     }
 }
 
-public class ChangePasswordValidator : AbstractValidator<ChangePasswordDto>
+public class ChangePasswordValidator : AbstractValidator<UserChangePasswordDto>
 {
     public ChangePasswordValidator()
     {

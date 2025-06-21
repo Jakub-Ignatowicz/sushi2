@@ -1,7 +1,9 @@
 using AutoMapper;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SushiZume.DTOs;
+using SushiZume.Enums;
 using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Controllers;
@@ -13,7 +15,7 @@ public class UsersController(
     IValidator<UserPostDto> validator,
     IMapper mapper,
     IValidator<AddressPostDto> addressValidator,
-    IValidator<ChangePasswordDto> changePasswordValidator)
+    IValidator<UserChangePasswordDto> changePasswordValidator)
     : ControllerBase
 {
     [HttpPost]
@@ -25,6 +27,7 @@ public class UsersController(
         return Ok(id);
     }
 
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpGet]
     public async Task<ActionResult<List<UserDto>>> GetUsers()
     {
@@ -32,6 +35,7 @@ public class UsersController(
         return mapper.Map<List<UserDto>>(users);
     }
 
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpGet("{userId:guid}")]
     public async Task<ActionResult<UserDto>> GetUserById(Guid userId)
     {
@@ -46,7 +50,7 @@ public class UsersController(
         return mapper.Map<List<OrderDto>>(orders);
     }
 
-
+    [Authorize(Roles = nameof(UserRole.Normal))]
     [HttpGet("{userId:guid}/addresses")]
     public async Task<ActionResult<List<AddressDto>>> GetUserAddresses(Guid userId)
     {
@@ -54,6 +58,7 @@ public class UsersController(
         return mapper.Map<List<AddressDto>>(addresses);
     }
 
+    [Authorize(Roles = nameof(UserRole.Normal))]
     [HttpPost("{userId:guid}/addresses")]
     public async Task<ActionResult<Guid>> AddAddress(Guid userId, [FromBody] AddressPostDto dto)
     {
@@ -63,6 +68,7 @@ public class UsersController(
         return Ok(addressId);
     }
 
+    [Authorize(Roles = nameof(UserRole.Normal))]
     [HttpDelete("{userId:guid}/addresses/{addressId:guid}")]
     public async Task<ActionResult> DeleteAddress(Guid userId, Guid addressId)
     {
@@ -70,8 +76,9 @@ public class UsersController(
         return NoContent();
     }
 
+    [Authorize(Roles = nameof(UserRole.Normal))]
     [HttpPost("{userId:guid}/password")]
-    public async Task<ActionResult> ChangePassword(Guid userId, [FromBody] ChangePasswordDto dto)
+    public async Task<ActionResult> ChangePassword(Guid userId, [FromBody] UserChangePasswordDto dto)
     {
         await changePasswordValidator.ValidateAndThrowAsync(dto);
 

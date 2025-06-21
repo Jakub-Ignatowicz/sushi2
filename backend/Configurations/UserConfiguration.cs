@@ -13,11 +13,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(u => u.Id);
 
         builder.Property(u => u.Id)
-            .IsRequired()
             .HasColumnName("id");
 
         builder.Property(u => u.Email)
             .HasColumnName("email");
+
+        builder.HasIndex(u => u.Email)
+            .IsUnique();
 
         builder.Property(u => u.PhoneNumber)
             .HasColumnName("phone");
