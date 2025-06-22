@@ -7,6 +7,12 @@ namespace SushiZume.Repositories;
 
 public class RefreshTokenRepository(SushiContext context) : Repository<RefreshToken>(context), IRefreshTokenRepository
 {
+    protected override IQueryable<RefreshToken> DefaultQuery =>
+        base.DefaultQuery
+            .Include(rt => rt.User)
+            .Include(rt => rt.ReplacedByToken);
+
+
     public Task<RefreshToken?> GetByTokenAsync(string token)
     {
         return DefaultQuery

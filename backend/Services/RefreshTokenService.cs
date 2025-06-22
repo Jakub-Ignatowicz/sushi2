@@ -25,6 +25,14 @@ public class RefreshTokenService(
             );
     }
 
+    public async Task<RefreshToken> TryGetByIdAsync(Guid tokenId)
+    {
+        var refreshToken = await refreshTokenRepo.GetByIdAsync(tokenId);
+        if (refreshToken == null)
+            throw new KeyNotFoundException("Refresh token not found.");
+        return refreshToken;
+    }
+
     public async Task<RefreshToken> TryGetByTokenAsync(string token)
     {
         var refreshToken = await refreshTokenRepo.GetByTokenAsync(token);

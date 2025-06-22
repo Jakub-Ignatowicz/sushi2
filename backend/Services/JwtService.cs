@@ -27,12 +27,14 @@ public class JwtService(IConfiguration config) : IJwtService
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+        var expires = DateTime.UtcNow.AddMinutes(_expiryMinutes);
         var token = new JwtSecurityToken(
             issuer: "sushizume",
             audience: "sushizume",
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_expiryMinutes),
-            signingCredentials: creds);
+            expires: expires,
+            signingCredentials: creds
+        );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }

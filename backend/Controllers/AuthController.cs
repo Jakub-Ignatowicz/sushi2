@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SushiZume.Attributes;
 using SushiZume.DTOs;
+using SushiZume.Models;
 using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Controllers;
@@ -27,6 +28,31 @@ public class AuthController(
         return Ok(id);
     }
 
+    private async Task<(string, Guid)> IssueTokens(User user, string? ipAddress, string? userAgent)
+    {
+        var payload = jwtService.GeneratePayload(user);
+
+        var refreshTokenPostDto = new RefreshTokenPostDto(
+            payload.RefreshToken,
+            userAgent ?? "",
+            ipAddress ?? "",
+            user.Id
+        );
+
+        var tokenId = await refreshTokenService.CreateAsync(refreshTokenPostDto);
+        var createdToken = await refreshTokenService.TryGetByIdAsync(tokenId);
+
+        Response.Cookies.Append("refreshToken", createdToken.Token, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = createdToken.ExpiryDate
+        });
+
+        return (payload.AccessToken, tokenId);
+    }
+
     [HttpPost("login")]
     public async Task<ActionResult<TokenDto>> Login([FromBody] UserLoginDto dto)
     {
@@ -35,43 +61,54 @@ public class AuthController(
         var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
         var userAgent = Request.Headers.UserAgent.ToString();
 
-        var payload = jwtService.GeneratePayload(user);
-
-        var refreshTokenPostDto = new RefreshTokenPostDto(
-            payload.RefreshToken,
-            userAgent,
+        var token = await IssueTokens(
+            user,
             ipAddress,
-            user.Id
+            userAgent
         );
 
-        await refreshTokenService.CreateAsync(refreshTokenPostDto);
+        return Ok(new { token });
+    }
 
-        return Ok(payload);
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        var refreshToken = Request.Cookies["refreshToken"];
+        if (string.IsNullOrEmpty(refreshToken))
+            return NoContent();
+
+        var storedToken = await refreshTokenService.TryGetByTokenAsync(refreshToken);
+        if (!storedToken.IsExpired)
+            return NoContent();
+
+        await refreshTokenService.MarkAsRevokedAsync(storedToken.Id);
+
+        return NoContent();
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> RefreshToken([FromBody] TokenDto dto)
+    public async Task<IActionResult> RefreshToken()
     {
-        var refreshToken = await refreshTokenService.TryGetByTokenAsync(dto.RefreshToken);
+        var refreshToken = Request.Cookies["refreshToken"];
+        if (string.IsNullOrEmpty(refreshToken))
+            return Unauthorized("No refresh token provided.");
 
-        if (!refreshToken.IsActive)
+        var storedToken = await refreshTokenService.TryGetByTokenAsync(refreshToken);
+        if (!storedToken.IsActive)
             return Unauthorized("Refresh token is not active or has been revoked.");
-
-        var user = await userService.TryGetByIdAsync(refreshToken.UserId);
 
         var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
         var userAgent = Request.Headers.UserAgent.ToString();
-        var newPayload = jwtService.GeneratePayload(user);
 
-        var refreshTokenPostDto = new RefreshTokenPostDto(
-            newPayload.RefreshToken,
-            userAgent,
+        var (token, createdTokenId) = await IssueTokens(
+            storedToken.User,
             ipAddress,
-            user.Id
+            userAgent
         );
 
-        await refreshTokenService.CreateAndReplaceAsync(refreshTokenPostDto, refreshToken.Id);
-        return Ok(newPayload);
+        await refreshTokenService.ReplaceAsync(storedToken.Id, createdTokenId);
+
+        return Ok(new { token });
     }
 
     [HttpPost("reset-password/request")]
