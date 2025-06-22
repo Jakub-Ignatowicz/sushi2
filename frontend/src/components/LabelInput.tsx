@@ -9,9 +9,7 @@ type Props = {
 const LabelInput = ({ label, ...props }: Props) => {
   return (
     <div className="flex flex-col gap-2">
-      <Label className="text-sm font-medium text-muted-foreground">
-        {label}
-      </Label>
+      <Label className="text-sm font-medium">{label}</Label>
       <Input {...props} />
     </div>
   );

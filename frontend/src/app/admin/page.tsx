@@ -14,14 +14,13 @@ const AdminPage = () => {
       <Label className="pb-4 text-2xl font-semibold text-muted-foreground">
         Panel administratora
       </Label>
-      <div className="flex w-full max-w-sm flex-col gap-4 p-4 rounded-lg shadow-md">
+      <div className="flex w-full max-w-sm flex-col gap-4 p-4 rounded-lg shadow-md bg-accent">
         <LabelInput label="Login" />
         <LabelInput label="Hasło" />
         <Button
           className="w-full cursor-pointer"
           variant="default"
           onClick={() => {
-            // Handle login logic here
             router.push("/admin/dashboard");
             console.log("Zaloguj się clicked");
           }}

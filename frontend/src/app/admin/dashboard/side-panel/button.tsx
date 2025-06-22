@@ -1,14 +1,18 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type Props = {
   label: string;
+  href: string;
 };
 
-const AdminSidePanelButton = ({ label }: Props) => {
+const AdminSidePanelButton = ({ label, href }: Props) => {
   return (
-    <Button variant={"outline"} className="w-full text-center">
-      {label}
-    </Button>
+    <Link href={href}>
+      <Button variant={"outline"} className="w-full text-center">
+        {label}
+      </Button>
+    </Link>
   );
 };
 

@@ -28,8 +28,6 @@ export type OrderProduct = {
 
 export type Order = {
   id: string;
-  email: string;
-  phoneNumber: string;
   address: Address;
   peopleCount: number;
   isDone: boolean;
@@ -37,6 +35,9 @@ export type Order = {
   notes: string;
   createdAt: string;
   orderProducts: OrderProduct[];
+  totalPrice: number;
+  paymentMethod: number;
+  user: User;
 };
 
 export type Address = {
@@ -47,4 +48,15 @@ export type Address = {
   homeNumber: string;
   apartmentNumber: string;
   floor: number | null;
+};
+
+export type User = {
+  id: string;
+  email?: string | null;
+  phoneNumber?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  fullName?: string | null;
+  createdAt: string;
+  // role: UserRole;
 };
