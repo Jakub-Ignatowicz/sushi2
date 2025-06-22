@@ -8,4 +8,6 @@ public class PasswordResetToken
     public bool Used { get; set; } = false;
 
     public User User { get; set; }
+
+    public bool IsExpired => DateTime.UtcNow > ExpiryDate;
 }

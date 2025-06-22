@@ -14,8 +14,8 @@ public class AuthController(
     IUserService userService,
     IJwtService jwtService,
     IValidator<UserChangePasswordDto> changePasswordValidator,
-    IValidator<UserResetPasswordDto> resetPasswordValidator
-)
+    IValidator<UserResetPasswordDto> resetPasswordValidator,
+    IRefreshTokenService refreshTokenService)
     : ControllerBase
 {
     [HttpPost("register")]
@@ -28,26 +28,51 @@ public class AuthController(
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
+    public async Task<ActionResult<TokenDto>> Login([FromBody] UserLoginDto dto)
     {
-        var user = await userService.Authenticate(dto.Email, dto.Password);
+        var user = await userService.TryAuthenticate(dto.Email, dto.Password);
 
-        if (user == null)
-            return Unauthorized("Invalid email or password.");
+        var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+        var userAgent = Request.Headers.UserAgent.ToString();
 
-        var token = jwtService.GenerateToken(user);
-        return Ok(new { token });
+        var payload = jwtService.GeneratePayload(user);
+
+        var refreshTokenPostDto = new RefreshTokenPostDto(
+            payload.RefreshToken,
+            userAgent,
+            ipAddress,
+            user.Id
+        );
+
+        await refreshTokenService.CreateAsync(refreshTokenPostDto);
+
+        return Ok(payload);
     }
 
-    // [HttpPost("refresh")]
-    // public IActionResult RefreshToken([FromBody] TokenRefreshDto dto)
-    // {
-    //     var newToken = jwtService.RefreshToken(dto.Token);
-    //     if (newToken == null)
-    //         return Unauthorized("Invalid or expired token.");
-    //
-    //     return Ok(new { token = newToken });
-    // }
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshToken([FromBody] TokenDto dto)
+    {
+        var refreshToken = await refreshTokenService.TryGetByTokenAsync(dto.RefreshToken);
+
+        if (!refreshToken.IsActive)
+            return Unauthorized("Refresh token is not active or has been revoked.");
+
+        var user = await userService.TryGetByIdAsync(refreshToken.UserId);
+
+        var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+        var userAgent = Request.Headers.UserAgent.ToString();
+        var newPayload = jwtService.GeneratePayload(user);
+
+        var refreshTokenPostDto = new RefreshTokenPostDto(
+            newPayload.RefreshToken,
+            userAgent,
+            ipAddress,
+            user.Id
+        );
+
+        await refreshTokenService.CreateAndReplaceAsync(refreshTokenPostDto, refreshToken.Id);
+        return Ok(newPayload);
+    }
 
     [HttpPost("reset-password/request")]
     public async Task<IActionResult> RequestPasswordReset([FromBody] UserResetPasswordRequestDto dto)
@@ -60,10 +85,6 @@ public class AuthController(
     public async Task<IActionResult> ResetPassword(Guid tokenId, [FromBody] UserResetPasswordDto dto)
     {
         await resetPasswordValidator.ValidateAndThrowAsync(dto);
-        
-        // var token = await userService.GetPasswordResetTokenAsync(tokenId);
-        // if (token == null || token.Expiration < DateTime.UtcNow)
-        //     return BadRequest("Invalid or expired password reset token.");
 
         await userService.ResetPasswordAsync(tokenId, dto);
         return NoContent();

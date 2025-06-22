@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SushiZume.Data;
 using SushiZume.DTOs;
+using SushiZume.Enums;
 using SushiZume.Models;
 using SushiZume.Repositories.Interfaces;
 using SushiZume.Services.Interfaces;
@@ -14,7 +15,8 @@ public class UserService(
     SushiContext context,
     IUserRepository userRepo,
     IOrderRepository orderRepo,
-    IAddressRepository addressRepo)
+    IAddressRepository addressRepo,
+    IRefreshTokenService refreshTokenService)
     : IUserService
 {
     public async Task<Guid> AddAsync(UserPostDto dto)
@@ -30,11 +32,19 @@ public class UserService(
         return user.Id;
     }
 
-    public async Task<User> GetByIdAsync(Guid userId)
+    public async Task<User> TryGetByIdAsync(Guid userId)
     {
         var user = await userRepo.GetByIdAsync(userId);
         if (user == null)
             throw new KeyNotFoundException($"User with ID {userId} not found.");
+        return user;
+    }
+
+    public async Task<User> TryGetByEmailAsync(string email)
+    {
+        var user = await userRepo.GetByEmailAsync(email);
+        if (user == null)
+            throw new KeyNotFoundException($"User with email {email} not found or is not a normal user.");
         return user;
     }
 
@@ -65,18 +75,20 @@ public class UserService(
     {
         var token = await GetPasswordResetTokenAsync(tokenId);
 
-        if (token == null || token.ExpiryDate < DateTime.UtcNow)
+        if (token == null || token.IsExpired)
             throw new UnauthorizedAccessException("Invalid or expired password reset token.");
 
-        var user = await GetByIdAsync(token.UserId);
+        var user = await TryGetByIdAsync(token.UserId);
 
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
         await userRepo.SaveChangesAsync();
+
+        await refreshTokenService.RevokeAllActiveTokensAsync(user.Id);
     }
 
     public async Task ChangePasswordAsync(Guid userId, UserChangePasswordDto dto)
     {
-        var user = await GetByIdAsync(userId);
+        var user = await TryGetByIdAsync(userId);
 
         if (!VerifyPassword(user, dto.OldPassword))
             throw new UnauthorizedAccessException("Old password is incorrect.");
@@ -108,20 +120,28 @@ public class UserService(
 
     public async Task<User?> Authenticate(string email, string password)
     {
-        var user = await context.Users.SingleOrDefaultAsync(u => u.Email == email);
+        var user = await userRepo.GetByEmailAsync(email);
 
-        if (user == null || user.IsGuest)
+        if (user == null)
             return null;
 
         if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             return null;
 
-        return await GetByIdAsync(user.Id);
+        return await TryGetByIdAsync(user.Id);
+    }
+
+    public async Task<User> TryAuthenticate(string email, string password)
+    {
+        var user = await Authenticate(email, password);
+        if (user == null)
+            throw new UnauthorizedAccessException("Invalid email or password.");
+        return user;
     }
 
     public async Task<bool> DoesEmailExistAsync(string email)
     {
-        return await context.Users.AnyAsync(u => u.Email == email && !u.IsGuest);
+        return await context.Users.AnyAsync(u => u.Email == email && u.Role == UserRole.Normal);
     }
 
     public async Task GeneratePasswordResetToken(string email)

@@ -58,8 +58,9 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("street");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("userId");
 
                     b.HasKey("Id");
 
@@ -159,6 +160,31 @@ namespace SushiZume.Migrations
                     b.ToTable("OrderProduct", (string)null);
                 });
 
+            modelBuilder.Entity("SushiZume.Models.PasswordResetToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expiryDate");
+
+                    b.Property<bool>("Used")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("userId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PasswordResetToken", (string)null);
+                });
+
             modelBuilder.Entity("SushiZume.Models.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -256,6 +282,56 @@ namespace SushiZume.Migrations
                     b.ToTable("ProductItem", (string)null);
                 });
 
+            modelBuilder.Entity("SushiZume.Models.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expiryDate");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("text")
+                        .HasColumnName("ipAddress");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("boolean")
+                        .HasColumnName("isRevoked");
+
+                    b.Property<Guid?>("ReplacedByTokenId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("replacedByTokenId");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("token");
+
+                    b.Property<string>("UserAgent")
+                        .HasColumnType("text")
+                        .HasColumnName("userAgent");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("userId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReplacedByTokenId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshToken", (string)null);
+                });
+
             modelBuilder.Entity("SushiZume.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -294,14 +370,21 @@ namespace SushiZume.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.Address", b =>
                 {
-                    b.HasOne("SushiZume.Models.User", null)
+                    b.HasOne("SushiZume.Models.User", "User")
                         .WithMany("Addresses")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SushiZume.Models.Order", b =>
@@ -342,6 +425,17 @@ namespace SushiZume.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("SushiZume.Models.PasswordResetToken", b =>
+                {
+                    b.HasOne("SushiZume.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SushiZume.Models.ProductCategory", b =>
                 {
                     b.HasOne("SushiZume.Models.Category", "Category")
@@ -370,6 +464,24 @@ namespace SushiZume.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SushiZume.Models.RefreshToken", b =>
+                {
+                    b.HasOne("SushiZume.Models.RefreshToken", "ReplacedByToken")
+                        .WithOne()
+                        .HasForeignKey("SushiZume.Models.RefreshToken", "ReplacedByTokenId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SushiZume.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ReplacedByToken");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SushiZume.Models.Address", b =>

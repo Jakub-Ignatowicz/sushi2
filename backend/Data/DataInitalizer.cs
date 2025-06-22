@@ -86,10 +86,11 @@ public static class DataInitializer
 
         var user = new User
         {
-            Email = "cwel@gmail.com",
+            Email = "test@gmail.com",
             PhoneNumber = "123456890",
             FirstName = "John",
             LastName = "Doe",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("123123"),
             Role = UserRole.Normal,
             Addresses = new List<Address> { address1 }
         };

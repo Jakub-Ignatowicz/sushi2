@@ -115,16 +115,68 @@ namespace SushiZume.Migrations
                     homeNumber = table.Column<string>(type: "text", nullable: false),
                     apartmentNumber = table.Column<string>(type: "text", nullable: false),
                     floor = table.Column<int>(type: "integer", nullable: true),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: true)
+                    userId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Address", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Address_User_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Address_User_userId",
+                        column: x => x.userId,
                         principalTable: "User",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PasswordResetToken",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    userId = table.Column<Guid>(type: "uuid", nullable: false),
+                    expiryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Used = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PasswordResetToken", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_PasswordResetToken_User_userId",
+                        column: x => x.userId,
+                        principalTable: "User",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    userId = table.Column<Guid>(type: "uuid", nullable: false),
+                    token = table.Column<string>(type: "text", nullable: false),
+                    expiryDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    createdAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    isRevoked = table.Column<bool>(type: "boolean", nullable: false),
+                    userAgent = table.Column<string>(type: "text", nullable: true),
+                    ipAddress = table.Column<string>(type: "text", nullable: true),
+                    replacedByTokenId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_RefreshToken_replacedByTokenId",
+                        column: x => x.replacedByTokenId,
+                        principalTable: "RefreshToken",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_User_userId",
+                        column: x => x.userId,
+                        principalTable: "User",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,9 +236,9 @@ namespace SushiZume.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Address_UserId",
+                name: "IX_Address_userId",
                 table: "Address",
-                column: "UserId");
+                column: "userId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_addressId",
@@ -204,6 +256,11 @@ namespace SushiZume.Migrations
                 column: "productId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PasswordResetToken_userId",
+                table: "PasswordResetToken",
+                column: "userId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductCategory_categoryId",
                 table: "ProductCategory",
                 column: "categoryId");
@@ -212,6 +269,23 @@ namespace SushiZume.Migrations
                 name: "IX_ProductItem_productId",
                 table: "ProductItem",
                 column: "productId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshToken_replacedByTokenId",
+                table: "RefreshToken",
+                column: "replacedByTokenId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshToken_userId",
+                table: "RefreshToken",
+                column: "userId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_email",
+                table: "User",
+                column: "email",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -221,10 +295,16 @@ namespace SushiZume.Migrations
                 name: "OrderProduct");
 
             migrationBuilder.DropTable(
+                name: "PasswordResetToken");
+
+            migrationBuilder.DropTable(
                 name: "ProductCategory");
 
             migrationBuilder.DropTable(
                 name: "ProductItem");
+
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "Order");

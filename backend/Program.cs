@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using SushiZume.Data;
 using Microsoft.EntityFrameworkCore;
 using SushiZume.Extensions;
@@ -27,18 +28,14 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductItemRepository, ProductItemRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
 // Register services
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IJwtService, JwtService>(sp =>
-{
-    var config = sp.GetRequiredService<IConfiguration>();
-    var secret = config["Jwt:Secret"]!;
-    var expiry = int.Parse(config["Jwt:ExpiryMinutes"]!);
-    return new JwtService(secret, expiry);
-});
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -59,11 +56,15 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.MapControllers().AllowAnonymous();
+}
+else
+{
+    app.MapControllers();
 }
 
 // Middleware
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
-app.MapControllers();
 
 // Auth
 app.UseAuthentication();
