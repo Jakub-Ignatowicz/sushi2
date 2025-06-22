@@ -4,6 +4,7 @@ import Link from "next/link";
 import ShoppingCart from "./ShoppingCart";
 import NavbarLinks from "./NavbarLinks";
 import MobileMenu from "./MobileMenu";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default function Navbar() {
   const mapLinks = new Map<string, string>([
@@ -14,7 +15,7 @@ export default function Navbar() {
   ]);
 
   return (
-    <div className="flex justify-center items-center h-30">
+    <div className="flex justify-center items-center my-10 mx-20">
       <div className="flex items-center justify-between w-full max-w-box">
         <div className="flex items-center ">
           <Link className="flex justify-center items-center z-50" href="/">
@@ -23,7 +24,10 @@ export default function Navbar() {
           <NavbarLinks mapLinks={mapLinks} />
         </div>
         <MobileMenu mapLinks={mapLinks} />
-        <ShoppingCart />
+        <div className="flex items-center gap-4">
+          <ModeToggle />
+          <ShoppingCart />
+        </div>
       </div>
     </div>
   );

@@ -11,10 +11,10 @@ const AdminPage = () => {
 
   return (
     <div className="flex w-full h-full flex-col items-center justify-center">
-      <Label className="text-xl pb-4 text-2xl font-semibold text-muted-foreground">
+      <Label className="pb-4 text-2xl font-semibold text-muted-foreground">
         Panel administratora
       </Label>
-      <div className="flex w-full max-w-sm flex-col gap-4 bg-secondary p-4 rounded-lg shadow-md">
+      <div className="flex w-full max-w-sm flex-col gap-4 p-4 rounded-lg shadow-md">
         <LabelInput label="Login" />
         <LabelInput label="Hasło" />
         <Button
