@@ -1,8 +1,12 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SushiZume.Attributes;
 using SushiZume.DTOs;
+using SushiZume.Extensions;
 using SushiZume.Models;
 using SushiZume.Services.Interfaces;
 
@@ -16,7 +20,8 @@ public class AuthController(
     IJwtService jwtService,
     IValidator<UserChangePasswordDto> changePasswordValidator,
     IValidator<UserResetPasswordDto> resetPasswordValidator,
-    IRefreshTokenService refreshTokenService)
+    IRefreshTokenService refreshTokenService,
+    IMapper mapper)
     : ControllerBase
 {
     [HttpPost("register")]
@@ -61,11 +66,12 @@ public class AuthController(
         var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
         var userAgent = Request.Headers.UserAgent.ToString();
 
-        var token = await IssueTokens(
+        var (token, _) = await IssueTokens(
             user,
             ipAddress,
             userAgent
         );
+
 
         return Ok(new { token });
     }
@@ -136,5 +142,15 @@ public class AuthController(
 
         await userService.ChangePasswordAsync(userId, dto);
         return NoContent();
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<ActionResult<UserDto>> GetCurrentUser()
+    {
+        var userId = User.RequireUserId();
+
+        var user = await userService.TryGetByIdAsync(userId);
+        return mapper.Map<UserDto>(user);
     }
 }

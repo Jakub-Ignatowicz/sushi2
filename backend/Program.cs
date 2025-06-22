@@ -56,7 +56,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.MapControllers().AllowAnonymous();
+    // app.MapControllers().AllowAnonymous();
+    app.MapControllers();
 }
 else
 {
