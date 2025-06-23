@@ -10,6 +10,8 @@ using SushiZume.Repositories.Interfaces;
 using SushiZume.Services;
 using SushiZume.Services.Interfaces;
 
+var AllowLocalhostOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -36,9 +38,23 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: AllowLocalhostOrigins, policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+// Controllers
 builder.Services.AddControllers();
 
 // Validation
@@ -50,14 +66,15 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
-    // app.MapControllers().AllowAnonymous();
-    app.MapControllers();
+    app.UseCors(AllowLocalhostOrigins);
+    app.MapControllers().AllowAnonymous();
 }
 else
 {
@@ -68,7 +85,7 @@ else
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 // Auth
-app.UseAuthentication();
+// app.UseAuthentication();
 app.UseAuthorization();
 
 // Initialize database

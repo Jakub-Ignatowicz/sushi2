@@ -3,9 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Info, Save } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DraggableCategoryList from "./draggable";
 import { Category } from "@/types/api";
+import { updateCategoryOrder } from "@/lib/api/categories";
 
 type Props = {
   categories: Category[];
@@ -13,22 +14,40 @@ type Props = {
 
 const CategoriesClient = ({ categories }: Props) => {
   const [changed, setChanged] = useState(false);
+  const [items, setItems] = useState(
+    [...categories].sort((a, b) => a.orderIndex - b.orderIndex),
+  );
+
+  useEffect(() => {
+    const originalIds = [...categories]
+      .sort((a, b) => a.orderIndex - b.orderIndex)
+      .map((c) => c.id);
+    const currentIds = items.map((c) => c.id);
+
+    const changed = originalIds.some((id, i) => id !== currentIds[i]);
+
+    if (changed) setChanged(true);
+  }, [items]);
 
   return (
     <div>
       <div>
-        <Label className="py-3 text-muted-foreground">
+        <Label className="py-4 text-muted-foreground">
           <Info size={16} />
           Przeciągnij i upuść, aby zmienić kolejność kategorii na stronie
           głównej
         </Label>
       </div>
       <div className="flex gap-4">
-        <Button disabled={!changed} variant="green" className="font-bold">
+        <Button
+          disabled={!changed}
+          variant="green"
+          onClick={() => updateCategoryOrder(items.map((c) => c.id))}
+        >
           <Save size={16} />
-          Zapisz zmiany
+          Zapisz kolejność
         </Button>
-        <DraggableCategoryList items={categories} setChanged={setChanged} />
+        <DraggableCategoryList items={items} setItems={setItems} />
       </div>
     </div>
   );

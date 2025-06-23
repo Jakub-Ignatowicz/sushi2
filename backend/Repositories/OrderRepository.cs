@@ -10,8 +10,13 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
         base.DefaultQuery
             .Include(o => o.OrderProducts)
             .ThenInclude(op => op.Product)
+            .ThenInclude(p => p.Categories)
+            .ThenInclude(pc => pc.Category)
+            .Include(o => o.OrderProducts)
+            .ThenInclude(op => op.Product)
             .ThenInclude(p => p.Items)
-            .Include(p => p.Address);
+            .Include(p => p.Address)
+            .Include(o => o.User);
 
     public new async Task<List<Order>> GetAllAsync()
     {

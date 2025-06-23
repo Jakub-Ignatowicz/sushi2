@@ -4,4 +4,5 @@ namespace SushiZume.Repositories.Interfaces;
 
 public interface ICategoryRepository : IRepository<Category>
 {
+    Task<List<Category>> GetAllWithProductsAsync();
 }

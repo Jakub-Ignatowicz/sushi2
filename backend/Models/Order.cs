@@ -21,6 +21,5 @@ public class Order
     public List<OrderProduct> OrderProducts { get; set; } = [];
     public User User { get; init; }
 
-    public string Email => User.Email;
-    public string PhoneNumber => User.PhoneNumber;
+    public decimal TotalPrice => OrderProducts.Sum(op => op.Product.Price * op.Quantity);
 }

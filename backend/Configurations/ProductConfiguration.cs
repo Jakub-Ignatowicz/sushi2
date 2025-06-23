@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SushiZume.Enums;
 using SushiZume.Models;
 
 namespace SushiZume.Configurations;
@@ -30,13 +31,25 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasDefaultValue(true);
 
         builder.Property(p => p.ImagePath)
-            .HasColumnName("imagePath");
+            .HasColumnName("imagePath")
+            .IsRequired(false);
 
         builder.Property(p => p.Amount)
-            .HasColumnName("amount");
+            .HasColumnName("amount")
+            .IsRequired(false);
 
         builder.Property(p => p.AmountUnit)
-            .HasColumnName("amountName");
+            .HasColumnName("amountName")
+            .IsRequired(false);
+
+        builder.Property(p => p.Description)
+            .HasColumnName("description")
+            .IsRequired(false);
+
+        builder.Property(p => p.Type)
+            .HasColumnName("type")
+            .HasConversion<string>()
+            .HasDefaultValue(ProductType.Normal);
 
         builder.HasMany(p => p.Categories)
             .WithOne(pc => pc.Product)

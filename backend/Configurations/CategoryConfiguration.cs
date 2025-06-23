@@ -18,6 +18,13 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         builder.Property(c => c.Name)
             .HasColumnName("name");
 
+        builder.Property(c => c.OrderIndex)
+            .HasColumnName("orderIndex");
+
+        builder.Property(c => c.Description)
+            .HasColumnName("description")
+            .IsRequired(false);
+
         builder.HasMany(c => c.Products)
             .WithOne(pc => pc.Category)
             .HasForeignKey(pc => pc.CategoryId);

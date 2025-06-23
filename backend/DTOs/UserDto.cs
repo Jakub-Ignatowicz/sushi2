@@ -5,6 +5,7 @@ namespace SushiZume.DTOs;
 public record UserDto(
     Guid Id,
     string? Email,
+    string? PhoneNumber,
     string? FirstName,
     string? LastName,
     string? FullName,

@@ -44,40 +44,24 @@ function SortableItem({
 
 type Props = {
   items: CategoryType[];
-  setChanged?: (changed: boolean) => void;
+  setItems: (items: CategoryType[]) => void;
 };
 
-export default function DraggableCategoryList({ items, setChanged }: Props) {
-  const [categories, setCategories] = useState(
-    [...items].sort((a, b) => a.orderIndex - b.orderIndex),
-  );
-  const ids = categories.map((c) => c.id);
+export default function DraggableCategoryList({ items, setItems }: Props) {
+  const ids = items.map((c) => c.id);
 
   const sensors = useSensors(useSensor(PointerSensor));
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (over && active.id !== over.id) {
-      setCategories((cats) => {
+      setItems((cats) => {
         const oldIndex = cats.findIndex((c) => c.id === active.id);
         const newIndex = cats.findIndex((c) => c.id === over.id);
         return arrayMove(cats, oldIndex, newIndex);
       });
     }
   }
-
-  useEffect(() => {
-    if (!setChanged) return;
-
-    const originalIds = [...items]
-      .sort((a, b) => a.orderIndex - b.orderIndex)
-      .map((c) => c.id);
-    const currentIds = categories.map((c) => c.id);
-
-    const changed = originalIds.some((id, i) => id !== currentIds[i]);
-
-    if (changed) setChanged(true);
-  }, [categories]);
 
   return (
     <DndContext
@@ -87,7 +71,7 @@ export default function DraggableCategoryList({ items, setChanged }: Props) {
     >
       <SortableContext items={ids} strategy={verticalListSortingStrategy}>
         <div className="flex flex-col gap-2 w-full">
-          {categories.map((cat) => (
+          {items.map((cat) => (
             <SortableItem key={cat.id} id={cat.id}>
               <Category category={cat} />
             </SortableItem>
