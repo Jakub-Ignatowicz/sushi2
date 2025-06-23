@@ -8,7 +8,7 @@ type ErrorResponse = {
 export const fetchApi = async <T>(
   endpoint: string,
   options?: RequestInit,
-): Promise<T | ErrorResponse> => {
+): Promise<T> => {
   try {
     const normalizedEndpoint = endpoint.replace(/^\/+/, "");
     const res = await fetch(`${BASE_URL}/${normalizedEndpoint}`, {

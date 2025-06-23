@@ -1,5 +1,4 @@
 import Image from "next/image";
-import hero from "../../public/Hero.webp";
 
 export default function Home() {
   return (
@@ -12,7 +11,7 @@ export default function Home() {
         </div>
       </div>
       <Image
-        src={hero}
+        src={"/Hero.webp"}
         width={850}
         height={850}
         className="absolute right-0 hidden xl:flex"

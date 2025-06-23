@@ -3,7 +3,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Georama } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Navbar from "@/components/general/navbar/Navbar";
 
 const georama = Georama({
   variable: "--font-georama",
@@ -17,7 +16,6 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  modal,
 }: Readonly<{
   children: React.ReactNode;
   modal: React.ReactNode;
@@ -36,8 +34,6 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="h-full flex flex-col justify-start mx-auto">
-            {modal}
-            <Navbar />
             <div className="flex-grow">{children}</div>
           </div>
         </ThemeProvider>

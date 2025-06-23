@@ -1,5 +1,4 @@
 import Image from "next/image";
-import logo from "../../../../public/SushizumeLogo.png";
 import Link from "next/link";
 import ShoppingCart from "./ShoppingCart";
 import NavbarLinks from "./NavbarLinks";
@@ -19,7 +18,12 @@ export default function Navbar() {
       <div className="flex items-center justify-between w-full max-w-box">
         <div className="flex items-center ">
           <Link className="flex justify-center items-center z-50" href="/">
-            <Image src={logo} alt="Logo" width={170} height={50} />
+            <Image
+              src={"/SushizumeLogo.png"}
+              alt="Logo"
+              width={170}
+              height={50}
+            />
           </Link>
           <NavbarLinks mapLinks={mapLinks} />
         </div>
