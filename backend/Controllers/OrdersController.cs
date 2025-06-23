@@ -13,7 +13,11 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-public class OrdersController(IOrderService orderService, IMapper mapper, IValidator<OrderPostDto> validator)
+public class OrdersController(
+    IOrderService orderService,
+    IMapper mapper,
+    IValidator<OrderPostDto> validator,
+    IOrderRepository orderRepo)
     : ControllerBase
 {
     [Authorize(Roles = nameof(UserRole.Admin))]
@@ -23,6 +27,23 @@ public class OrdersController(IOrderService orderService, IMapper mapper, IValid
         var orders = await orderService.GetWithPaginationAsync(page, pageSize);
         return Ok(mapper.Map<List<OrderDto>>(orders));
     }
+
+    [Authorize(Roles = nameof(UserRole.Admin))]
+    [HttpGet("new")]
+    public async Task<IActionResult> GetNewOrders()
+    {
+        var orders = await orderRepo.GetAllNewAsync();
+        return Ok(mapper.Map<List<OrderDto>>(orders));
+    }
+
+    [Authorize(Roles = nameof(UserRole.Admin))]
+    [HttpGet("in-progress")]
+    public async Task<IActionResult> GetInProgressOrders()
+    {
+        var orders = await orderRepo.GetAllInProgressAsync();
+        return Ok(mapper.Map<List<OrderDto>>(orders));
+    }
+
 
     [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpGet("{orderId:guid}")]

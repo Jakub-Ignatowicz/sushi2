@@ -27,7 +27,14 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
     public async Task<List<Order>> GetAllNewAsync()
     {
         return await DefaultQuery
-            .Where(o => o.IsNew)
+            .Where(o => o.IsNew && !o.IsDone)
+            .ToListAsync();
+    }
+
+    public async Task<List<Order>> GetAllInProgressAsync()
+    {
+        return await DefaultQuery
+            .Where(o => !o.IsNew && !o.IsDone)
             .ToListAsync();
     }
 
@@ -39,7 +46,6 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
             .Take(pageSize)
             .ToListAsync();
     }
-
 
     public async Task<bool> MarkAsDoneAsync(Guid id)
     {

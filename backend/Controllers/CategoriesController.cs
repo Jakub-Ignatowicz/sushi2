@@ -30,4 +30,11 @@ public class CategoriesController(ICategoryService categoryService, IMapper mapp
         await categoryService.OrderCategoriesAsync(categoryIds);
         return Ok();
     }
+
+    [HttpPatch("{categoryId:guid}")]
+    public async Task<IActionResult> UpdateCategoryName(Guid categoryId, [FromBody] UpdateCategoryNameDto dto)
+    {
+        await categoryService.ChangeNameAsync(categoryId, dto.Name);
+        return NoContent();
+    }
 }

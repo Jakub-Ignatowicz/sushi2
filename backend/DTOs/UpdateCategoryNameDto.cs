@@ -1,3 +1,5 @@
 namespace SushiZume.DTOs;
 
-public record UpdateCategoryNameDto();
+public record UpdateCategoryNameDto(
+    string Name
+);

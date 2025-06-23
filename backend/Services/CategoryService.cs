@@ -32,4 +32,14 @@ public class CategoryService(ICategoryRepository categoryRepo, SushiContext cont
 
         await context.SaveChangesAsync();
     }
+
+    public async Task ChangeNameAsync(Guid categoryId, string name)
+    {
+        var category = await categoryRepo.GetByIdAsync(categoryId);
+        if (category == null)
+            throw new KeyNotFoundException($"Category with ID {categoryId} not found.");
+
+        category.Name = name;
+        await context.SaveChangesAsync();
+    }
 }
