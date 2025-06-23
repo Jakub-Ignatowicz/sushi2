@@ -1,16 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { priceToString } from "@/lib/utils";
 import { Product as ProductType } from "@/types/api";
 import ProductDialog from "./product-dialog";
-import { Trash, Trash2 } from "lucide-react";
+import ProductDeleteDialog from "./product-delete-dialog";
 
 type Props = {
   product: ProductType;
+  categoryId: string;
 };
 
-const Product = ({ product }: Props) => {
+const Product = ({ product, categoryId }: Props) => {
   return (
     <div
       key={product.id}
@@ -28,12 +28,7 @@ const Product = ({ product }: Props) => {
         <p className="mt-2">{priceToString(product.price)}</p>
       </div>
       <div className="flex items-center gap-2">
-        <Button
-          variant="destructive"
-          onClick={() => alert(`Product ID: ${product.id}`)}
-        >
-          <Trash2 size={16} />
-        </Button>
+        <ProductDeleteDialog product={product} categoryId={categoryId} />
         <ProductDialog product={product} />
       </div>
     </div>

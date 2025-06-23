@@ -21,7 +21,7 @@ const ProductsPage = async () => {
             </Label>
             <div className="flex flex-col gap-4">
               {products.map((product) => (
-                <Product product={product} />
+                <Product product={product} categoryId={category} />
               ))}
             </div>
           </div>
