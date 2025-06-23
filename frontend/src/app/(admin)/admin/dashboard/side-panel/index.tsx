@@ -7,15 +7,8 @@ import { ModeToggle } from "@/components/mode-toggle";
 import Image from "next/image";
 
 const AdminDashboardSidePanel = () => {
-  const buttons = [
-    {
-      label: "Panel zarządzania",
-      icon: <LayoutDashboard />,
-    },
-  ];
-
   return (
-    <div className="w-120 h-screen p-4 bg-sidebar">
+    <div className="min-w-100 p-4 bg-sidebar h-screen sticky top-0">
       <div className="mb-6 flex items-center justify-center">
         <Image src={"/SushizumeLogo.png"} alt="Logo" width={170} height={50} />
       </div>

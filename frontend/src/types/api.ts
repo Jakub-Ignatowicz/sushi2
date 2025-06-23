@@ -1,10 +1,11 @@
 export type Product = {
   id: string;
   name: string;
-  imagePath: string;
-  amountUnit: string;
   price: number;
-  amount: number;
+  imagePath?: string;
+  amount?: number;
+  amountUnit?: string;
+  description?: string;
   categories: Category[];
   items: ProductItem[];
 };
@@ -12,6 +13,8 @@ export type Product = {
 export type Category = {
   id: string;
   name: string;
+  orderIndex: number;
+  description?: string;
 };
 
 export type ProductItem = {
