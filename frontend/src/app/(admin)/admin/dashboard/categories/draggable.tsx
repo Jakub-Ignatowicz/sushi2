@@ -19,29 +19,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { Category as CategoryType } from "@/types/api";
 import Category from "./category";
 
-function SortableItem({
-  id,
-  children,
-}: {
-  id: string;
-  children: React.ReactNode;
-}) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    cursor: "grab",
-  };
-
-  return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      {children}
-    </div>
-  );
-}
-
 type Props = {
   items: CategoryType[];
   setItems: (items: CategoryType[]) => void;
@@ -72,9 +49,7 @@ export default function DraggableCategoryList({ items, setItems }: Props) {
       <SortableContext items={ids} strategy={verticalListSortingStrategy}>
         <div className="flex flex-col gap-2 w-full">
           {items.map((cat) => (
-            <SortableItem key={cat.id} id={cat.id}>
-              <Category category={cat} />
-            </SortableItem>
+            <Category key={cat.id} category={cat} />
           ))}
         </div>
       </SortableContext>

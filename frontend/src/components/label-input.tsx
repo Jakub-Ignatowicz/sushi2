@@ -3,12 +3,11 @@ import { Label } from "./ui/label";
 
 type Props = {
   label: string;
-  // children: React.ReactNode;
-};
+} & React.ComponentProps<"input">;
 
 const LabelInput = ({ label, ...props }: Props) => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full">
       <Label className="text-sm font-medium">{label}</Label>
       <Input {...props} />
     </div>

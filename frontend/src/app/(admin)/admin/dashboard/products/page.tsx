@@ -3,26 +3,19 @@ import Product from "./product";
 import { Product as ProductType } from "@/types/api";
 import { Label } from "@/components/ui/label";
 import { Tag } from "lucide-react";
-
-type AggregatedProducts = {
-  [categoryName: string]: ProductType[];
-};
+import { groupProductsByCategory } from "@/lib/utils";
 
 const ProductsPage = async () => {
   const products = await getProducts();
 
-  const aggregatedProducts = products.reduce((acc, product) => {
-    for (const category of product.categories)
-      (acc[category.name] ??= []).push(product);
-    return acc;
-  }, {} as AggregatedProducts);
+  const aggregatedProducts = groupProductsByCategory(products);
 
   return (
     <div className="flex flex-col">
       {Object.entries(aggregatedProducts).map(([category, products]) => {
         return (
           <div>
-            <Label className="text-2xl my-5 font-bold">
+            <Label className="text-2xl my-5 mt-8 font-bold">
               <Tag size={16} />
               {category}
             </Label>

@@ -8,3 +8,9 @@ export const updateCategoryOrder = async (categories: string[]) =>
     method: "POST",
     body: JSON.stringify(categories),
   });
+
+export const changeCategoryName = async (id: string, name: string) =>
+  fetchApi(`/categories/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ name }),
+  });

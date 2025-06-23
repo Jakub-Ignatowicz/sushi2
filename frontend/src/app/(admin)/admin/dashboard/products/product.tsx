@@ -3,6 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { priceToString } from "@/lib/utils";
 import { Product as ProductType } from "@/types/api";
+import ProductDialog from "./product-dialog";
+import { Trash, Trash2 } from "lucide-react";
 
 type Props = {
   product: ProductType;
@@ -25,7 +27,15 @@ const Product = ({ product }: Props) => {
         <p className="text-sm text-muted-foreground">{product.description}</p>
         <p className="mt-2">{priceToString(product.price)}</p>
       </div>
-      <Button variant={"outline"}>Edytuj</Button>
+      <div className="flex items-center gap-2">
+        <Button
+          variant="destructive"
+          onClick={() => alert(`Product ID: ${product.id}`)}
+        >
+          <Trash2 size={16} />
+        </Button>
+        <ProductDialog product={product} />
+      </div>
     </div>
   );
 };
