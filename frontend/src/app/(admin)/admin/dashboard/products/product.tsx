@@ -14,7 +14,7 @@ const Product = ({ product, categoryId }: Props) => {
   return (
     <div
       key={product.id}
-      className="px-6 py-4 bg-primary-foreground rounded-lg shadow-md flex gap-2 items-center justify-between"
+      className="px-6 py-3 bg-primary-foreground rounded-lg shadow-md flex gap-10 items-center justify-between"
     >
       <div>
         <div>
@@ -25,7 +25,7 @@ const Product = ({ product, categoryId }: Props) => {
           </span>
         </div>
         <p className="text-sm text-muted-foreground">{product.description}</p>
-        <p className="mt-2">{priceToString(product.price)}</p>
+        <p className="mt-2 text-sm">{priceToString(product.price)}</p>
       </div>
       <div className="flex items-center gap-2">
         <ProductDeleteDialog product={product} categoryId={categoryId} />

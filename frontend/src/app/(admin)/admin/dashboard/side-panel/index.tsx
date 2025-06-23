@@ -22,7 +22,7 @@ const AdminDashboardSidePanel = () => {
       <div className="flex flex-col gap-2 mb-4">
         <AdminSidePanelButton
           label="Zamówienia"
-          href="/admin/dashboard/orders"
+          href="/admin/dashboard/orders/new"
         />
         <AdminSidePanelButton
           label="Produkty"

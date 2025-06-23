@@ -36,7 +36,7 @@ export type Order = {
   isDone: boolean;
   isNew: boolean;
   notes: string;
-  createdAt: string;
+  createdAt: Date;
   orderProducts: OrderProduct[];
   totalPrice: number;
   paymentMethod: number;

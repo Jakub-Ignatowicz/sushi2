@@ -1,4 +1,4 @@
-import { Product } from "@/types/api";
+import { Address, Product } from "@/types/api";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -11,6 +11,22 @@ export function priceToString(price: number): string {
     style: "currency",
     currency: "PLN",
   }).format(price);
+}
+
+export function addressToString(address: Address): string {
+  return `ul. ${address.street} ${address.homeNumber}${address.apartmentNumber ? `/${address.apartmentNumber}` : ""}`;
+}
+
+export function formatDate(date: Date): string {
+  return (
+    new Date(date).toLocaleDateString("pl-PL") +
+    " " +
+    new Date(date).toLocaleTimeString("pl-PL", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    })
+  );
 }
 
 export type AggregatedProducts = {

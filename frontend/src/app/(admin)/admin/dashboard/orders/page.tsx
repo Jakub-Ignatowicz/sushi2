@@ -2,9 +2,11 @@ import { getOrders } from "@/lib/api/orders";
 import { Order } from "@/types/api";
 import OrderComponent from "./order";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
 
 const OrdersPage = async () => {
-  const orders = (await getOrders()) as Order[];
+  const orders = await getOrders();
 
   return (
     <div>
