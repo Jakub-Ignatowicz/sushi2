@@ -16,20 +16,24 @@ const AddToCardButton = ({ product, isPreview }: Props) => {
   const handleAddToCart = () => {
     const existingItem = cart.find((item) => item.product.id === product.id);
 
+    let updatedCart;
+
     if (existingItem) {
-      const updatedCart = cart.map((item) =>
+      updatedCart = cart.map((item) =>
         item.product.id === product.id
           ? { ...item, count: item.count + 1 }
           : item,
       );
-      setCart(updatedCart);
     } else {
       const newCartItem: CartProduct = {
         product,
         count: 1,
       };
-      setCart([...cart, newCartItem]);
+      updatedCart = [...cart, newCartItem];
     }
+
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart)); // ⬅️ zapis do localStorage
   };
 
   return (
