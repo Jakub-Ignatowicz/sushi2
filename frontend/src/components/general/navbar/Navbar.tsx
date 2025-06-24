@@ -14,7 +14,7 @@ export default function Navbar() {
   ]);
 
   return (
-    <div className="flex justify-center items-center my-10 mx-20">
+    <div className="flex justify-center items-center my-10 mx-8 xl:mx-20">
       <div className="flex items-center justify-between w-full max-w-box">
         <div className="flex items-center ">
           <Link className="flex justify-center items-center z-50" href="/">
@@ -29,7 +29,7 @@ export default function Navbar() {
         </div>
         <div className="flex items-center">
           <div className="flex items-center gap-4">
-            <ModeToggle />
+            <ModeToggle className="hidden xl:flex" />
             <ShoppingCart />
           </div>
           <MobileMenu mapLinks={mapLinks} />

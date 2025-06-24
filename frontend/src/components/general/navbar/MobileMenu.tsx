@@ -6,6 +6,7 @@ import { FaBars, FaRegTimesCircle } from "react-icons/fa";
 import MobileLink from "./MobileLink";
 import { cn } from "@/lib/utils";
 import { useCartState } from "@/context/CartState";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default function MobileMenu({
   mapLinks,
@@ -60,7 +61,7 @@ export default function MobileMenu({
             transition={{ duration: 0.1 }}
             className="flex justify-center  fixed top-0 left-0 w-screen h-screen backdrop-blur-lg z-10 py-20"
           >
-            <div className="flex items-start flex-col max-w-box w-full text-xl my-5">
+            <div className="flex items-start flex-col max-w-box w-full text-xl my-6 mx-6">
               {Array.from(mapLinks).map(([href, content]) => (
                 <MobileLink
                   key={href}
@@ -85,6 +86,7 @@ export default function MobileMenu({
                   {newTotalCount}
                 </div>
               </div>
+              <ModeToggle className="border-0 my-2 mx-1" />
             </div>
           </motion.div>
         )}

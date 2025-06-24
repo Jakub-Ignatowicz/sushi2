@@ -18,7 +18,7 @@ export default function MobileLink({
       href={href}
       onClick={() => setMenuOn(false)}
       className={cn(
-        "px-3 py-2 m-1 rounded-4xl",
+        "px-2 py-2 my-1 rounded-4xl",
         path == href ? "bg-zume" : "bg-transparent",
       )}
     >
