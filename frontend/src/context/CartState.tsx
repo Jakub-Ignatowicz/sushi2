@@ -1,5 +1,5 @@
 "use client";
-import { CartProduct } from "@/types";
+import { CartProduct } from "@/types/api";
 import { createContext, useContext, useState, ReactNode } from "react";
 
 type CartStateType = {
