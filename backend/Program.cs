@@ -54,6 +54,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -105,6 +106,8 @@ app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 // Auth
 // app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseStaticFiles();
 
 // Initialize database
 using var scope = app.Services.CreateScope();

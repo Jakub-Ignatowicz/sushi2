@@ -12,7 +12,7 @@ using SushiZume.Data;
 namespace SushiZume.Migrations
 {
     [DbContext(typeof(SushiContext))]
-    [Migration("20250624144059_Init")]
+    [Migration("20250624203929_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -215,9 +215,9 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<string>("ImagePath")
+                    b.Property<string>("ImageName")
                         .HasColumnType("text")
-                        .HasColumnName("imagePath");
+                        .HasColumnName("imageName");
 
                     b.Property<bool>("IsAvailable")
                         .ValueGeneratedOnAdd()

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { API_BASE_URL } from "@/lib/api";
 import { priceToString } from "@/lib/utils";
 import { Product } from "@/types/api";
 import { Plus } from "lucide-react";
@@ -11,9 +12,13 @@ type Props = {
 const ProductComponent = ({ product, isPreview = false }: Props) => {
   return (
     <div className="flex gap-2 bg-primary-foreground p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
-      {product.imagePath && (
+      {((isPreview && product.fakePath) || product.imageName) && (
         <img
-          src={product.imagePath}
+          src={
+            product.fakePath
+              ? product.fakePath
+              : `${API_BASE_URL}/images/${product.imageName}`
+          }
           alt={product.name}
           className="w-64 h-full object-cover rounded-lg my-auto mr-8"
         />

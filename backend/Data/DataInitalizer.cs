@@ -22,7 +22,7 @@ public static class DataInitializer
             Price = 25,
             IsAvailable = true,
             IsVisible = true,
-            ImagePath = "margherita.jpg",
+            ImageName = "margherita.jpg",
             Amount = 1,
             AmountUnit = "pcs",
         };
@@ -40,7 +40,7 @@ public static class DataInitializer
             Price = 5,
             IsAvailable = true,
             IsVisible = true,
-            ImagePath = "cola.jpg",
+            ImageName = "cola.jpg",
             Amount = 0.5,
             AmountUnit = "L",
         };

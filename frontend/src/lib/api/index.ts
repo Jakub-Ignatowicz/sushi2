@@ -1,4 +1,5 @@
-const BASE_URL = "http://localhost:5152/api";
+export const API_BASE_URL = "http://localhost:5152";
+export const API_URL = `${API_BASE_URL}/api`;
 
 type ErrorResponse = {
   status: "error";
@@ -11,7 +12,7 @@ export const fetchApi = async <T>(
 ): Promise<T> => {
   try {
     const normalizedEndpoint = endpoint.replace(/^\/+/, "");
-    const res = await fetch(`${BASE_URL}/${normalizedEndpoint}`, {
+    const res = await fetch(`${API_URL}/${normalizedEndpoint}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
