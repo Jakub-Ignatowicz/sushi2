@@ -23,14 +23,14 @@ const ProductComponent = ({ product, isPreview = false }: Props) => {
           className="w-64 h-full object-cover rounded-lg my-auto mr-8"
         />
       )}
-      <div>
+      <div className="flex flex-col gap-2">
         <div>
           <span className="text-lg font-semibold">{product.name}</span>
           <span className="text-muted-foreground ml-2">
             {product.amount} {product.amountUnit}
           </span>
         </div>
-        <div className="flex items-center my-2 gap-4">
+        <div className="flex items-center gap-4">
           <p className="text-xl font-bold text-red-200">
             {priceToString(product.price)}
           </p>
@@ -38,15 +38,17 @@ const ProductComponent = ({ product, isPreview = false }: Props) => {
             <Plus />
           </Button>
         </div>
-        <p>{product.description}</p>
-        <div className="inline-block mt-2">
-          {product.items.map((item) => (
-            <div className="flex items-start gap-2" key={item.id}>
-              <p className="text-red-400 font-semibold">{item.number}x</p>
-              <p>{item.description}</p>
-            </div>
-          ))}
-        </div>
+        {product.description && <p>{product.description}</p>}
+        {product.items.length > 0 && (
+          <div className="inline-block mt-2">
+            {product.items.map((item) => (
+              <div className="flex items-start gap-2" key={item.id}>
+                <p className="text-red-400 font-semibold">{item.number}x</p>
+                <p>{item.description}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

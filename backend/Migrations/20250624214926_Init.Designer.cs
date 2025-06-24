@@ -12,7 +12,7 @@ using SushiZume.Data;
 namespace SushiZume.Migrations
 {
     [DbContext(typeof(SushiContext))]
-    [Migration("20250624203929_Init")]
+    [Migration("20250624214926_Init")]
     partial class Init
     {
         /// <inheritdoc />

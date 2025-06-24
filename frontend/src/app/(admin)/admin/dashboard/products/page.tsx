@@ -9,19 +9,6 @@ import { uploadImage } from "@/lib/api/images";
 const ProductsPage = async () => {
   const products = await getProducts();
 
-  async function urlToFile(url, filename, mimeType) {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    return new File([blob], filename, { type: mimeType });
-  }
-
-  const convertProduct = async (data) => {
-    const fileName = await uploadImage(file);
-    data.imageName = fileName;
-
-    await updateProduct(data);
-  };
-
   const aggregatedProducts = groupProductsByCategory(products);
 
   return (
