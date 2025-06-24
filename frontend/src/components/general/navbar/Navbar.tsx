@@ -27,10 +27,12 @@ export default function Navbar() {
           </Link>
           <NavbarLinks mapLinks={mapLinks} />
         </div>
-        <MobileMenu mapLinks={mapLinks} />
-        <div className="flex items-center gap-4">
-          <ModeToggle />
-          <ShoppingCart />
+        <div className="flex items-center">
+          <div className="flex items-center gap-4">
+            <ModeToggle />
+            <ShoppingCart />
+          </div>
+          <MobileMenu mapLinks={mapLinks} />
         </div>
       </div>
     </div>
