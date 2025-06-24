@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useCartState } from "@/context/CartState";
-import { CartProduct, Product } from "@/types/api";
+import { OrderProduct, Product } from "@/types/api";
 import { Plus } from "lucide-react";
 
 type Props = {
@@ -21,13 +21,13 @@ const AddToCardButton = ({ product, isPreview }: Props) => {
     if (existingItem) {
       updatedCart = cart.map((item) =>
         item.product.id === product.id
-          ? { ...item, count: item.count + 1 }
+          ? { ...item, count: item.quantity + 1 }
           : item,
       );
     } else {
-      const newCartItem: CartProduct = {
+      const newCartItem: OrderProduct = {
         product,
-        count: 1,
+        quantity: 1,
       };
       updatedCart = [...cart, newCartItem];
     }

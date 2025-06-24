@@ -11,12 +11,6 @@ export type Product = {
   items: ProductItem[];
 };
 
-// nie API type ale no nwm, nie bede robil osobnego pliku na to; TODO
-export type CartProduct = {
-  product: Product;
-  count: number;
-};
-
 export type Category = {
   id: string;
   name: string;
