@@ -4,6 +4,7 @@ import { Product as ProductType } from "@/types/api";
 import { Label } from "@/components/ui/label";
 import { Tag } from "lucide-react";
 import { groupProductsByCategory } from "@/lib/utils";
+import { uploadImage } from "@/lib/api/images";
 
 const ProductsPage = async () => {
   const products = await getProducts();

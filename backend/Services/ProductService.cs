@@ -51,7 +51,7 @@ public class ProductService(
         var product = await GetByIdAsync(productId);
 
         product.Name = dto.Name ?? product.Name;
-        product.ImagePath = dto.ImagePath ?? product.ImagePath;
+        product.ImageName = dto.ImageName ?? product.ImageName;
         product.AmountUnit = dto.AmountUnit ?? product.AmountUnit;
         product.Price = dto.Price ?? product.Price;
         product.Amount = dto.Amount ?? product.Amount;

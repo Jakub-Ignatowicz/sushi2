@@ -12,7 +12,7 @@ public class Product
     public bool IsAvailable { get; set; }
     public bool IsVisible { get; set; }
     public bool IsFeatured { get; set; }
-    public string? ImagePath { get; set; }
+    public string? ImageName { get; set; }
     public double? Amount { get; set; }
     public string? AmountUnit { get; set; }
     public string? Description { get; set; }

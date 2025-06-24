@@ -34,8 +34,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasColumnName("featured")
             .HasDefaultValue(false);
 
-        builder.Property(p => p.ImagePath)
-            .HasColumnName("imagePath")
+        builder.Property(p => p.ImageName)
+            .HasColumnName("imageName")
             .IsRequired(false);
 
         builder.Property(p => p.Amount)

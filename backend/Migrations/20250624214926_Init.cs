@@ -35,7 +35,7 @@ namespace SushiZume.Migrations
                     available = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
                     visible = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
                     featured = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    imagePath = table.Column<string>(type: "text", nullable: true),
+                    imageName = table.Column<string>(type: "text", nullable: true),
                     amount = table.Column<double>(type: "double precision", nullable: true),
                     amountName = table.Column<string>(type: "text", nullable: true),
                     description = table.Column<string>(type: "text", nullable: true),

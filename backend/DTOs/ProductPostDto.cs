@@ -5,7 +5,7 @@ namespace SushiZume.DTOs;
 public record ProductPostDto(
     string Name,
     decimal Price,
-    string ImagePath,
+    string ImageName,
     double Amount,
     string AmountUnit,
     List<Guid> CategoryIds,

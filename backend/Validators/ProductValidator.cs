@@ -18,22 +18,12 @@ public class ProductValidator : AbstractValidator<ProductPostDto>
         RuleFor(p => p.Amount)
             .GreaterThan(0).WithMessage("Ilość produktu musi być większa niż 0.");
 
-        RuleFor(p => p.ImagePath)
-            .NotEmpty().WithMessage("Ścieżka do obrazu produktu jest wymagana.")
-            .Must(BeAValidUrl).WithMessage("Ścieżka do obrazu musi być poprawnym adresem URL.");
-
         RuleFor(p => p.AmountUnit)
             .NotEmpty().WithMessage("Jednostka miary produktu jest wymagana.")
             .MaximumLength(50).WithMessage("Jednostka miary nie może przekraczać 50 znaków.");
 
         RuleForEach(p => p.ProductItems)
             .SetValidator(new ProductItemValidator());
-    }
-
-    private bool BeAValidUrl(string url)
-    {
-        return Uri.TryCreate(url, UriKind.Absolute, out var uriResult)
-               && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
     }
 }
 
@@ -50,18 +40,8 @@ public class ProductUpdateValidator : AbstractValidator<ProductUpdateDto>
         RuleFor(p => p.Amount)
             .GreaterThan(0).When(p => p.Amount.HasValue).WithMessage("Ilość produktu musi być większa niż 0.");
 
-        RuleFor(p => p.ImagePath)
-            .Must(BeAValidUrl).WithMessage("Ścieżka do obrazu musi być poprawnym adresem URL.")
-            .When(p => !string.IsNullOrEmpty(p.ImagePath));
-
         RuleFor(p => p.AmountUnit)
             .MaximumLength(50).WithMessage("Jednostka miary nie może przekraczać 50 znaków.")
             .When(p => !string.IsNullOrEmpty(p.AmountUnit));
-    }
-
-    private bool BeAValidUrl(string url)
-    {
-        return Uri.TryCreate(url, UriKind.Absolute, out var uriResult)
-               && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
     }
 }
