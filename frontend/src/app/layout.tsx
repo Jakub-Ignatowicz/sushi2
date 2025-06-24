@@ -3,6 +3,7 @@ import { Georama } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/general/navbar/Navbar";
+import { CartStateProvider } from "@/context/CartState";
 
 const georama = Georama({
   variable: "--font-georama",
@@ -25,9 +26,11 @@ export default function RootLayout({
     <html className={cn(georama.className, "antialiased  h-full")} lang="en">
       <body className="h-full bg-background">
         <div className="h-full flex flex-col justify-start mx-auto">
-          {modal}
-          <Navbar />
-          <div className="flex-grow">{children}</div>
+          <CartStateProvider>
+            {modal}
+            <Navbar />
+            <div className="flex-grow">{children}</div>
+          </CartStateProvider>
         </div>
       </body>
     </html>
