@@ -16,10 +16,6 @@ type Props = {
 };
 
 const ProductDeleteDialog = ({ product, categoryId }: Props) => {
-  console.log("ProductDeleteDialog", product, categoryId);
-  // const categoryName = product.categories.find(
-  //   (c) => c.id === categoryId,
-  // )?.name;
   const categoryNames = product.categories.map((c) => c.name);
 
   return (

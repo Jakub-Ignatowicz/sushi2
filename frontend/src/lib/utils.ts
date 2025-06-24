@@ -46,6 +46,10 @@ export function groupProductsByCategory(
     }
   }
 
+  for (const products of Object.values(aggregated)) {
+    products.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   return Object.fromEntries(
     Object.entries(aggregated).sort(
       (a, b) => categoryOrder[a[0]] - categoryOrder[b[0]],
