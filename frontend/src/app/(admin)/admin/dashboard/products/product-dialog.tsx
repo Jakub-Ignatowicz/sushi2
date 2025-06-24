@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { updateProduct } from "@/lib/api/products";
 import { Product } from "@/types/api";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -80,7 +81,7 @@ const ProductDialog = ({ product }: Props) => {
                     <LabelInput
                       label="Ilość"
                       value={newAmount}
-                      // className="w-24"
+                      width="w-32"
                       type="number"
                       onChange={(e) => setNewAmount(e.target.value)}
                     />
@@ -113,14 +114,16 @@ const ProductDialog = ({ product }: Props) => {
                       </div>
                     ))}
                   </div>
-                  {product.items.map((item, index) => (
-                    <div key={index} className="flex items-center gap-2 mt-2">
-                      <p>{item.description}</p>
-                    </div>
-                  ))}
                 </div>
               </div>
-              <Button className="mt-4 w-full" type="submit" variant="secondary">
+              <Button
+                className="mt-4 w-full"
+                type="submit"
+                variant="secondary"
+                onClick={() => {
+                  updateProduct(watch());
+                }}
+              >
                 Zapisz zmiany
               </Button>
             </div>

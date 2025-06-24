@@ -19,5 +19,5 @@ public class Product
     public ProductType Type { get; set; }
     public List<ProductCategory> Categories { get; init; } = [];
     public List<OrderProduct> OrderProducts { get; init; } = [];
-    public List<ProductItem> Items { get; set; } = [];
+    public List<ProductItem> Items { get; init; } = [];
 }

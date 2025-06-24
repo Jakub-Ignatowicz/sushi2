@@ -1,4 +1,6 @@
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using SushiZume.Data;
 using SushiZume.DTOs;
 using SushiZume.Models;
@@ -47,9 +49,36 @@ public class ProductService(
     public async Task<Product> UpdateAsync(Guid productId, ProductUpdateDto dto)
     {
         var product = await GetByIdAsync(productId);
-        product = dto.ToProduct(product, mapper);
 
-        await productRepo.SaveChangesAsync();
+        product.Name = dto.Name ?? product.Name;
+        product.ImagePath = dto.ImagePath ?? product.ImagePath;
+        product.AmountUnit = dto.AmountUnit ?? product.AmountUnit;
+        product.Price = dto.Price ?? product.Price;
+        product.Amount = dto.Amount ?? product.Amount;
+        product.IsAvailable = dto.Available ?? product.IsAvailable;
+        product.IsVisible = dto.Visible ?? product.IsVisible;
+
+        if (dto.Items != null)
+        {
+            product.Items.Clear();
+            foreach (var item in dto.Items)
+            {
+                var newItem = new ProductItem
+                {
+                    ProductId = product.Id,
+                    Description = item.Description,
+                    Number = item.Number,
+                };
+
+                product.Items.Add(newItem);
+                context.Entry(newItem).State = EntityState.Added;
+            }
+
+            context.Entry(product).State = EntityState.Modified;
+        }
+
+        productRepo.Update(product);
+        await context.SaveChangesAsync();
         return product;
     }
 
