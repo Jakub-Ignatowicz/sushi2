@@ -47,7 +47,7 @@ public class ProductService(
     public async Task<Product> UpdateAsync(Guid productId, ProductUpdateDto dto)
     {
         var product = await GetByIdAsync(productId);
-        product = dto.ToProduct(product);
+        product = dto.ToProduct(product, mapper);
 
         await productRepo.SaveChangesAsync();
         return product;

@@ -26,7 +26,6 @@ public class CategoriesController(ICategoryService categoryService, IMapper mapp
     [HttpPost("order")]
     public async Task<IActionResult> OrderCategories([FromBody] List<string> categoryIds)
     {
-        Console.WriteLine("123");
         await categoryService.OrderCategoriesAsync(categoryIds);
         return Ok();
     }

@@ -150,6 +150,8 @@ public class AuthController(
     {
         var userId = User.RequireUserId();
 
+        // return Problem("123123");
+
         var user = await userService.TryGetByIdAsync(userId);
         return mapper.Map<UserDto>(user);
     }

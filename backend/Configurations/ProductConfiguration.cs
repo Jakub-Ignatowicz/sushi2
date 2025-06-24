@@ -30,6 +30,10 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasColumnName("visible")
             .HasDefaultValue(true);
 
+        builder.Property(p => p.IsFeatured)
+            .HasColumnName("featured")
+            .HasDefaultValue(false);
+
         builder.Property(p => p.ImagePath)
             .HasColumnName("imagePath")
             .IsRequired(false);

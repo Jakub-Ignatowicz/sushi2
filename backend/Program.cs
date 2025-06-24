@@ -1,7 +1,9 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using SushiZume.Data;
 using Microsoft.EntityFrameworkCore;
+using SushiZume.Exceptions;
 using SushiZume.Extensions;
 using SushiZume.Mapping;
 using SushiZume.Middleware;
@@ -10,7 +12,7 @@ using SushiZume.Repositories.Interfaces;
 using SushiZume.Services;
 using SushiZume.Services.Interfaces;
 
-var AllowLocalhostOrigins = "_myAllowSpecificOrigins";
+const string allowLocalhostOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,19 @@ builder.Services.AddOpenApi();
 // DB
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<SushiContext>(options => options.UseNpgsql(connectionString));
+
+// builder.Services.AddProblemDetails(options =>
+// {
+//     options.CustomizeProblemDetails = context =>
+//     {
+//         context.ProblemDetails.Instance =
+//             $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
+//         context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+//         var activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
+//         context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
+//     };
+// });
+// builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 // Register repositories
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -46,7 +61,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 // CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: AllowLocalhostOrigins, policy =>
+    options.AddPolicy(name: allowLocalhostOrigins, policy =>
     {
         policy.WithOrigins("http://localhost:3000")
             .AllowAnyHeader()
@@ -73,13 +88,16 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseCors(AllowLocalhostOrigins);
+    app.UseCors(allowLocalhostOrigins);
     app.MapControllers().AllowAnonymous();
 }
 else
 {
     app.MapControllers();
 }
+
+// app.UseExceptionHandler(o => { });
+// app.UseStatusCodePages();
 
 // Middleware
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
