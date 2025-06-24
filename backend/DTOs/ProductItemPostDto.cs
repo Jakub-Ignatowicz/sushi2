@@ -4,6 +4,6 @@ namespace SushiZume.DTOs;
 
 public record ProductItemPostDto(
     string Description,
-    int Number,
-    string? NumberSuffix
+    int Number
+    // string? NumberSuffix
 );

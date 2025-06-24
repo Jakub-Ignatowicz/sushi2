@@ -36,7 +36,7 @@ const ProductComponent = ({ product, isPreview = false }: Props) => {
         <p>{product.description}</p>
         <div className="inline-block mt-2">
           {product.items.map((item) => (
-            <div className="flex items-center gap-2" key={item.id}>
+            <div className="flex items-start gap-2" key={item.id}>
               <p className="text-red-400 font-semibold">{item.number}x</p>
               <p>{item.description}</p>
             </div>
