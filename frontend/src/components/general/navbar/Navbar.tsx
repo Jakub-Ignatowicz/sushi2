@@ -14,7 +14,7 @@ export default function Navbar() {
   ]);
 
   return (
-    <div className="flex justify-center items-center h-30">
+    <div className="flex justify-center items-center min-h-30">
       <div className="flex items-center justify-between w-full max-w-box">
         <div className="flex items-center ">
           <Link className="flex justify-center items-center z-50" href="/">
