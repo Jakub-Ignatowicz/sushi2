@@ -1,3 +1,4 @@
+using SushiZume.Enums;
 using SushiZume.Models;
 
 namespace SushiZume.Data;
@@ -6,11 +7,11 @@ public static class DataInitializer
 {
     public static async Task SeedAsync(SushiContext context)
     {
-        if (context.Categories.Any()) return;
+        if (context.Products.Any()) return;
 
         // Categories
-        var pizzaCategory = new Category { Id = Guid.NewGuid(), Name = "Pizza" };
-        var drinksCategory = new Category { Id = Guid.NewGuid(), Name = "Drinks" };
+        var pizzaCategory = new Category { Name = "Pizza" };
+        var drinksCategory = new Category { Name = "Drinks" };
 
         context.Categories.AddRange(pizzaCategory, drinksCategory);
 
@@ -24,8 +25,14 @@ public static class DataInitializer
             ImagePath = "margherita.jpg",
             Amount = 1,
             AmountUnit = "pcs",
-            CategoryId = pizzaCategory.Id
         };
+        margherita.Categories.AddRange(
+            new ProductCategory()
+            {
+                CategoryId = pizzaCategory.Id,
+                ProductId = margherita.Id
+            }
+        );
 
         var cola = new Product
         {
@@ -36,12 +43,18 @@ public static class DataInitializer
             ImagePath = "cola.jpg",
             Amount = 0.5,
             AmountUnit = "L",
-            CategoryId = drinksCategory.Id
         };
+        cola.Categories.AddRange(
+            new ProductCategory()
+            {
+                CategoryId = drinksCategory.Id,
+                ProductId = cola.Id
+            }
+        );
 
         context.Products.AddRange(margherita, cola);
 
-        // ProductItems for Margherita
+        // Items for Margherita
         context.ProductItems.AddRange(
             new ProductItem
             {
@@ -65,24 +78,34 @@ public static class DataInitializer
             District = "Manhattan",
             Street = "5th Avenue",
             HomeNumber = "123",
-            ApartamentNumber = "45B",
+            ApartmentNumber = "45B",
             Floor = 4
         };
 
         context.Addresses.Add(address1);
 
+        var user = new User
+        {
+            Email = "test@gmail.com",
+            PhoneNumber = "123456890",
+            FirstName = "John",
+            LastName = "Doe",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("123123"),
+            Role = UserRole.Normal,
+            Addresses = new List<Address> { address1 }
+        };
+        context.Users.Add(user);
+
         // Orders
         var order1 = new Order
         {
-            Email = "customer@example.com",
-            PhoneNumber = "1234567890",
-            PeopleNumber = 2,
+            PeopleCount = 2,
             PaymentMethod = OrderPaymentMethod.Cash,
             IsNew = true,
             IsDone = false,
-            CreatedAt = DateTime.UtcNow,
             Notes = "No onions please",
-            AddressId = address1.Id
+            AddressId = address1.Id,
+            UserId = user.Id,
         };
 
         context.Orders.Add(order1);

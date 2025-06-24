@@ -8,20 +8,22 @@ using SushiZume.Repositories.Interfaces;
 
 public class ProductRepository(SushiContext context) : Repository<Product>(context), IProductRepository
 {
-    public async Task<Product?> GetProductByIdAsync(string id)
-    {
-        return await _context.Products.FindAsync(id);
-    }
+    protected override IQueryable<Product> DefaultQuery =>
+        base.DefaultQuery
+            .Include(p => p.Categories)
+            .ThenInclude(pc => pc.Category)
+            .Include(p => p.Items);
 
-    public async Task<List<Product>> GetAllProductsAsync()
+    public new async Task<List<Product>> GetAllAsync()
     {
-        return await _context.Products
-            .Include(p => p.ProductItems)
+        return await DefaultQuery
             .ToListAsync();
     }
 
-    public async Task<int> GetProductCountAsync()
+    public async Task<List<Product>> GetAllAvailableAsync()
     {
-        return await _context.Products.CountAsync();
+        return await DefaultQuery
+            .Where(p => p.IsAvailable)
+            .ToListAsync();
     }
 }

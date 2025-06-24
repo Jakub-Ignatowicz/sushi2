@@ -1,4 +1,11 @@
+using AutoMapper;
+using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using SushiZume.DTOs;
+using SushiZume.Enums;
+using SushiZume.Models;
 using SushiZume.Services.Interfaces;
+using SushiZume.Validators;
 
 namespace SushiZume.Controllers;
 
@@ -6,26 +13,77 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-public class OrdersController(IOrderService orderService) : ControllerBase
+public class OrdersController(
+    IOrderService orderService,
+    IMapper mapper,
+    IValidator<OrderPostDto> validator,
+    IOrderRepository orderRepo)
+    : ControllerBase
 {
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpGet]
-    public async Task<IActionResult> GetOrders(int page = 1, int pageSize = 10)
+    public async Task<ActionResult<List<OrderDto>>> GetOrdersWithPagination(int page = 1, int pageSize = 10)
     {
-        var orders = await orderService.GetOrdersAsync(page, pageSize);
-        return Ok(orders);
+        var orders = await orderService.GetWithPaginationAsync(page, pageSize);
+        return Ok(mapper.Map<List<OrderDto>>(orders));
+    }
+
+    [Authorize(Roles = nameof(UserRole.Admin))]
+    [HttpGet("new")]
+    public async Task<IActionResult> GetNewOrders()
+    {
+        var orders = await orderRepo.GetAllNewAsync();
+        return Ok(mapper.Map<List<OrderDto>>(orders));
+    }
+
+    [Authorize(Roles = nameof(UserRole.Admin))]
+    [HttpGet("in-progress")]
+    public async Task<IActionResult> GetInProgressOrders()
+    {
+        var orders = await orderRepo.GetAllInProgressAsync();
+        return Ok(mapper.Map<List<OrderDto>>(orders));
+    }
+
+
+    [Authorize(Roles = nameof(UserRole.Admin))]
+    [HttpGet("{orderId:guid}")]
+    public async Task<ActionResult<OrderDto>> GetOrderById(Guid orderId)
+    {
+        var order = await orderService.GetByIdAsync(orderId);
+        return Ok(mapper.Map<OrderDto>(order));
+    }
+
+    [Authorize(Roles = nameof(UserRole.Admin))]
+    [HttpPost]
+    public async Task<ActionResult<OrderDto>> CreateOrder([FromBody] OrderPostDto dto)
+    {
+        await validator.ValidateAndThrowAsync(dto);
+
+        var order = await orderService.AddAsync(dto);
+        var created = await orderService.GetByIdAsync(order.Id);
+        return mapper.Map<OrderDto>(created);
     }
 
     [HttpGet("count")]
-    public async Task<IActionResult> GetOrderCount()
+    public async Task<ActionResult<int>> GetOrderCount()
     {
-        var count = await orderService.GetOrderCountAsync();
+        var count = await orderService.GetCountAsync();
         return Ok(count);
     }
 
-    [HttpGet("{id}/seen")]
-    public async Task<IActionResult> MarkAsSeen(string id)
+    [Authorize(Roles = nameof(UserRole.Admin))]
+    [HttpPost("{orderId:guid}/seen")]
+    public async Task<ActionResult<bool>> MarkAsSeen(Guid orderId)
     {
-        var order = await orderService.MarkAsNotNewAsync(id);
+        var order = await orderService.MarkAsSeenAsync(orderId);
+        return Ok(order);
+    }
+
+    [Authorize(Roles = nameof(UserRole.Admin))]
+    [HttpPost("{orderId:guid}/resolved")]
+    public async Task<ActionResult<bool>> MarkAsResolved(Guid orderId)
+    {
+        var order = await orderService.MarkAsResolvedAsync(orderId);
         return Ok(order);
     }
 }

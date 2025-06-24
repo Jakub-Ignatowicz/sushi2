@@ -1,13 +1,16 @@
+using System.ComponentModel.DataAnnotations;
 using SushiZume.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SushiZume.Data;
 
 namespace SushiZume.Repositories;
 
 public class Repository<T> : IRepository<T> where T : class
 {
-    protected readonly SushiContext _context;
-    protected readonly DbSet<T> _dbSet;
+    private readonly SushiContext _context;
+    private readonly DbSet<T> _dbSet;
+    protected virtual IQueryable<T> DefaultQuery => _dbSet.AsQueryable();
 
     public Repository(SushiContext context)
     {
@@ -15,24 +18,31 @@ public class Repository<T> : IRepository<T> where T : class
         _dbSet = context.Set<T>();
     }
 
-    public Task<List<T>> GetAllAsync() => _dbSet.ToListAsync();
+    public Task<List<T>> GetAllAsync() => DefaultQuery.ToListAsync();
 
-    public Task<T?> GetByIdAsync(string id) => _dbSet.FindAsync(id).AsTask();
+    public Task<T?> GetByIdAsync(Guid id) =>
+        DefaultQuery.FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id") == id);
 
-    public async Task AddAsync(T entity)
+    public async Task AddAsync(T entity) => await _dbSet.AddAsync(entity);
+
+    public void Update(T entity) => _dbSet.Update(entity);
+
+    public void Delete(T entity) => _dbSet.Remove(entity);
+
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await _dbSet.AddAsync(entity);
+        var entries = _context.ChangeTracker.Entries()
+            .Where(e => e.State is EntityState.Added or EntityState.Modified);
+
+        foreach (var entry in entries)
+        {
+            var entity = entry.Entity;
+            var validationContext = new ValidationContext(entity);
+            Validator.ValidateObject(entity, validationContext, validateAllProperties: true);
+        }
+
+        return await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public void Update(T entity)
-    {
-        _dbSet.Update(entity);
-    }
-
-    public void Delete(T entity)
-    {
-        _dbSet.Remove(entity);
-    }
-
-    public Task SaveChangesAsync() => _context.SaveChangesAsync();
+    public Task<int> GetCountAsync() => DefaultQuery.CountAsync();
 }

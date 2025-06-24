@@ -1,7 +1,7 @@
 namespace SushiZume.DTOs;
 
 public record ProductItemDto(
-    string Id,
+    Guid Id,
     string Description,
     int Number,
     string NumberSuffix

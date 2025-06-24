@@ -6,27 +6,65 @@ using Microsoft.EntityFrameworkCore;
 
 public class OrderRepository(SushiContext context) : Repository<Order>(context), IOrderRepository
 {
-    public Task<List<Order>> GetNewOrdersAsync()
+    protected override IQueryable<Order> DefaultQuery =>
+        base.DefaultQuery
+            .Include(o => o.OrderProducts)
+            .ThenInclude(op => op.Product)
+            .ThenInclude(p => p.Categories)
+            .ThenInclude(pc => pc.Category)
+            .Include(o => o.OrderProducts)
+            .ThenInclude(op => op.Product)
+            .ThenInclude(p => p.Items)
+            .Include(p => p.Address)
+            .Include(o => o.User);
+
+    public new async Task<List<Order>> GetAllAsync()
     {
-        return _context.Orders.Where(o => o.IsNew).ToListAsync();
+        return await DefaultQuery
+            .ToListAsync();
     }
 
-    public async Task<List<Order>> GetOrdersAsync(int skip, int pageSize)
+    public async Task<List<Order>> GetAllNewAsync()
     {
-        return await _context.Orders
+        return await DefaultQuery
+            .Where(o => o.IsNew && !o.IsDone)
+            .ToListAsync();
+    }
+
+    public async Task<List<Order>> GetAllInProgressAsync()
+    {
+        return await DefaultQuery
+            .Where(o => !o.IsNew && !o.IsDone)
+            .ToListAsync();
+    }
+
+    public async Task<List<Order>> GetWithPaginationAsync(int skip, int pageSize)
+    {
+        return await DefaultQuery
             .OrderByDescending(o => o.CreatedAt)
             .Skip(skip)
             .Take(pageSize)
             .ToListAsync();
     }
 
-    public async Task<int> GetOrderCountAsync()
+    public async Task<bool> MarkAsDoneAsync(Guid id)
     {
-        return await _context.Orders.CountAsync();
+        return await context.Orders
+            .Where(o => o.Id == id)
+            .ExecuteUpdateAsync(o => o.SetProperty(x => x.IsDone, true)) > 0;
     }
 
-    public void MarkAsNotNew(Order order)
+    public async Task<bool> MarkAsNotNewAsync(Guid id)
     {
-        _context.Orders.Update(order);
+        return await context.Orders
+            .Where(o => o.Id == id)
+            .ExecuteUpdateAsync(o => o.SetProperty(x => x.IsNew, false)) > 0;
+    }
+
+    public async Task<List<Order>> GetByUserIdAsync(Guid userId)
+    {
+        return await DefaultQuery
+            .Where(o => o.UserId == userId)
+            .ToListAsync();
     }
 }

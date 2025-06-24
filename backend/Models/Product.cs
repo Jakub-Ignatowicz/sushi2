@@ -1,26 +1,23 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SushiZume.Enums;
 
 namespace SushiZume.Models;
 
-[Table("Product")]
 public class Product
 {
-    [Key, Column("id")] public Guid Id { get; set; } = Guid.NewGuid();
-
-    [Required, MinLength(1), Column("name")]
-    public string Name { get; set; } = string.Empty;
-
-    [Range(0, double.MaxValue), Column("price")]
-    public double Price { get; set; }
-
-    [Column("available")] public bool IsAvailable { get; set; }
-    [Column("visible")] public bool IsVisible { get; set; }
-    [Column("imagePath")] public string ImagePath { get; set; }
-    [Column("amount")] public double Amount { get; set; }
-    [Column("amountName")] public string AmountUnit { get; set; }
-    [Column("categoryId")] public Guid CategoryId { get; set; }
-    [ForeignKey(nameof(CategoryId))] public Category Category { get; set; }
-    public List<OrderProduct> OrderProducts { get; set; }
-    public List<ProductItem> ProductItems { get; set; }
+    public Guid Id { get; init; } = Guid.NewGuid();
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public bool IsAvailable { get; set; }
+    public bool IsVisible { get; set; }
+    public bool IsFeatured { get; set; }
+    public string? ImagePath { get; set; }
+    public double? Amount { get; set; }
+    public string? AmountUnit { get; set; }
+    public string? Description { get; set; }
+    public ProductType Type { get; set; }
+    public List<ProductCategory> Categories { get; init; } = [];
+    public List<OrderProduct> OrderProducts { get; init; } = [];
+    public List<ProductItem> Items { get; set; } = [];
 }

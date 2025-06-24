@@ -1,13 +1,18 @@
+using SushiZume.Models;
+
 namespace SushiZume.DTOs;
 
 public record ProductDto(
-    string Id,
+    Guid Id,
     string Name,
-    decimal Price,
+    string? ImagePath,
+    string? AmountUnit,
+    bool IsFeatured,
     bool IsAvailable,
     bool IsVisible,
-    string ImagePath,
-    double Amount,
-    string AmountUnit,
-    List<ProductItemDto> ProductItems
+    decimal Price,
+    double? Amount,
+    string? Description,
+    List<CategoryDto> Categories,
+    List<ProductItemDto> Items
 );

@@ -6,11 +6,11 @@ namespace SushiZume.Models;
 [Table("OrderProduct")]
 public class OrderProduct
 {
-    [Range(1, int.MaxValue), Column("quantity")]
+    [Range(1, int.MaxValue, ErrorMessage = "Ilość musi być większa niż 0.")]
     public int Quantity { get; set; }
 
     [Column("orderId")] public Guid OrderId { get; set; }
-    [ForeignKey(nameof(OrderId))] public Order Order { get; set; }
+    public Order Order { get; set; }
     [Column("productId")] public Guid ProductId { get; set; }
-    [ForeignKey(nameof(ProductId))] public Product Product { get; set; }
+    public Product Product { get; set; }
 }

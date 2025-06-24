@@ -1,34 +1,25 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using SushiZume.Enums;
 
 namespace SushiZume.Models;
 
-public enum OrderPaymentMethod
-{
-    Cash
-}
-
-[Table("Order")]
 public class Order
 {
-    [Key, Column("id")] public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
+    public int PeopleCount { get; set; }
+    public OrderPaymentMethod PaymentMethod { get; set; }
+    public bool IsNew { get; set; } = true;
+    public bool IsDone { get; set; } = false;
+    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
+    public string Notes { get; set; }
+    public Guid AddressId { get; set; }
+    public Guid UserId { get; set; }
 
-    [Required, MinLength(1), Column("email")]
-    public string Email { get; set; } = string.Empty;
+    public Address Address { get; init; } = null!;
+    public List<OrderProduct> OrderProducts { get; set; } = [];
+    public User User { get; init; }
 
-    [Required, MinLength(1), Column("phone")]
-    public string PhoneNumber { get; set; } = string.Empty;
-
-    [Range(1, int.MaxValue), Column("peopleNumber")]
-    public int PeopleNumber { get; set; }
-
-    [Required, Column("paymentMethod")] public OrderPaymentMethod PaymentMethod { get; set; }
-    [Column("new")] public bool IsNew { get; set; } = true;
-    [Column("done")] public bool IsDone { get; set; } = false;
-    [Column("createdAt")] public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    [Column("notesForOrder")] public string Notes { get; set; }
-    [Required, Column("addressId")] public Guid AddressId { get; set; }
-    [ForeignKey(nameof(AddressId))] public Address Address { get; set; }
-    public List<OrderProduct> OrderProducts { get; set; }
+    public decimal TotalPrice => OrderProducts.Sum(op => op.Product.Price * op.Quantity);
 }

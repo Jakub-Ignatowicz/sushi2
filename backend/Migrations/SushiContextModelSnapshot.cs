@@ -29,10 +29,10 @@ namespace SushiZume.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("ApartamentNumber")
+                    b.Property<string>("ApartmentNumber")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("apartamentNumber");
+                        .HasColumnName("apartmentNumber");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -58,9 +58,15 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("street");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("userId");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Address");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.Category", b =>
@@ -70,14 +76,22 @@ namespace SushiZume.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
 
+                    b.Property<int>("OrderIndex")
+                        .HasColumnType("integer")
+                        .HasColumnName("orderIndex");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.Order", b =>
@@ -95,21 +109,19 @@ namespace SushiZume.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("createdAt");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("email");
-
                     b.Property<bool>("IsDone")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(false)
                         .HasColumnName("done");
 
                     b.Property<bool>("IsNew")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(true)
                         .HasColumnName("new");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("notesForOrder");
 
@@ -118,20 +130,21 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("paymentMethod");
 
-                    b.Property<int>("PeopleNumber")
+                    b.Property<int>("PeopleCount")
                         .HasColumnType("integer")
-                        .HasColumnName("peopleNumber");
+                        .HasColumnName("peopleCount");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("phone");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("userId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("Order");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Order", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.OrderProduct", b =>
@@ -152,7 +165,32 @@ namespace SushiZume.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderProduct");
+                    b.ToTable("OrderProduct", (string)null);
+                });
+
+            modelBuilder.Entity("SushiZume.Models.PasswordResetToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expiryDate");
+
+                    b.Property<bool>("Used")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("userId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PasswordResetToken", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.Product", b =>
@@ -162,30 +200,38 @@ namespace SushiZume.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<double>("Amount")
+                    b.Property<double?>("Amount")
                         .HasColumnType("double precision")
                         .HasColumnName("amount");
 
                     b.Property<string>("AmountUnit")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("amountName");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("categoryId");
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("imagePath");
 
                     b.Property<bool>("IsAvailable")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(true)
                         .HasColumnName("available");
 
-                    b.Property<bool>("IsVisible")
+                    b.Property<bool>("IsFeatured")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("featured");
+
+                    b.Property<bool>("IsVisible")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
                         .HasColumnName("visible");
 
                     b.Property<string>("Name")
@@ -193,15 +239,37 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision")
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric")
                         .HasColumnName("price");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("Normal")
+                        .HasColumnName("type");
 
                     b.HasKey("Id");
 
+                    b.ToTable("Product", (string)null);
+                });
+
+            modelBuilder.Entity("SushiZume.Models.ProductCategory", b =>
+                {
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("productId");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("categoryId");
+
+                    b.HasKey("ProductId", "CategoryId");
+
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Product");
+                    b.ToTable("ProductCategory", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.ProductItem", b =>
@@ -216,13 +284,14 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("integer")
+                    b.Property<double>("Number")
+                        .HasColumnType("double precision")
                         .HasColumnName("number");
 
                     b.Property<string>("NumberSuffix")
-                        .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("text")
+                        .HasDefaultValue("x")
                         .HasColumnName("numberSuffix");
 
                     b.Property<Guid>("ProductId")
@@ -233,7 +302,109 @@ namespace SushiZume.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductItem");
+                    b.ToTable("ProductItem", (string)null);
+                });
+
+            modelBuilder.Entity("SushiZume.Models.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expiryDate");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("text")
+                        .HasColumnName("ipAddress");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("boolean")
+                        .HasColumnName("isRevoked");
+
+                    b.Property<Guid?>("ReplacedByTokenId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("replacedByTokenId");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("token");
+
+                    b.Property<string>("UserAgent")
+                        .HasColumnType("text")
+                        .HasColumnName("userAgent");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("userId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReplacedByTokenId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshToken", (string)null);
+                });
+
+            modelBuilder.Entity("SushiZume.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text")
+                        .HasColumnName("firstName");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text")
+                        .HasColumnName("lastName");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text")
+                        .HasColumnName("passwordHash");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text")
+                        .HasColumnName("phone");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("role");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User", (string)null);
+                });
+
+            modelBuilder.Entity("SushiZume.Models.Address", b =>
+                {
+                    b.HasOne("SushiZume.Models.User", "User")
+                        .WithMany("Addresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SushiZume.Models.Order", b =>
@@ -241,10 +412,18 @@ namespace SushiZume.Migrations
                     b.HasOne("SushiZume.Models.Address", "Address")
                         .WithMany("Orders")
                         .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SushiZume.Models.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Address");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SushiZume.Models.OrderProduct", b =>
@@ -266,7 +445,18 @@ namespace SushiZume.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("SushiZume.Models.Product", b =>
+            modelBuilder.Entity("SushiZume.Models.PasswordResetToken", b =>
+                {
+                    b.HasOne("SushiZume.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SushiZume.Models.ProductCategory", b =>
                 {
                     b.HasOne("SushiZume.Models.Category", "Category")
                         .WithMany("Products")
@@ -274,18 +464,44 @@ namespace SushiZume.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SushiZume.Models.Product", "Product")
+                        .WithMany("Categories")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SushiZume.Models.ProductItem", b =>
                 {
                     b.HasOne("SushiZume.Models.Product", "Product")
-                        .WithMany("ProductItems")
+                        .WithMany("Items")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SushiZume.Models.RefreshToken", b =>
+                {
+                    b.HasOne("SushiZume.Models.RefreshToken", "ReplacedByToken")
+                        .WithOne()
+                        .HasForeignKey("SushiZume.Models.RefreshToken", "ReplacedByTokenId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SushiZume.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ReplacedByToken");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SushiZume.Models.Address", b =>
@@ -305,9 +521,18 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.Product", b =>
                 {
-                    b.Navigation("OrderProducts");
+                    b.Navigation("Categories");
 
-                    b.Navigation("ProductItems");
+                    b.Navigation("Items");
+
+                    b.Navigation("OrderProducts");
+                });
+
+            modelBuilder.Entity("SushiZume.Models.User", b =>
+                {
+                    b.Navigation("Addresses");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

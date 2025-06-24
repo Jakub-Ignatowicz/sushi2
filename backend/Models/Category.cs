@@ -6,10 +6,10 @@ namespace SushiZume.Models;
 [Table("Category")]
 public class Category
 {
-    [Key, Column("id")] public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
+    public string Name { get; set; }
+    public int OrderIndex { get; set; }
+    public string? Description { get; set; }
 
-    [Required, MinLength(1), Column("name")]
-    public string Name { get; set; } = string.Empty;
-
-    public List<Product> Products { get; set; }
+    public List<ProductCategory> Products { get; set; } = [];
 }
