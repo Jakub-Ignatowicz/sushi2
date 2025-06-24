@@ -76,10 +76,18 @@ namespace SushiZume.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
+
+                    b.Property<int>("OrderIndex")
+                        .HasColumnType("integer")
+                        .HasColumnName("orderIndex");
 
                     b.HasKey("Id");
 
@@ -192,17 +200,19 @@ namespace SushiZume.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<double>("Amount")
+                    b.Property<double?>("Amount")
                         .HasColumnType("double precision")
                         .HasColumnName("amount");
 
                     b.Property<string>("AmountUnit")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("amountName");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("imagePath");
 
@@ -211,6 +221,12 @@ namespace SushiZume.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(true)
                         .HasColumnName("available");
+
+                    b.Property<bool>("IsFeatured")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("featured");
 
                     b.Property<bool>("IsVisible")
                         .ValueGeneratedOnAdd()
@@ -226,6 +242,13 @@ namespace SushiZume.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric")
                         .HasColumnName("price");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("Normal")
+                        .HasColumnName("type");
 
                     b.HasKey("Id");
 
@@ -369,9 +392,6 @@ namespace SushiZume.Migrations
                         .HasColumnName("role");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
 
                     b.ToTable("User", (string)null);
                 });

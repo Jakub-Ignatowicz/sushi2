@@ -10,8 +10,13 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
         base.DefaultQuery
             .Include(o => o.OrderProducts)
             .ThenInclude(op => op.Product)
+            .ThenInclude(p => p.Categories)
+            .ThenInclude(pc => pc.Category)
+            .Include(o => o.OrderProducts)
+            .ThenInclude(op => op.Product)
             .ThenInclude(p => p.Items)
-            .Include(p => p.Address);
+            .Include(p => p.Address)
+            .Include(o => o.User);
 
     public new async Task<List<Order>> GetAllAsync()
     {
@@ -22,7 +27,14 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
     public async Task<List<Order>> GetAllNewAsync()
     {
         return await DefaultQuery
-            .Where(o => o.IsNew)
+            .Where(o => o.IsNew && !o.IsDone)
+            .ToListAsync();
+    }
+
+    public async Task<List<Order>> GetAllInProgressAsync()
+    {
+        return await DefaultQuery
+            .Where(o => !o.IsNew && !o.IsDone)
             .ToListAsync();
     }
 
@@ -34,7 +46,6 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
             .Take(pageSize)
             .ToListAsync();
     }
-
 
     public async Task<bool> MarkAsDoneAsync(Guid id)
     {

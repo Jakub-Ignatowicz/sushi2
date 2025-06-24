@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SushiZume.Middleware;
 
@@ -38,12 +39,14 @@ public class GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<Glob
                     g => g.Select(e => e.ErrorMessage).ToArray()
                 );
 
-            await context.Response.WriteAsJsonAsync(new ErrorResponse
+            var problem = new ValidationProblemDetails(errors)
             {
+                Title = "An unexpected error occurred.",
                 Status = StatusCodes.Status400BadRequest,
-                Title = "Validation failed",
-                Errors = errors
-            });
+                Detail = ex.Message
+            };
+
+            await context.Response.WriteAsJsonAsync(problem);
         }
         catch (ValidationException ex)
         {
@@ -76,11 +79,12 @@ public class GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<Glob
             logger.LogError(ex, "Unexpected error");
 
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            await context.Response.WriteAsJsonAsync(new ErrorResponse
+
+            await context.Response.WriteAsJsonAsync(new ProblemDetails
             {
                 Status = context.Response.StatusCode,
                 Title = "An unexpected error occurred.",
-                Errors = new List<object> { new { message = ex.Message } }
+                Detail = ex.Message
             });
         }
     }

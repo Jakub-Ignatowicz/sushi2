@@ -1,3 +1,5 @@
+using SushiZume.Enums;
+
 namespace SushiZume.DTOs;
 
 public record OrderDto_OrderProductDto(
@@ -7,13 +9,14 @@ public record OrderDto_OrderProductDto(
 
 public record OrderDto(
     Guid Id,
-    string Email,
-    string PhoneNumber,
-    AddressDto Address,
     int PeopleCount,
     bool IsDone,
     bool IsNew,
     string Notes,
+    decimal TotalPrice,
+    OrderPaymentMethod PaymentMethod,
+    UserDto User,
     DateTime CreatedAt,
+    AddressDto Address,
     List<OrderDto_OrderProductDto> OrderProducts
 );

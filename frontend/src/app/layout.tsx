@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Georama } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Navbar from "@/components/general/navbar/Navbar";
 
 const georama = Georama({
   variable: "--font-georama",
@@ -16,19 +16,27 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  modal,
 }: Readonly<{
   children: React.ReactNode;
   modal: React.ReactNode;
 }>) {
   return (
-    <html className={cn(georama.className, "antialiased  h-full")} lang="en">
+    <html
+      className={cn(georama.className, "antialiased  h-full")}
+      lang="en"
+      suppressHydrationWarning
+    >
       <body className="h-full bg-background">
-        <div className="h-full flex flex-col justify-start mx-auto">
-          {modal}
-          <Navbar />
-          <div className="flex-grow">{children}</div>
-        </div>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="h-full flex flex-col justify-start mx-auto">
+            <div className="flex-grow">{children}</div>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

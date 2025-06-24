@@ -10,13 +10,16 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<ProductCategory, CategoryDto>()
-            .ConstructUsing(pc => new CategoryDto(pc.Category.Id, pc.Category.Name));
+            .ConstructUsing(pc =>
+                new CategoryDto(pc.Category.Id, pc.Category.Name, pc.Category.Description, pc.Category.OrderIndex));
         CreateMap<Product, ProductDto>().ReverseMap();
+        CreateMap<Product, CategoryWithProductsDto_ProductDto>().ReverseMap();
         CreateMap<ProductItem, ProductItemDto>().ReverseMap();
         CreateMap<Order, OrderDto>().ReverseMap();
         CreateMap<OrderProduct, OrderDto_OrderProductDto>().ReverseMap();
         CreateMap<Address, AddressDto>().ReverseMap();
         CreateMap<Category, CategoryDto>().ReverseMap();
+        CreateMap<Category, CategoryWithProductsDto>().ReverseMap();
         CreateMap<User, UserDto>().ReverseMap();
 
         // Post
