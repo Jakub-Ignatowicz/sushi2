@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { FaBars, FaRegTimesCircle } from "react-icons/fa";
 import MobileLink from "./MobileLink";
 import { cn } from "@/lib/utils";
-import { Product } from "@/types";
 import { useCartState } from "@/context/CartState";
 
 export default function MobileMenu({
@@ -79,7 +78,7 @@ export default function MobileMenu({
 
                 <div
                   className={cn(
-                    "rounded-full bg-primary text-sm w-[25px] h-[25px] flex items-center justify-center ",
+                    "rounded-full bg-zume text-sm w-[25px] h-[25px] flex items-center justify-center",
                     newTotalCount == 0 ? "hidden" : "",
                   )}
                 >
