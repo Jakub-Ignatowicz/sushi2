@@ -29,7 +29,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="h-full bg-background">
-
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -37,11 +36,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="h-full flex flex-col justify-start mx-auto">
-            <CartStateProvider>
-              {/* {modal} */}
-              <Navbar />
-              <div className="flex-grow">{children}</div>
-            </CartStateProvider>
+            <div className="flex-grow">{children}</div>
           </div>
         </ThemeProvider>
       </body>

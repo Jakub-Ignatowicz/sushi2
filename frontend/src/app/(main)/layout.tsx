@@ -1,4 +1,5 @@
 import Navbar from "@/components/general/navbar/Navbar";
+import { CartStateProvider } from "@/context/CartState";
 
 export default function MainLayout({
   children,
@@ -9,9 +10,12 @@ export default function MainLayout({
 }>) {
   return (
     <div className="h-full flex flex-col justify-start mx-auto">
-      {modal}
-      <Navbar />
-      <div className="flex-grow">{children}</div>
+      <CartStateProvider>
+        {modal}
+        <Navbar />
+
+        <div className="flex-grow">{children}</div>
+      </CartStateProvider>
     </div>
   );
 }

@@ -33,7 +33,7 @@ export default function NavbarLink({ href, content }: NavbarLinkProps) {
       {isActive && (
         <motion.div
           layoutId="navbar-bg"
-          className="absolute inset-0 rounded-4xl bg-primary z-0"
+          className="absolute inset-0 rounded-4xl bg-zume z-0"
           transition={{ type: "spring", stiffness: 500, damping: 35 }}
         />
       )}
