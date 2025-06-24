@@ -3,6 +3,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Georama } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Navbar from "@/components/general/navbar/Navbar";
+import { CartStateProvider } from "@/context/CartState";
 
 const georama = Georama({
   variable: "--font-georama",
@@ -27,6 +29,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="h-full bg-background">
+
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -34,7 +37,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="h-full flex flex-col justify-start mx-auto">
-            <div className="flex-grow">{children}</div>
+            <CartStateProvider>
+              {/* {modal} */}
+              <Navbar />
+              <div className="flex-grow">{children}</div>
+            </CartStateProvider>
           </div>
         </ThemeProvider>
       </body>

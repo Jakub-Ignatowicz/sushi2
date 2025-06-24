@@ -4,8 +4,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FaBars, FaRegTimesCircle } from "react-icons/fa";
 import MobileLink from "./MobileLink";
-import { CartItem } from "@/types";
 import { cn } from "@/lib/utils";
+import { Product } from "@/types";
+import { useCartState } from "@/context/CartState";
 
 export default function MobileMenu({
   mapLinks,
@@ -13,12 +14,10 @@ export default function MobileMenu({
   mapLinks: Map<string, string>;
 }) {
   const [menuOn, setMenuOn] = useState<boolean>(false);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const { cart, setCart } = useCartState();
 
-  useEffect(() => {
-    const stored = localStorage.getItem("cart");
-    if (stored) setCartItems(JSON.parse(stored));
-  }, []);
+  const newTotalCount = cart.reduce((sum, item) => sum + item.count, 0);
+
   return (
     <div className="relative flex xl:hidden">
       <Button
@@ -80,11 +79,11 @@ export default function MobileMenu({
 
                 <div
                   className={cn(
-                    "rounded-full bg-primary text-md w-[25px] h-[25px] flex items-center justify-center ",
-                    cartItems.length == 0 ? "hidden" : "",
+                    "rounded-full bg-primary text-sm w-[25px] h-[25px] flex items-center justify-center ",
+                    newTotalCount == 0 ? "hidden" : "",
                   )}
                 >
-                  {cartItems.length}
+                  {newTotalCount}
                 </div>
               </div>
             </div>
