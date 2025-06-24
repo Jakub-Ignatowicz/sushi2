@@ -1,7 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { priceToString } from "@/lib/utils";
 import { Product } from "@/types/api";
-import { Plus } from "lucide-react";
+import AddToCardButton from "./addToCardButton";
 
 type Props = {
   product: Product;
@@ -29,9 +28,7 @@ const ProductComponent = ({ product, isPreview = false }: Props) => {
           <p className="text-xl font-bold text-red-200">
             {priceToString(product.price)}
           </p>
-          <Button disabled={isPreview} variant="outline" className="size-8">
-            <Plus />
-          </Button>
+          <AddToCardButton product={product} isPreview={isPreview} />
         </div>
         <p>{product.description}</p>
         <div className="inline-block mt-2">
