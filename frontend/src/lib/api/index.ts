@@ -7,12 +7,13 @@ type ErrorResponse = {
 
 export const fetchApi = async <T>(
   endpoint: string,
+  requestType: "GET" | "POST",
   options?: RequestInit,
 ): Promise<T> => {
   try {
     const normalizedEndpoint = endpoint.replace(/^\/+/, "");
     const res = await fetch(`${BASE_URL}/${normalizedEndpoint}`, {
-      method: "GET",
+      method: requestType,
       headers: {
         "Content-Type": "application/json",
       },
