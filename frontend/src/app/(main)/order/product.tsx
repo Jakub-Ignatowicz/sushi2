@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { API_BASE_URL } from "@/lib/api";
 import { priceToString } from "@/lib/utils";
 import { Product } from "@/types/api";
-import { Plus } from "lucide-react";
+import AddToCardButton from "./addToCardButton";
 
 type Props = {
   product: Product;
@@ -34,9 +34,7 @@ const ProductComponent = ({ product, isPreview = false }: Props) => {
           <p className="text-xl font-bold text-red-200">
             {priceToString(product.price)}
           </p>
-          <Button disabled={isPreview} variant="outline" className="size-8">
-            <Plus />
-          </Button>
+          <AddToCardButton product={product} isPreview={isPreview} />
         </div>
         {product.description && <p>{product.description}</p>}
         {product.items.length > 0 && (
