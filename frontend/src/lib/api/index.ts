@@ -1,7 +1,7 @@
-import { ErrorResponse } from "@/types/api";
 import { toast } from "sonner";
 
-const BASE_URL = "http://localhost:5152/api";
+export const API_BASE_URL = "http://localhost:5152";
+export const API_URL = `${API_BASE_URL}/api`;
 
 // TODO; frontend middlewear
 export const fetchApi = async <T>(
@@ -11,7 +11,7 @@ export const fetchApi = async <T>(
 ): Promise<T | undefined> => {
   try {
     const normalizedEndpoint = endpoint.replace(/^\/+/, "");
-    const res = await fetch(`${BASE_URL}/${normalizedEndpoint}`, {
+    const res = await fetch(`${API_URL}/${normalizedEndpoint}`, {
       method: requestType,
       headers: {
         "Content-Type": "application/json",

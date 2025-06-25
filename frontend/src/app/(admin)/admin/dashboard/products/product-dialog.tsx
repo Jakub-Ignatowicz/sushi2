@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { uploadImage } from "@/lib/api/images";
 import { updateProduct } from "@/lib/api/products";
 import { Product } from "@/types/api";
 import { Plus, Trash2 } from "lucide-react";
@@ -18,11 +19,13 @@ type Props = {
 };
 
 const ProductDialog = ({ product }: Props) => {
-  const { register, control, handleSubmit, reset, watch } = useForm<Product>({
-    defaultValues: { ...product },
-  });
+  const { register, control, handleSubmit, reset, watch, setValue } =
+    useForm<Product>({
+      defaultValues: { ...product },
+    });
   const [newAmount, setNewAmount] = useState("");
   const [newDescription, setNewDescription] = useState("");
+  const [file, setFile] = useState<File | null>(null);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -30,20 +33,33 @@ const ProductDialog = ({ product }: Props) => {
   });
 
   const addItem = () => {
-    if (!newDescription) return; // simple validation
+    if (!newAmount || !newDescription) return;
+
     append({
       number: Number(newAmount) || 0,
       description: newDescription,
-      numberSuffix: "x",
-      id: "8f253f0f-c7ef-4830-bd32-f217ec610d3d",
-    });
+    } as any);
+
     setNewAmount("");
     setNewDescription("");
   };
 
-  const onSubmit = (data: Product) => {
-    console.log("Submitted data:", data);
-    // you can call an API or do something else here
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) {
+      setFile(e.target.files[0]);
+      const url = URL.createObjectURL(e.target.files[0]);
+      setValue("fakePath", url, { shouldValidate: true, shouldDirty: true });
+    }
+  };
+
+  const onSubmit = async (data: Product) => {
+    let fileName;
+    if (file) {
+      fileName = await uploadImage(file);
+    }
+    data.imageName = fileName;
+
+    await updateProduct(data);
   };
 
   return (
@@ -66,7 +82,7 @@ const ProductDialog = ({ product }: Props) => {
             <div className="flex flex-col items-center">
               <div className="overflow-auto w-full max-h-[50vh] flex flex-col gap-2 pr-2">
                 <LabelInput label="Nazwa" {...register("name")} />
-                <LabelFile label="Zdjęcie" {...register("imagePath")} />
+                <LabelFile label="Zdjęcie" onChange={onFileChange} />
                 <LabelInput label="Cena" type="number" {...register("price")} />
                 <LabelInput
                   label="Ilość"
@@ -116,14 +132,7 @@ const ProductDialog = ({ product }: Props) => {
                   </div>
                 </div>
               </div>
-              <Button
-                className="mt-4 w-full"
-                type="submit"
-                variant="secondary"
-                onClick={() => {
-                  updateProduct(watch());
-                }}
-              >
+              <Button className="mt-4 w-full" type="submit" variant="secondary">
                 Zapisz zmiany
               </Button>
             </div>

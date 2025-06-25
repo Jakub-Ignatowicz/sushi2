@@ -13,10 +13,10 @@ export default async function OrderPage() {
   const aggregatedProducts = groupProductsByCategory(products);
 
   return (
-    <div>
+    <div className="mb-64">
       {Object.entries(aggregatedProducts).map(([category, products]) => (
-        <div key={category} className="w-[75%] mx-auto mb-32">
-          <Label className="text-4xl font-bold mt-16 mb-8">
+        <div key={category} className="w-[75%] mx-auto">
+          <Label className="text-4xl font-bold mt-24 mb-8">
             <Tag />
             {category}
           </Label>

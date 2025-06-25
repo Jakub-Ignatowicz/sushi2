@@ -2,13 +2,14 @@ export type Product = {
   id: string;
   name: string;
   price: number;
-  imagePath?: string;
+  imageName?: string;
   isFeatured?: boolean;
   amount?: number;
   amountUnit?: string;
   description?: string;
   categories: Category[];
   items: ProductItem[];
+  fakePath?: string; // Used for previewing products without an image
 };
 
 export type Category = {
