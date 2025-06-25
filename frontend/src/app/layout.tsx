@@ -3,8 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Georama } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Navbar from "@/components/general/navbar/Navbar";
-import { CartStateProvider } from "@/context/CartState";
+import { Toaster } from "sonner";
 
 const georama = Georama({
   variable: "--font-georama",
@@ -35,6 +34,7 @@ export default function RootLayout({
           <div className="h-full flex flex-col justify-start mx-auto">
             <div className="flex-grow">{children}</div>
           </div>
+          <Toaster theme="system" />
         </ThemeProvider>
       </body>
     </html>

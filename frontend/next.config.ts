@@ -10,7 +10,18 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
-    remotePatterns: [new URL("https://k84fneng6k.ufs.sh/**")],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "k84fneng6k.ufs.sh",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "utfs.io",
+        pathname: "/f/**",
+      },
+    ],
   },
   output: "standalone",
 };

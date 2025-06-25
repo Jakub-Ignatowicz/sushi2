@@ -14,10 +14,10 @@ export default function Navbar() {
   ]);
 
   return (
-    <div className="flex justify-center items-center my-10 mx-20">
+    <div className="flex justify-center items-center my-10 mx-8 xl:mx-20">
       <div className="flex items-center justify-between w-full max-w-box">
         <div className="flex items-center ">
-          <Link className="flex justify-center items-center z-50" href="/">
+          <Link className="flex justify-center items-center z-40" href="/">
             <Image
               src={"/SushizumeLogo.png"}
               alt="Logo"
@@ -27,10 +27,12 @@ export default function Navbar() {
           </Link>
           <NavbarLinks mapLinks={mapLinks} />
         </div>
-        <MobileMenu mapLinks={mapLinks} />
-        <div className="flex items-center gap-4">
-          <ModeToggle />
-          <ShoppingCart />
+        <div className="flex items-center">
+          <div className="flex items-center gap-4">
+            <ModeToggle className="hidden xl:flex" />
+            <ShoppingCart />
+          </div>
+          <MobileMenu mapLinks={mapLinks} />
         </div>
       </div>
     </div>

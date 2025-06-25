@@ -17,7 +17,7 @@ services:
   frontend:
     build: ./frontend
     environment:
-      NEXT_PUBLIC_API_URL: "http://backend:5152"
+      NEXT_PUBLIC_API_URL: "http://161.35.212.253:5152"
     ports:
       - "3000:3000"
     depends_on:

@@ -1,16 +1,16 @@
 "use client";
-import { CartProduct } from "@/types";
+import { OrderProduct } from "@/types/api";
 import { createContext, useContext, useState, ReactNode } from "react";
 
 type CartStateType = {
-  cart: CartProduct[];
-  setCart: (cart: CartProduct[]) => void;
+  cart: OrderProduct[];
+  setCart: (cart: OrderProduct[]) => void;
 };
 
 const CartStateContext = createContext<CartStateType | null>(null);
 
 export const CartStateProvider = ({ children }: { children: ReactNode }) => {
-  const [cart, setCart] = useState<CartProduct[]>([]);
+  const [cart, setCart] = useState<OrderProduct[]>([]);
 
   return (
     <CartStateContext.Provider value={{ cart, setCart }}>

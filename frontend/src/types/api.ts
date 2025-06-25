@@ -43,6 +43,15 @@ export type Order = {
   user: User;
 };
 
+export type PostOrder = {
+  peopleCount: number;
+  notes: string;
+  paymentMethod: number;
+  address: PostAddress;
+  userId: string;
+  orderProducts: { productId: string; quantity: number }[];
+};
+
 export type Address = {
   id: string;
   city: string;
@@ -51,6 +60,15 @@ export type Address = {
   homeNumber: string;
   apartmentNumber: string;
   floor?: number | null;
+};
+
+export type PostAddress = {
+  city: string;
+  district: string;
+  street: string;
+  homeNumber: string;
+  apartmentNumber: string;
+  floor: number | null;
 };
 
 export type User = {
@@ -62,4 +80,24 @@ export type User = {
   fullName?: string | null;
   createdAt: string;
   type: "Admin" | "Regular" | "Guest";
+};
+
+export type PostUser = {
+  normal?: {
+    password: string;
+    confirmPassword: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+  };
+  guest?: {
+    phoneNumber: string;
+    email: string;
+  };
+};
+
+export type ErrorResponse = {
+  status: number;
+  errors: string[];
 };
