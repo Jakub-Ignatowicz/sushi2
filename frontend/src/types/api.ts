@@ -44,8 +44,26 @@ export type Order = {
   user: User;
 };
 
+export type PostOrder = {
+  peopleCount: number;
+  notes: string;
+  paymentMethod: number;
+  address: PostAddress;
+  userId: string;
+  orderProducts: { productId: string; quantity: number }[];
+};
+
 export type Address = {
   id: string;
+  city: string;
+  district: string;
+  street: string;
+  homeNumber: string;
+  apartmentNumber: string;
+  floor: number | null;
+};
+
+export type PostAddress = {
   city: string;
   district: string;
   street: string;
