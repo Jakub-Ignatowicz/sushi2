@@ -1,7 +1,9 @@
 import { toast } from "sonner";
 
-export const API_BASE_URL = "http://localhost:5152";
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5152";
 export const API_URL = `${API_BASE_URL}/api`;
+export const IMAGES_URL = `${API_BASE_URL}/images`;
 
 // TODO; frontend middlewear
 export const fetchApi = async <T>(

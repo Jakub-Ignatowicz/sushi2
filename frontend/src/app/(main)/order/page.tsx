@@ -15,11 +15,16 @@ export default async function OrderPage() {
   return (
     <div className="mb-64">
       {Object.entries(aggregatedProducts).map(([category, products]) => (
-        <div key={category} className="w-[75%] mx-auto">
-          <Label className="text-4xl font-bold mt-24 mb-8">
-            <Tag />
-            {category}
-          </Label>
+        <div key={category} className="w-[60%] mx-auto">
+          <div className="mt-24 mb-8">
+            <Label className="text-4xl font-bold">
+              <Tag />
+              {category}
+            </Label>
+            <p className="mt-2">
+              lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </p>
+          </div>
           {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12"> */}
           <div className="flex flex-col gap-6">
             {products.map((product: Product) => (

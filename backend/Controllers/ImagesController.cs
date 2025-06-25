@@ -1,14 +1,15 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SushiZume.Enums;
 using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Controllers;
-
-public record ImageUploadRequest(IFormFile Image);
 
 [ApiController]
 [Route("api/[controller]")]
 public class ImagesController(IImageService imageService, IProductService productService) : ControllerBase
 {
+    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpPost("upload")]
     public async Task<IActionResult> UploadImage(IFormFile image)
     {

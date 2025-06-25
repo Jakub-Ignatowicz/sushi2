@@ -3,7 +3,7 @@ namespace SushiZume.DTOs;
 public record CategoryWithProductsDto_ProductDto(
     Guid Id,
     string Name,
-    string? ImageName,
+    string? ImageUrl,
     string? AmountUnit,
     decimal Price,
     double? Amount,

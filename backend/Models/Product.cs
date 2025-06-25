@@ -6,17 +6,16 @@ namespace SushiZume.Models;
 
 public class Product
 {
-    public Guid Id { get; init; } = Guid.NewGuid();
+    public Guid Id { get; init; }
     public string Name { get; set; }
     public decimal Price { get; set; }
     public bool IsAvailable { get; set; }
     public bool IsVisible { get; set; }
     public bool IsFeatured { get; set; }
-    public string? ImageName { get; set; }
+    public string? ImageUrl { get; set; }
     public double? Amount { get; set; }
     public string? AmountUnit { get; set; }
     public string? Description { get; set; }
-    public ProductType Type { get; set; }
     public List<ProductCategory> Categories { get; init; } = [];
     public List<OrderProduct> OrderProducts { get; init; } = [];
     public List<ProductItem> Items { get; init; } = [];

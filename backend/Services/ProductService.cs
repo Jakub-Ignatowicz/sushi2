@@ -51,10 +51,11 @@ public class ProductService(
         var product = await GetByIdAsync(productId);
 
         product.Name = dto.Name ?? product.Name;
-        product.ImageName = dto.ImageName ?? product.ImageName;
+        product.ImageUrl = dto.ImageUrl ?? product.ImageUrl;
         product.AmountUnit = dto.AmountUnit ?? product.AmountUnit;
         product.Price = dto.Price ?? product.Price;
         product.Amount = dto.Amount ?? product.Amount;
+        product.Description = dto.Description ?? product.Description;
         product.IsAvailable = dto.Available ?? product.IsAvailable;
         product.IsVisible = dto.Visible ?? product.IsVisible;
 
@@ -67,7 +68,7 @@ public class ProductService(
                 {
                     ProductId = product.Id,
                     Description = item.Description,
-                    Number = item.Number,
+                    Quantity = item.Quantity,
                 };
 
                 product.Items.Add(newItem);

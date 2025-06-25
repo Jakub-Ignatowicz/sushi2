@@ -11,6 +11,7 @@ namespace SushiZume.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 
+[Authorize(Roles = nameof(UserType.Admin))]
 [ApiController]
 [Route("api/[controller]")]
 public class OrdersController(
@@ -20,7 +21,6 @@ public class OrdersController(
     IOrderRepository orderRepo)
     : ControllerBase
 {
-    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpGet]
     public async Task<ActionResult<List<OrderDto>>> GetOrdersWithPagination(int page = 1, int pageSize = 10)
     {
@@ -28,7 +28,6 @@ public class OrdersController(
         return Ok(mapper.Map<List<OrderDto>>(orders));
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpGet("new")]
     public async Task<IActionResult> GetNewOrders()
     {
@@ -36,7 +35,6 @@ public class OrdersController(
         return Ok(mapper.Map<List<OrderDto>>(orders));
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpGet("in-progress")]
     public async Task<IActionResult> GetInProgressOrders()
     {
@@ -45,7 +43,6 @@ public class OrdersController(
     }
 
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpGet("{orderId:guid}")]
     public async Task<ActionResult<OrderDto>> GetOrderById(Guid orderId)
     {
@@ -53,7 +50,7 @@ public class OrdersController(
         return Ok(mapper.Map<OrderDto>(order));
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
+    [AllowAnonymous]
     [HttpPost]
     public async Task<ActionResult<OrderDto>> CreateOrder([FromBody] OrderPostDto dto)
     {
@@ -71,19 +68,10 @@ public class OrdersController(
         return Ok(count);
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
-    [HttpPost("{orderId:guid}/seen")]
-    public async Task<ActionResult<bool>> MarkAsSeen(Guid orderId)
+    [HttpPost("{orderId:guid}/status")]
+    public async Task<IActionResult> ChangeOrderStatus(Guid orderId, [FromBody] ChangeOrderStatusDto dto)
     {
-        var order = await orderService.MarkAsSeenAsync(orderId);
-        return Ok(order);
-    }
-
-    [Authorize(Roles = nameof(UserRole.Admin))]
-    [HttpPost("{orderId:guid}/resolved")]
-    public async Task<ActionResult<bool>> MarkAsResolved(Guid orderId)
-    {
-        var order = await orderService.MarkAsResolvedAsync(orderId);
-        return Ok(order);
+        await orderService.ChangeStatusAsync(orderId, dto.Status);
+        return NoContent();
     }
 }

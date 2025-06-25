@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SushiZume.Data;
 using SushiZume.DTOs;
+using SushiZume.Enums;
 using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Services;
@@ -34,39 +35,19 @@ public class OrderService(IOrderRepository orderRepo, IMapper mapper, SushiConte
         return order;
     }
 
-    public async Task<bool> MarkAsDoneAsync(Guid id)
-    {
-        var order = await GetByIdAsync(id);
-
-        order.IsDone = true;
-        orderRepo.Update(order);
-        await orderRepo.SaveChangesAsync();
-
-        return true;
-    }
-
-    public async Task<bool> MarkAsSeenAsync(Guid id)
+    public async Task<bool> ChangeStatusAsync(Guid id, OrderStatus status)
     {
         await context.Orders
             .Where(o => o.Id == id)
-            .ExecuteUpdateAsync(o => o.SetProperty(x => x.IsNew, true));
+            .ExecuteUpdateAsync(o =>
+                o.SetProperty(x => x.Status, status));
 
-        await context.SaveChangesAsync();
+        // await context.SaveChangesAsync();
         return true;
     }
 
     public async Task<int> GetCountAsync()
     {
         return await orderRepo.GetCountAsync();
-    }
-
-    public async Task<bool> MarkAsResolvedAsync(Guid orderId)
-    {
-        await context.Orders
-            .Where(o => o.Id == orderId)
-            .ExecuteUpdateAsync(o => o.SetProperty(x => x.IsDone, true));
-
-        await context.SaveChangesAsync();
-        return true;
     }
 }

@@ -5,7 +5,7 @@ namespace SushiZume.Models;
 
 public class Address
 {
-    public Guid Id { get; init; } = Guid.NewGuid();
+    public Guid Id { get; init; }
     public string City { get; set; }
     public string District { get; set; }
     public string Street { get; set; }

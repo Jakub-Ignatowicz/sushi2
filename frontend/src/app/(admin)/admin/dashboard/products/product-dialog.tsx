@@ -16,9 +16,10 @@ import { useFieldArray, useForm } from "react-hook-form";
 
 type Props = {
   product: Product;
+  isEdit?: boolean;
 };
 
-const ProductDialog = ({ product }: Props) => {
+const ProductDialog = ({ product, isEdit }: Props) => {
   const { register, control, handleSubmit, reset, watch, setValue } =
     useForm<Product>({
       defaultValues: { ...product },
@@ -48,18 +49,20 @@ const ProductDialog = ({ product }: Props) => {
     if (e.target.files?.[0]) {
       setFile(e.target.files[0]);
       const url = URL.createObjectURL(e.target.files[0]);
-      setValue("fakePath", url, { shouldValidate: true, shouldDirty: true });
+      setValue("fakePath", url, { shouldValidate: false, shouldDirty: true });
     }
   };
 
   const onSubmit = async (data: Product) => {
-    let fileName;
     if (file) {
-      fileName = await uploadImage(file);
+      data.imageUrl = await uploadImage(file);
     }
-    data.imageName = fileName;
 
-    await updateProduct(data);
+    if (isEdit) {
+      product = await updateProduct(data);
+    } else {
+      product = await updateProduct(data);
+    }
   };
 
   return (
@@ -78,9 +81,11 @@ const ProductDialog = ({ product }: Props) => {
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex-1 pl-6"
           >
-            <Label className="text-2xl mb-4 font-bold">Edytuj produkt</Label>
+            <Label className="text-2xl mb-4 font-bold">
+              {isEdit ? "Edytuj produkt" : "Stwórz nowy produkt"}
+            </Label>
             <div className="flex flex-col items-center">
-              <div className="overflow-auto w-full max-h-[50vh] flex flex-col gap-2 pr-2">
+              <div className="overflow-auto w-full max-h-[50vh] flex flex-col gap-2 pr-3">
                 <LabelInput label="Nazwa" {...register("name")} />
                 <LabelFile label="Zdjęcie" onChange={onFileChange} />
                 <LabelInput label="Cena" type="number" {...register("price")} />
@@ -90,7 +95,11 @@ const ProductDialog = ({ product }: Props) => {
                   {...register("amount")}
                 />
                 <LabelInput label="Jednostka" {...register("amountUnit")} />
-                <LabelTextarea label="Opis" {...register("description")} />
+                <LabelTextarea
+                  rows={5}
+                  label="Opis"
+                  {...register("description")}
+                />
                 <div>
                   <Label className="my-2 text-xl">Dodaj produkt</Label>
                   <div className="flex items-end gap-2">
@@ -106,7 +115,7 @@ const ProductDialog = ({ product }: Props) => {
                       value={newDescription}
                       onChange={(e) => setNewDescription(e.target.value)}
                     />
-                    <Button variant="outline" className="" onClick={addItem}>
+                    <Button variant="outline" type="button" onClick={addItem}>
                       <Plus size={16} />
                     </Button>
                   </div>
@@ -133,7 +142,7 @@ const ProductDialog = ({ product }: Props) => {
                 </div>
               </div>
               <Button className="mt-4 w-full" type="submit" variant="secondary">
-                Zapisz zmiany
+                {isEdit ? "Zapisz zmiany" : "Zapisz"}
               </Button>
             </div>
           </form>

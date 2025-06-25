@@ -10,5 +10,5 @@ public record UserDto(
     string? LastName,
     string? FullName,
     DateTime CreatedAt,
-    UserRole Role
+    UserType Type
 );

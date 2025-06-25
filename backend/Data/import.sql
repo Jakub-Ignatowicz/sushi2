@@ -1,16 +1,16 @@
-CREATE EXTENSION dblink;
-SELECT dblink_connect('source_conn', 'host=localhost dbname=sushizume');
+CREATE EXTENSION IF NOT EXISTS dblink;
+SELECT dblink_connect('source_conn', '{{SOURCE_CONN}}');
 
-INSERT INTO "Product" (name, price, available, visible, featured, "imageName", amount, "amountName", id, description)
-SELECT name,
+INSERT INTO products (id, name, price, is_available, is_visible, image_url, amount, amount_unit,
+                      description)
+SELECT id::uuid,       -- cast id from text to uuid
+       name,
        price::numeric, -- cast price from integer to numeric
        available,
        visible,
-       false,
        imagePath,
-       amount::numeric,
+       amount,
        amountName,
-       id::uuid,       -- cast id from text to uuid
        description
 FROM dblink('source_conn',
             'SELECT name, price, available, visible, "imagePath", amount, "amountName", id, description FROM "Product"'
@@ -26,17 +26,17 @@ FROM dblink('source_conn',
                  description text
     );
 
-insert into "Category" (id, name, "orderIndex", description)
+insert into categories (id, name, description)
 select id::uuid,
        name,
-       1,
        null
 from dblink('source_conn',
             'SELECT id, name from "Category"')
          AS source(id text, name text);
 
-insert into "ProductCategory" ("productId", "categoryId")
-select id::uuid, "categoryId"::uuid
+insert into product_categories (product_id, category_id)
+select id::uuid,
+       "categoryId"::uuid
 from dblink('source_conn',
             'SELECT id, "categoryId" from "Product"')
          as source(id text, "categoryId" text);
@@ -76,17 +76,13 @@ BEGIN
         LOOP
             new_user_id := gen_random_uuid();
 
-            INSERT INTO "User" (id, email, phone, "passwordHash", "firstName", "lastName", "createdAt", role)
+            INSERT INTO users (id, email, phone_number, type)
             values (new_user_id,
                     rec.email,
                     rec.phone,
-                    NULL,
-                    NULL,
-                    NULL,
-                    now(),
                     'Guest');
 
-            insert into "Address" (id, city, district, street, "homeNumber", "apartmentNumber", floor, "userId")
+            insert into addresses (id, city, district, street, home_number, apartment_number, floor, user_id)
             values (rec."addressId",
                     rec.city,
                     rec.district,
@@ -96,13 +92,10 @@ BEGIN
                     rec.floor,
                     new_user_id);
 
-            insert into "Order" (id, "peopleCount", "paymentMethod", new, done, "createdAt", "notesForOrder",
-                                 "addressId", "userId")
+            insert into orders (id, people_count, payment_method, created_at, notes, address_id, user_id)
             values (rec."orderId",
                     rec."peopleNumber",
                     rec."paymentMethod",
-                    rec.new,
-                    rec.done,
                     rec."createdAt",
                     rec."notesForOrder",
                     rec."addressId",
@@ -113,7 +106,7 @@ $$;
 
 select import_users_from_orders();
 
-insert into "OrderProduct" ("orderId", "productId", quantity)
+insert into order_products (order_id, product_id, quantity)
 select "orderId", "productId", quantity
 from dblink('source_conn',
             'SELECT "orderId", "productId", quantity from "OrderProduct"')

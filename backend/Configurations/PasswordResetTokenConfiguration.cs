@@ -8,19 +8,13 @@ public class PasswordResetTokenConfiguration : IEntityTypeConfiguration<Password
 {
     public void Configure(EntityTypeBuilder<PasswordResetToken> builder)
     {
-        builder.ToTable("PasswordResetToken");
-
         builder.HasKey(p => p.Id);
 
         builder.Property(p => p.Id)
-            .HasColumnName("id");
+            .HasDefaultValueSql("gen_random_uuid()");
 
-        builder.Property(p => p.ExpiryDate)
-            .HasColumnName("expiryDate");
-
-        builder.Property(p => p.UserId)
-            .HasColumnName("userId")
-            .IsRequired();
+        builder.Property(p => p.IsUsed)
+            .HasDefaultValue(false);
 
         builder.HasOne(p => p.User)
             .WithMany()

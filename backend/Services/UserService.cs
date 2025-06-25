@@ -141,7 +141,7 @@ public class UserService(
 
     public async Task<bool> DoesEmailExistAsync(string email)
     {
-        return await context.Users.AnyAsync(u => u.Email == email && u.Role == UserRole.Normal);
+        return await context.Users.AnyAsync(u => u.Email == email && u.Type == UserType.Regular);
     }
 
     public async Task GeneratePasswordResetToken(string email)

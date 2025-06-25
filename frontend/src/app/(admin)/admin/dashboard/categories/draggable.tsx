@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -13,15 +12,13 @@ import {
   arrayMove,
   SortableContext,
   verticalListSortingStrategy,
-  useSortable,
 } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { Category as CategoryType } from "@/types/api";
 import Category from "./category";
 
 type Props = {
   items: CategoryType[];
-  setItems: (items: CategoryType[]) => void;
+  setItems: React.Dispatch<React.SetStateAction<CategoryType[]>>;
 };
 
 export default function DraggableCategoryList({ items, setItems }: Props) {

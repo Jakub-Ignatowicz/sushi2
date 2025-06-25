@@ -38,7 +38,7 @@ const Product = ({ product, categoryId }: Props) => {
           {product.isFeatured ? <StarOff size={16} /> : <Star size={16} />}
         </Button>
         <ProductDeleteDialog product={product} categoryId={categoryId} />
-        <ProductDialog product={product} />
+        <ProductDialog product={product} isEdit />
       </div>
     </div>
   );

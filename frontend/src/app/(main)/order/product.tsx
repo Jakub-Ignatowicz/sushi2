@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { API_BASE_URL } from "@/lib/api";
 import { priceToString } from "@/lib/utils";
 import { Product } from "@/types/api";
 import AddToCardButton from "./addToCardButton";
@@ -9,18 +8,14 @@ type Props = {
   isPreview?: boolean;
 };
 
-const ProductComponent = ({ product, isPreview = false }: Props) => {
+const ProductComponent = ({ product, isPreview }: Props) => {
   return (
-    <div className="flex gap-2 bg-primary-foreground p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
-      {((isPreview && product.fakePath) || product.imageName) && (
+    <div className="flex gap-2 bg-primary-foreground p-4 px-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+      {((isPreview && product.fakePath) || product.imageUrl) && (
         <img
-          src={
-            product.fakePath
-              ? product.fakePath
-              : `${API_BASE_URL}/images/${product.imageName}`
-          }
+          src={product.fakePath || product.imageUrl}
           alt={product.name}
-          className="w-64 h-full object-cover rounded-lg my-auto mr-8"
+          className="w-50 h-full object-cover rounded-lg my-auto mr-6"
         />
       )}
       <div className="flex flex-col gap-2">
@@ -38,10 +33,10 @@ const ProductComponent = ({ product, isPreview = false }: Props) => {
         </div>
         {product.description && <p>{product.description}</p>}
         {product.items.length > 0 && (
-          <div className="inline-block mt-2">
+          <div>
             {product.items.map((item) => (
               <div className="flex items-start gap-2" key={item.id}>
-                <p className="text-red-400 font-semibold">{item.number}x</p>
+                <p className="font-semibold">{item.number}x</p>
                 <p>{item.description}</p>
               </div>
             ))}

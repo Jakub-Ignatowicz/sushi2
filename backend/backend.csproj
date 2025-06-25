@@ -5,20 +5,22 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>SushiZume</RootNamespace>
-	  <UserSecretsId>bbadcb76-3d16-431d-8f51-f1c43b67d4af</UserSecretsId>
-  </PropertyGroup>
+		<UserSecretsId>bbadcb76-3d16-431d-8f51-f1c43b67d4af</UserSecretsId>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+		<PackageReference Include="DotNetEnv" Version="3.1.1" />
+		<PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
 		<PackageReference Include="FluentValidation" Version="12.0.0" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.6" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.6">
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		  <PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
@@ -27,8 +29,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Migrations\" />
-	  <Folder Include="wwwroot\images\" />
+		<Folder Include="Migrations\" />
+		<Folder Include="wwwroot\images\" />
+		<Content Include="Data\import.sql">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 </Project>

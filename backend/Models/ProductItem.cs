@@ -5,10 +5,9 @@ namespace SushiZume.Models;
 
 public class ProductItem
 {
-    public Guid Id { get; init; } = Guid.NewGuid();
+    public Guid Id { get; init; }
     public string Description { get; set; }
-    public double Number { get; set; }
-    public string? NumberSuffix { get; set; }
+    public int Quantity { get; set; }
     public Guid ProductId { get; set; }
     public Product Product { get; set; }
 }
