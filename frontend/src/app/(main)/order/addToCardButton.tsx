@@ -33,7 +33,7 @@ const AddToCardButton = ({ product, isPreview }: Props) => {
     }
 
     setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart)); // ⬅️ zapis do localStorage
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
   return (
