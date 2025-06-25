@@ -24,6 +24,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .HasDefaultValueSql("now()");
 
         builder.Property(o => o.Status)
+            .HasConversion<string>()
             .HasDefaultValue(OrderStatus.Pending);
 
         builder.HasOne(o => o.Address)
