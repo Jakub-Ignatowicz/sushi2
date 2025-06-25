@@ -14,7 +14,11 @@ using SushiZume.Services.Interfaces;
 
 const string allowLocalhostOrigins = "_myAllowSpecificOrigins";
 
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
+
+// builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -22,7 +26,12 @@ builder.Services.AddOpenApi();
 
 // DB
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<SushiContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<SushiContext>(options =>
+    options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication().AddCookie();
+
 
 // builder.Services.AddProblemDetails(options =>
 // {
@@ -90,6 +99,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseCors(allowLocalhostOrigins);
     app.MapControllers().AllowAnonymous();
+
+    app.ApplyMigrations();
 }
 else
 {
@@ -109,8 +120,8 @@ app.UseAuthorization();
 app.UseStaticFiles();
 
 // Initialize database
-using var scope = app.Services.CreateScope();
-var context = scope.ServiceProvider.GetRequiredService<SushiContext>();
-await DataInitializer.SeedAsync(context);
+// using var scope = app.Services.CreateScope();
+// var context = scope.ServiceProvider.GetRequiredService<SushiContext>();
+// await DataInitializer.SeedAsync(context);
 
 app.Run();

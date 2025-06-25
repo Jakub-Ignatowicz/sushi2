@@ -55,14 +55,14 @@ public class MappingProfile : Profile
                 {
                     var user = context.Mapper.Map<User>(src.Normal);
                     user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(src.Normal.Password);
-                    user.Role = UserRole.Normal;
+                    user.Type = UserType.Regular;
                     return user;
                 }
 
                 if (src.Guest is not null)
                 {
                     var guest = context.Mapper.Map<User>(src.Guest);
-                    guest.Role = UserRole.Guest;
+                    guest.Type = UserType.Guest;
                     return guest;
                 }
 

@@ -8,38 +8,24 @@ public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
 {
     public void Configure(EntityTypeBuilder<RefreshToken> builder)
     {
-        builder.ToTable("RefreshToken");
-
         builder.HasKey(rt => rt.Id);
 
         builder.Property(rt => rt.Id)
-            .HasColumnName("id");
-
-        builder.Property(rt => rt.UserId)
-            .HasColumnName("userId");
-
-        builder.Property(rt => rt.Token)
-            .HasColumnName("token");
-
-        builder.Property(rt => rt.ExpiryDate)
-            .HasColumnName("expiryDate");
-
-        builder.Property(rt => rt.CreatedAt)
-            .HasColumnName("createdAt");
+            .HasDefaultValueSql("gen_random_uuid()");
 
         builder.Property(rt => rt.IsRevoked)
-            .HasColumnName("isRevoked");
+            .HasDefaultValue(false);
+
+        builder.Property(rt => rt.CreatedAt)
+            .HasDefaultValueSql("now()");
 
         builder.Property(rt => rt.ReplacedByTokenId)
-            .HasColumnName("replacedByTokenId")
             .IsRequired(false);
 
         builder.Property(rt => rt.UserAgent)
-            .HasColumnName("userAgent")
             .IsRequired(false);
 
         builder.Property(rt => rt.IpAddress)
-            .HasColumnName("ipAddress")
             .IsRequired(false);
 
         builder.HasOne(rt => rt.User)

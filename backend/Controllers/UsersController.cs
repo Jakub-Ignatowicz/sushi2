@@ -28,7 +28,7 @@ public class UsersController(
         return Ok(id);
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
+    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpGet]
     public async Task<ActionResult<List<UserDto>>> GetUsers()
     {
@@ -36,7 +36,7 @@ public class UsersController(
         return mapper.Map<List<UserDto>>(users);
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
+    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpGet("{userId:guid}")]
     public async Task<ActionResult<UserDto>> GetUserById(Guid userId)
     {

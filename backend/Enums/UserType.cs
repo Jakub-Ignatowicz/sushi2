@@ -1,8 +1,8 @@
 namespace SushiZume.Enums;
 
-public enum UserRole
+public enum UserType
 {
     Admin,
-    Normal,
+    Regular,
     Guest
 }

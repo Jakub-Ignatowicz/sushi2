@@ -28,7 +28,7 @@ public class ProductsController(
         return mapper.Map<List<ProductDto>>(all);
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
+    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpGet("/available")]
     public async Task<ActionResult<List<ProductDto>>> GetAvailableProducts()
     {
@@ -36,7 +36,7 @@ public class ProductsController(
         return mapper.Map<List<ProductDto>>(all);
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
+    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpPost]
     public async Task<ActionResult<ProductDto>> CreateProduct(ProductPostDto dto)
     {
@@ -47,7 +47,7 @@ public class ProductsController(
         return mapper.Map<ProductDto>(created);
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
+    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpPost("{productId:guid}/available")]
     public async Task<ActionResult<ProductDto>> SetProductAvailable(Guid productId, [FromBody] bool available)
     {
@@ -55,7 +55,7 @@ public class ProductsController(
         return mapper.Map<ProductDto>(product);
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
+    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpPost("{productId:guid}/visible")]
     public async Task<ActionResult<ProductDto>> SetProductVisible(Guid productId, [FromBody] bool visible)
     {
@@ -63,7 +63,7 @@ public class ProductsController(
         return mapper.Map<ProductDto>(product);
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
+    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpPost("{productId:guid}")]
     public async Task<ActionResult<ProductDto>> UpdateProduct(Guid productId, [FromBody] ProductUpdateDto dto)
     {
@@ -73,7 +73,7 @@ public class ProductsController(
         return mapper.Map<ProductDto>(product);
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
+    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpPost("{productId:guid}/items")]
     public async Task<ActionResult> AddProductItems(Guid productId, [FromBody] List<ProductItemPostDto> dtos)
     {
@@ -83,7 +83,7 @@ public class ProductsController(
         return NoContent();
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
+    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpDelete("{productId:guid}/items")]
     public async Task<ActionResult> RemoveProductItems(Guid productId, [FromBody] List<Guid> itemIds)
     {
@@ -91,7 +91,7 @@ public class ProductsController(
         return NoContent();
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
+    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpPost("{productId:guid}/categories")]
     public async Task<ActionResult> AddProductCategories(Guid productId, [FromBody] List<Guid> categoryIds)
     {
@@ -99,7 +99,7 @@ public class ProductsController(
         return Ok(result);
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
+    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpDelete("{productId:guid}/categories")]
     public async Task<ActionResult> RemoveProductCategories(Guid productId, [FromBody] List<Guid> categoryIds)
     {

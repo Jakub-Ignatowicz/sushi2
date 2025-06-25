@@ -1,3 +1,5 @@
+using SushiZume.Enums;
+
 namespace SushiZume.Repositories;
 
 using Data;
@@ -27,14 +29,14 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
     public async Task<List<Order>> GetAllNewAsync()
     {
         return await DefaultQuery
-            .Where(o => o.IsNew && !o.IsDone)
+            .Where(o => o.Status == OrderStatus.Pending)
             .ToListAsync();
     }
 
     public async Task<List<Order>> GetAllInProgressAsync()
     {
         return await DefaultQuery
-            .Where(o => !o.IsNew && !o.IsDone)
+            .Where(o => o.Status == OrderStatus.Preparing)
             .ToListAsync();
     }
 
@@ -45,20 +47,6 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
             .Skip(skip)
             .Take(pageSize)
             .ToListAsync();
-    }
-
-    public async Task<bool> MarkAsDoneAsync(Guid id)
-    {
-        return await context.Orders
-            .Where(o => o.Id == id)
-            .ExecuteUpdateAsync(o => o.SetProperty(x => x.IsDone, true)) > 0;
-    }
-
-    public async Task<bool> MarkAsNotNewAsync(Guid id)
-    {
-        return await context.Orders
-            .Where(o => o.Id == id)
-            .ExecuteUpdateAsync(o => o.SetProperty(x => x.IsNew, false)) > 0;
     }
 
     public async Task<List<Order>> GetByUserIdAsync(Guid userId)

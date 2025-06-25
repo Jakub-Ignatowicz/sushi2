@@ -9,51 +9,31 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.ToTable("Product");
-
         builder.HasKey(p => p.Id);
 
         builder.Property(p => p.Id)
-            .HasColumnName("id");
-
-        builder.Property(p => p.Name)
-            .HasColumnName("name");
-
-        builder.Property(p => p.Price)
-            .HasColumnName("price");
+            .HasDefaultValueSql("gen_random_uuid()");
 
         builder.Property(p => p.IsAvailable)
-            .HasColumnName("available")
             .HasDefaultValue(true);
 
         builder.Property(p => p.IsVisible)
-            .HasColumnName("visible")
             .HasDefaultValue(true);
 
         builder.Property(p => p.IsFeatured)
-            .HasColumnName("featured")
             .HasDefaultValue(false);
 
-        builder.Property(p => p.ImageName)
-            .HasColumnName("imageName")
+        builder.Property(p => p.ImageUrl)
             .IsRequired(false);
 
         builder.Property(p => p.Amount)
-            .HasColumnName("amount")
             .IsRequired(false);
 
         builder.Property(p => p.AmountUnit)
-            .HasColumnName("amountName")
             .IsRequired(false);
 
         builder.Property(p => p.Description)
-            .HasColumnName("description")
             .IsRequired(false);
-
-        builder.Property(p => p.Type)
-            .HasColumnName("type")
-            .HasConversion<string>()
-            .HasDefaultValue(ProductType.Normal);
 
         builder.HasMany(p => p.Categories)
             .WithOne(pc => pc.Product)
