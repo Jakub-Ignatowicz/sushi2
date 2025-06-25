@@ -16,12 +16,14 @@ const AddToCardButton = ({ product, isPreview }: Props) => {
   const handleAddToCart = () => {
     const existingItem = cart.find((item) => item.product.id === product.id);
 
+    console.log(cart);
+
     let updatedCart;
 
     if (existingItem) {
       updatedCart = cart.map((item) =>
         item.product.id === product.id
-          ? { ...item, count: item.quantity + 1 }
+          ? { ...item, quantity: item.quantity + 1 }
           : item,
       );
     } else {

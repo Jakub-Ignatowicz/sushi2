@@ -4,6 +4,7 @@ import { useCartState } from "@/context/CartState";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import Form from "./Form";
 
 export default function CartPage() {
   const { cart, setCart } = useCartState();
@@ -20,7 +21,7 @@ export default function CartPage() {
   };
 
   const totalPrice = cart.reduce(
-    (sum, item) => sum + item.product.price * item.count,
+    (sum, item) => sum + item.product.price * item.quantity,
     0,
   );
 
@@ -53,7 +54,7 @@ export default function CartPage() {
                       {item.product.name}
                     </h2>
                     <p className="text-gray-500">
-                      Ilość: {item.count} × {item.product.price} zł
+                      Ilość: {item.quantity} × {item.product.price} zł
                     </p>
                   </div>
                 </div>
@@ -69,7 +70,7 @@ export default function CartPage() {
 
           <div className="flex justify-between items-center">
             <h2 className="text-xl xl:text-2xl font-bold">
-              Suma: {totalPrice.toFixed(2)} zł
+              Suma w koszyku: {totalPrice.toFixed(2)} zł
             </h2>
             <div className="flex flex-col xl:flex-row">
               <Button
@@ -79,13 +80,9 @@ export default function CartPage() {
               >
                 Wyczyść koszyk
               </Button>
-              <Link href="/cart/checkout">
-                <Button className="m-1" variant="zume">
-                  Złóż zamówienie
-                </Button>
-              </Link>
             </div>
           </div>
+          <Form />
         </>
       )}
     </div>

@@ -16,7 +16,7 @@ export default function ShoppingCart() {
     if (stored) setCart(JSON.parse(stored));
   }, [setCart]);
 
-  const newTotalCount = cart.reduce((sum, item) => sum + item.count, 0);
+  const newTotalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
     if (totalCount !== 0 && totalCount !== newTotalCount) {
