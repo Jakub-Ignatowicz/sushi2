@@ -9,7 +9,7 @@ export const fetchApi = async <T>(
   endpoint: string,
   requestType: "GET" | "POST",
   options?: RequestInit,
-): Promise<T> => {
+): Promise<T | ErrorResponse> => {
   try {
     const normalizedEndpoint = endpoint.replace(/^\/+/, "");
     const res = await fetch(`${BASE_URL}/${normalizedEndpoint}`, {
