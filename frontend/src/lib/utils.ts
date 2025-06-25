@@ -1,6 +1,7 @@
 import { Address, Product } from "@/types/api";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { IMAGES_URL } from "./api";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -56,3 +57,6 @@ export function groupProductsByCategory(
     ),
   );
 }
+
+export const getImageUrl = (imageName: string): string =>
+  `${IMAGES_URL}/${imageName}`;

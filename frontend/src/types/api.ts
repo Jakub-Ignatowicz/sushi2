@@ -2,7 +2,7 @@ export type Product = {
   id: string;
   name: string;
   price: number;
-  imageName?: string;
+  imageUrl?: string;
   isFeatured?: boolean;
   amount?: number;
   amountUnit?: string;
@@ -23,7 +23,6 @@ export type ProductItem = {
   id: string;
   description: string;
   number: number;
-  numberSuffix: string;
 };
 
 export type OrderProduct = {
@@ -35,8 +34,7 @@ export type Order = {
   id: string;
   address: Address;
   peopleCount: number;
-  isDone: boolean;
-  isNew: boolean;
+  status: "Pending" | "Preparing" | "Completed" | "Cancelled";
   notes: string;
   createdAt: Date;
   orderProducts: OrderProduct[];
@@ -52,7 +50,7 @@ export type Address = {
   street: string;
   homeNumber: string;
   apartmentNumber: string;
-  floor: number | null;
+  floor?: number | null;
 };
 
 export type User = {
@@ -63,5 +61,5 @@ export type User = {
   lastName?: string | null;
   fullName?: string | null;
   createdAt: string;
-  // role: UserRole;
+  type: "Admin" | "Regular" | "Guest";
 };
