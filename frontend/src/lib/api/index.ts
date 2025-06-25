@@ -1,9 +1,6 @@
-const BASE_URL = "http://localhost:5152/api";
+import { ErrorResponse } from "@/types/api";
 
-type ErrorResponse = {
-  status: "error";
-  errors: string[];
-};
+const BASE_URL = "http://localhost:5152/api";
 
 export const fetchApi = async <T>(
   endpoint: string,
@@ -22,7 +19,10 @@ export const fetchApi = async <T>(
 
     if (!res.ok) {
       const errorData = (await res.json()) as ErrorResponse;
-      return { status: "error", errors: errorData.errors || ["Unknown error"] };
+      return {
+        status: res.status,
+        errors: errorData.errors || ["Unknown error"],
+      };
     }
 
     const data = (await res.json()) as T;
@@ -30,7 +30,7 @@ export const fetchApi = async <T>(
   } catch (err) {
     console.error(err);
     return {
-      status: "error",
+      status: 500,
       errors: [err instanceof Error ? err.message : "Unexpected error"],
     };
   }

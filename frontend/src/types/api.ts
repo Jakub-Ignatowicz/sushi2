@@ -79,3 +79,8 @@ export type PostUser = {
     email: string;
   };
 };
+
+export type ErrorResponse = {
+  status: number;
+  errors: string[];
+};
