@@ -64,3 +64,18 @@ export type User = {
   createdAt: string;
   // role: UserRole;
 };
+
+export type PostUser = {
+  normal?: {
+    password: string;
+    confirmPassword: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+  };
+  guest?: {
+    phoneNumber: string;
+    email: string;
+  };
+};
