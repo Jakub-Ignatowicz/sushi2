@@ -4,7 +4,7 @@ const BASE_URL = "http://localhost:5152/api";
 
 export const fetchApi = async <T>(
   endpoint: string,
-  requestType: "GET" | "POST",
+  requestType: "GET" | "POST" | "PATCH" | "PUT",
   options?: RequestInit,
 ): Promise<T | ErrorResponse> => {
   try {
