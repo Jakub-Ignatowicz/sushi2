@@ -1,4 +1,4 @@
-export const API_BASE_URL = "http://localhost:5152";
+export const API_BASE_URL = "http://192.168.88.103:8081";
 export const API_URL = `${API_BASE_URL}/api`;
 export const IMAGES_URL = `${API_BASE_URL}/images`;
 
@@ -23,6 +23,7 @@ export const fetchApi = async <T>(
 
     if (!res.ok) {
       const errorData = (await res.json()) as ErrorResponse;
+      // @ts-ignore
       return { status: "error", errors: errorData.errors || ["Unknown error"] };
     }
 
@@ -30,6 +31,7 @@ export const fetchApi = async <T>(
     return data;
   } catch (err) {
     console.error(err);
+    // @ts-ignore
     return {
       status: "error",
       errors: [err instanceof Error ? err.message : "Unexpected error"],

@@ -14,11 +14,10 @@ using SushiZume.Services.Interfaces;
 
 const string allowLocalhostOrigins = "_myAllowSpecificOrigins";
 
-DotNetEnv.Env.Load();
-
 var builder = WebApplication.CreateBuilder(args);
 
-// builder.Configuration.AddEnvironmentVariables();
+// DotNetEnv.Env.Load();
+builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -31,20 +30,6 @@ builder.Services.AddDbContext<SushiContext>(options =>
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication().AddCookie();
-
-
-// builder.Services.AddProblemDetails(options =>
-// {
-//     options.CustomizeProblemDetails = context =>
-//     {
-//         context.ProblemDetails.Instance =
-//             $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
-//         context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
-//         var activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
-//         context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
-//     };
-// });
-// builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 // Register repositories
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -69,15 +54,15 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: allowLocalhostOrigins, policy =>
-    {
-        policy.WithOrigins("http://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
-});
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy(name: allowLocalhostOrigins, policy =>
+//     {
+//         policy.AllowAnyOrigin()
+//             .AllowAnyHeader()
+//             .AllowAnyMethod();
+//     });
+// });
 
 // Controllers
 builder.Services.AddControllers();
@@ -89,6 +74,11 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInte
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5152); // Listen on port 5152
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -97,15 +87,17 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseCors(allowLocalhostOrigins);
-    app.MapControllers().AllowAnonymous();
 
-    app.ApplyMigrations();
+    app.MapControllers().AllowAnonymous();
 }
 else
 {
-    app.MapControllers();
+    app.MapControllers().AllowAnonymous();
 }
+
+app.ApplyMigrations();
+
+// app.UseCors(allowLocalhostOrigins);
 
 // app.UseExceptionHandler(o => { });
 // app.UseStatusCodePages();

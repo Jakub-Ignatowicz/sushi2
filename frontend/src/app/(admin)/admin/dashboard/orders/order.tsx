@@ -1,7 +1,5 @@
 import { Label } from "@/components/ui/label";
 import { Order } from "@/types/api";
-import OrderDetails from "./order-details";
-import OrderProducts from "./order-products";
 import { Button } from "@/components/ui/button";
 import { addressToString, formatDate, priceToString } from "@/lib/utils";
 import OrderDialog from "./dialog";
@@ -35,9 +33,9 @@ const OrderComponent = ({ order }: Props) => {
         ))}
       </div>
       <div className="flex gap-2">
-        {order.isNew ? (
+        {order.status == "Pending" ? (
           <Button>Potwierdz</Button>
-        ) : !order.isDone ? (
+        ) : order.status == "Preparing" ? (
           <Button variant="green">Zrealizuj</Button>
         ) : null}
         <OrderDialog order={order} />

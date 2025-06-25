@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { API_BASE_URL, IMAGES_URL } from "@/lib/api";
-import { getImageUrl, priceToString } from "@/lib/utils";
+import { priceToString } from "@/lib/utils";
 import { Product } from "@/types/api";
 import { Plus } from "lucide-react";
 

@@ -8,7 +8,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripHorizontal, Pencil, Save, X } from "lucide-react";
 import { useState } from "react";
 import Product from "../products/product";
-import { TooltipButton } from "./categories-client";
 
 type Props = {
   category: CategoryType;
