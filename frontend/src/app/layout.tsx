@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PublicEnvScript } from "next-runtime-env";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Georama } from "next/font/google";
 import "./globals.css";
@@ -24,6 +25,9 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
+      <head>
+        <PublicEnvScript />
+      </head>
       <body className="h-full bg-background">
         <ThemeProvider
           attribute="class"

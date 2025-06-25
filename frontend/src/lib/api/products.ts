@@ -9,7 +9,6 @@ export const updateProduct = (product: Product) =>
   });
 
 export const createProduct = (product: Product) =>
-  fetchApi<Product>("products", {
-    method: "POST",
+  fetchApi<Product>("products", "POST", {
     body: JSON.stringify(product),
   });

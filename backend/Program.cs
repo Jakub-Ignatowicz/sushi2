@@ -54,15 +54,15 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // CORS
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy(name: allowLocalhostOrigins, policy =>
-//     {
-//         policy.AllowAnyOrigin()
-//             .AllowAnyHeader()
-//             .AllowAnyMethod();
-//     });
-// });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: allowLocalhostOrigins, policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 // Controllers
 builder.Services.AddControllers();
@@ -89,6 +89,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 
     app.MapControllers().AllowAnonymous();
+    app.UseCors(allowLocalhostOrigins);
 }
 else
 {
@@ -97,7 +98,6 @@ else
 
 app.ApplyMigrations();
 
-// app.UseCors(allowLocalhostOrigins);
 
 // app.UseExceptionHandler(o => { });
 // app.UseStatusCodePages();

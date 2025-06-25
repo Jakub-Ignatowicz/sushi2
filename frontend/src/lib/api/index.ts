@@ -1,9 +1,7 @@
+import { env } from "next-runtime-env";
 import { toast } from "sonner";
 
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5152";
-export const API_URL = `${API_BASE_URL}/api`;
-export const IMAGES_URL = `${API_BASE_URL}/images`;
+export const API_URL = env("NEXT_PUBLIC_API_URL") || "http://localhost:5152";
 
 // TODO; frontend middlewear
 export const fetchApi = async <T>(
@@ -13,6 +11,7 @@ export const fetchApi = async <T>(
 ): Promise<T | undefined> => {
   try {
     const normalizedEndpoint = endpoint.replace(/^\/+/, "");
+    console.log(`Fetching API: ${API_URL}/${normalizedEndpoint}`);
     const res = await fetch(`${API_URL}/${normalizedEndpoint}`, {
       method: requestType,
       headers: {

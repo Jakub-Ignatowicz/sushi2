@@ -2,15 +2,9 @@ import { Order, PostOrder } from "@/types/api";
 import { fetchApi } from ".";
 
 export const getOrders = async (page: number = 1, pageSize: number = 25) =>
-  // fetchApi<Order[]>(
-  //   `/orders?${new URLSearchParams({ page: `${page}`, pageSize: `${pageSize}` })}`,
-  // );
-  {
-    const res = await fetch("http://backend:5152/api/orders");
-    console.log("res", res);
-
-    return (await res.json()) as Order[];
-  };
+  fetchApi<Order[]>(
+    `/orders?${new URLSearchParams({ page: `${page}`, pageSize: `${pageSize}` })}`,
+  );
 
 export const getNewOrders = () => fetchApi<Order[]>("orders/new");
 
