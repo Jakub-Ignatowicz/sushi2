@@ -17,7 +17,7 @@ export default function Navbar() {
     <div className="flex justify-center items-center my-10 mx-8 xl:mx-20">
       <div className="flex items-center justify-between w-full max-w-box">
         <div className="flex items-center ">
-          <Link className="flex justify-center items-center z-50" href="/">
+          <Link className="flex justify-center items-center z-40" href="/">
             <Image
               src={"/SushizumeLogo.png"}
               alt="Logo"
