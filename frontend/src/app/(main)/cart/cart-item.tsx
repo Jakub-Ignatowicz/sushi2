@@ -1,39 +1,38 @@
 import { Button } from "@/components/ui/button";
 import { priceToString } from "@/lib/utils";
-import { Product } from "@/types/api";
+import { OrderProduct, Product } from "@/types/api";
 import { X } from "lucide-react";
+import QuantitySelector from "./quantity-selector";
 
 const CartItem = ({
   item,
   onRemove,
 }: {
-  item: { product: Product };
+  item: OrderProduct;
   onRemove: (id: string) => void;
 }) => {
   return (
-    <li
+    <div
       key={item.product.id}
-      className="flex items-center justify-between border p-4 rounded-xl shadow-sm"
+      className="flex items-center justify-between border px-4 py-3 rounded-lg shadow-sm bg-primary-foreground"
     >
       <div className="flex items-center gap-4">
-        {/* {item.product.imageUrl && ( */}
-        {/* <Image */}
-        {/*   src={item.product.imageUrl} */}
-        {/*   alt={item.product.name} */}
-        {/*   width={80} */}
-        {/*   height={80} */}
-        {/*   className="rounded-lg object-cover" */}
-        {/* /> */}
-        {/* )} */}
         <div>
-          <h2 className="text-xl font-semibold">{item.product.name}</h2>
-          <p className="text-gray-500">{priceToString(item.product.price)}</p>
+          <h2 className="text-lg font-semibold text-muted-foreground">
+            {item.product.name}
+          </h2>
+          <p className="font-semibold text-base">
+            {priceToString(item.product.price)}
+          </p>
         </div>
       </div>
-      <Button variant="ghost" onClick={() => onRemove(item.product.id)}>
-        <X />
-      </Button>
-    </li>
+      <div className="flex items-center gap-4">
+        <QuantitySelector />
+        <Button variant="ghost" onClick={() => onRemove(item.product.id)}>
+          <X />
+        </Button>
+      </div>
+    </div>
   );
 };
 

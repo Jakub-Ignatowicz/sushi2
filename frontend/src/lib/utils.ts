@@ -29,17 +29,11 @@ export function formatDate(date: Date): string {
   );
 }
 
-export type AggregatedCategory = Category & {
+export type AggregatedCategory = {
   products: Product[];
-};
-export type AggregatedProducts = {
-  category: Category;
-  products: Product[];
-};
+} & Category;
 
-export function categorizieProducts(
-  products: Product[],
-): AggregatedCategory[] {
+export function categorizeProducts(products: Product[]): AggregatedCategory[] {
   const lookup: Record<string, AggregatedCategory> = {};
 
   for (const product of products) {
@@ -57,6 +51,3 @@ export function categorizieProducts(
     })
     .sort((a, b) => a.orderIndex - b.orderIndex);
 }
-
-// export const getImageUrl = (imageName: string): string =>
-//   `${IMAGES_URL}/${imageName}`;

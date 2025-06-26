@@ -1,7 +1,7 @@
 import { getProducts } from "@/lib/api/products";
 import { Product } from "@/types/api";
 import ProductComponent from "./product";
-import { categorizieProducts } from "@/lib/utils";
+import { categorizeProducts } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Tag } from "lucide-react";
 import FetchError from "@/components/fetch-error";
@@ -14,7 +14,7 @@ export default async function OrderPage() {
     return <FetchError error={error} />;
   }
 
-  const categories = categorizieProducts(products);
+  const categories = categorizeProducts(products);
 
   return (
     <div>

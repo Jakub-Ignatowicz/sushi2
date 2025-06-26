@@ -1,10 +1,8 @@
-import Image from "next/image";
-import Link from "next/link";
-import ShoppingCart from "./ShoppingCart";
 import NavbarLinks from "./NavbarLinks";
 import MobileMenu from "./MobileMenu";
 import { ModeToggle } from "@/components/mode-toggle";
 import AppLogo from "@/components/logo";
+import CartDialog from "@/app/(main)/cart/cart-dialog";
 
 export default function Navbar() {
   const mapLinks = new Map<string, string>([
@@ -24,7 +22,7 @@ export default function Navbar() {
         <div className="flex items-center">
           <div className="flex items-center gap-4">
             <ModeToggle className="hidden xl:flex" />
-            <ShoppingCart />
+            <CartDialog />
           </div>
           <MobileMenu mapLinks={mapLinks} />
         </div>

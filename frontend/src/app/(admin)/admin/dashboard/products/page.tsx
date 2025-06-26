@@ -3,7 +3,7 @@ import Product from "./product";
 import { Product as ProductType } from "@/types/api";
 import { Label } from "@/components/ui/label";
 import { Tag } from "lucide-react";
-import { categorizieProducts } from "@/lib/utils";
+import { categorizeProducts } from "@/lib/utils";
 import { uploadImage } from "@/lib/api/images";
 import FetchError from "@/components/fetch-error";
 
@@ -15,7 +15,7 @@ const ProductsPage = async () => {
     return <FetchError error={error} />;
   }
 
-  const categories = categorizieProducts(products);
+  const categories = categorizeProducts(products);
 
   return (
     <div className="flex flex-col">

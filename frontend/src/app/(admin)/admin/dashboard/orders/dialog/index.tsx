@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   addressToString,
   formatDate,
-  categorizieProducts,
+  categorizeProducts,
   priceToString,
 } from "@/lib/utils";
 import { Order } from "@/types/api";
@@ -25,7 +25,7 @@ const OrderDetailRow = ({ label, value }: { label: string; value: any }) => {
 };
 
 const OrderDialog = ({ order }: Props) => {
-  const categories = categorizieProducts(
+  const categories = categorizeProducts(
     order.orderProducts.map((op) => op.product),
   );
 

@@ -14,7 +14,7 @@ export default function MobileMenu({
   mapLinks: Map<string, string>;
 }) {
   const [menuOn, setMenuOn] = useState<boolean>(false);
-  const { cart, setCart } = useCartState();
+  const { cart } = useCartState();
 
   const newTotalCount = cart.reduce((sum, item) => sum + item.count, 0);
 

@@ -1,7 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { priceToString } from "@/lib/utils";
 import { Product } from "@/types/api";
-import AddToCardButton from "./addToCardButton";
+import AddToCartButton from "./add-to-cart";
 
 type Props = {
   product: Product;
@@ -29,7 +28,7 @@ const ProductComponent = ({ product, isPreview }: Props) => {
           <p className="text-xl font-bold text-red-200">
             {priceToString(product.price)}
           </p>
-          <AddToCardButton product={product} isPreview={isPreview} />
+          <AddToCartButton product={product} isPreview={isPreview} />
         </div>
         {product.description && <p>{product.description}</p>}
         {product.items.length > 0 && (

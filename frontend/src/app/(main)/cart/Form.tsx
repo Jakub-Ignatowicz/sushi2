@@ -12,7 +12,7 @@ import { createOrder } from "@/lib/api/orders";
 import { withToast } from "@/lib/api";
 
 export default function Form() {
-  const { cart, setCart } = useCartState();
+  const { cart, clearCart } = useCartState();
   const router = useRouter();
 
   type formProps = {
@@ -132,8 +132,8 @@ export default function Form() {
     if (!orderResponse) return;
 
     toast.success(`Udało się złożyć zamówienie ${orderResponse.id}`);
-    setCart([]);
-    localStorage.removeItem("cart");
+    clearCart();
+
     router.push("/");
   };
 
