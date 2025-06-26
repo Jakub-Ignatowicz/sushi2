@@ -17,8 +17,14 @@ const string allowLocalhostOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
-// DotNetEnv.Env.Load();
-builder.Configuration.AddEnvironmentVariables();
+if (builder.Environment.IsDevelopment())
+{
+    DotNetEnv.Env.Load();
+}
+else
+{
+    builder.Configuration.AddEnvironmentVariables();
+}
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -92,6 +98,9 @@ if (app.Environment.IsDevelopment())
     app.MapControllers().AllowAnonymous();
     app.UseCors(allowLocalhostOrigins);
 
+    var homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    Console.WriteLine($"Home Directory: {homeDir}");
+
     app.UseStaticFiles();
 }
 else if (app.Environment.IsStaging())
@@ -103,9 +112,11 @@ else if (app.Environment.IsStaging())
     app.MapControllers().AllowAnonymous();
 
     var homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    var imagesPath = Path.Combine(homeDir, "persistent/images");
+    Directory.CreateDirectory(imagesPath); // creates it if it doesn't exist
     app.UseStaticFiles(new StaticFileOptions
     {
-        FileProvider = new PhysicalFileProvider(Path.Combine(homeDir, "persistent/images")),
+        FileProvider = new PhysicalFileProvider(imagesPath),
         RequestPath = "/images"
     });
 }
@@ -114,9 +125,11 @@ else
     app.MapControllers();
 
     var homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    var imagesPath = Path.Combine(homeDir, "persistent/images");
+    Directory.CreateDirectory(imagesPath); // creates it if it doesn't exist
     app.UseStaticFiles(new StaticFileOptions
     {
-        FileProvider = new PhysicalFileProvider(Path.Combine(homeDir, "persistent/images")),
+        FileProvider = new PhysicalFileProvider(imagesPath),
         RequestPath = "/images"
     });
 }
