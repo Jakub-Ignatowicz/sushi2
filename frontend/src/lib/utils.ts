@@ -50,6 +50,8 @@ export function groupProductsByCategory(
     products.sort((a, b) => a.name.localeCompare(b.name));
   }
 
+  console.log("Aggregated products:", categoryOrder);
+
   return Object.fromEntries(
     Object.entries(aggregated).sort(
       (a, b) => categoryOrder[a[0]] - categoryOrder[b[0]],

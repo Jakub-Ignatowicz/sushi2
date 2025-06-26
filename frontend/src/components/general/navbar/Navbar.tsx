@@ -4,6 +4,7 @@ import ShoppingCart from "./ShoppingCart";
 import NavbarLinks from "./NavbarLinks";
 import MobileMenu from "./MobileMenu";
 import { ModeToggle } from "@/components/mode-toggle";
+import AppLogo from "@/components/logo";
 
 export default function Navbar() {
   const mapLinks = new Map<string, string>([
@@ -17,14 +18,7 @@ export default function Navbar() {
     <div className="flex justify-center items-center my-10 mx-8 xl:mx-20">
       <div className="flex items-center justify-between w-full max-w-box">
         <div className="flex items-center ">
-          <Link className="flex justify-center items-center z-40" href="/">
-            <Image
-              src={"/SushizumeLogo.png"}
-              alt="Logo"
-              width={170}
-              height={50}
-            />
-          </Link>
+          <AppLogo />
           <NavbarLinks mapLinks={mapLinks} />
         </div>
         <div className="flex items-center">

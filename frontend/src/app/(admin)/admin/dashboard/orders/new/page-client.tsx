@@ -5,7 +5,7 @@ import OrderComponent from "../order";
 import { useEffect, useState } from "react";
 import { getNewOrders } from "@/lib/api/orders";
 import { formatDate } from "@/lib/utils";
-import { Activity, Dot, PackageX, UtensilsCrossed } from "lucide-react";
+import { PackageX } from "lucide-react";
 
 type Props = {
   orders: Order[];

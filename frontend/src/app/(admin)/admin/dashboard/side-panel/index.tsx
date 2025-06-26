@@ -5,13 +5,12 @@ import AdminSidePanelButton from "./button";
 import { Label } from "@/components/ui/label";
 import { ModeToggle } from "@/components/mode-toggle";
 import Image from "next/image";
+import AppLogo from "@/components/logo";
 
 const AdminDashboardSidePanel = () => {
   return (
     <div className="min-w-100 p-4 bg-sidebar h-screen sticky top-0">
-      <div className="mb-6 flex items-center justify-center">
-        <Image src={"/SushizumeLogo.png"} alt="Logo" width={170} height={50} />
-      </div>
+      <AppLogo className="pb-8" />
       <div className="flex items-center justify-between mb-4">
         <Label className="font-semibold flex items-center text-base">
           <LayoutDashboard size={22} />

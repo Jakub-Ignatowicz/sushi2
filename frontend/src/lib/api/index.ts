@@ -43,20 +43,25 @@ export const fetchApi = {
     requestType: RequestMethod = "GET",
     options?: RequestInit,
   ): Promise<T> => {
-    const url = `${API_URL}/${endpoint.replace(/^\//, "")}`;
+    try {
+      const url = `${API_URL}/${endpoint.replace(/^\//, "")}`;
 
-    const response = await fetch(url, {
-      method: requestType,
-      headers: { "Content-Type": "application/json" },
-      ...options,
-    });
+      const response = await fetch(url, {
+        method: requestType,
+        headers: { "Content-Type": "application/json" },
+        ...options,
+      });
 
-    const data = await parseResponse(response);
-    if (!response.ok) {
-      throw new ProblemDetails(data);
+      const data = await parseResponse(response);
+      if (!response.ok) {
+        throw new ProblemDetails(data);
+      }
+
+      return data as T;
+    } catch (error) {
+      console.error("API request failed:", error);
+      throw error;
     }
-
-    return data as T;
   },
 
   GET: <T>(endpoint: string, options?: RequestInit) =>
