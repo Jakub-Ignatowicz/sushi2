@@ -26,6 +26,15 @@ export class ProblemDetails extends Error {
   }
 }
 
+async function parseResponse(response: Response): Promise<any> {
+  const contentType = response.headers.get("Content-Type") || "";
+  if (contentType.includes("application/json")) {
+    return response.json();
+  } else {
+    return response.text();
+  }
+}
+
 type RequestMethod = "GET" | "POST" | "PATCH" | "PUT";
 
 export const fetchApi = {
@@ -42,10 +51,9 @@ export const fetchApi = {
       ...options,
     });
 
-    const data = await response.json();
-
+    const data = await parseResponse(response);
     if (!response.ok) {
-      throw new ProblemDetails(data) as T;
+      throw new ProblemDetails(data);
     }
 
     return data as T;
@@ -68,7 +76,7 @@ export const withToast = async <T>(
   try {
     return await fn();
   } catch (error) {
-    if (error instanceof StatusError) {
+    if (error instanceof ProblemDetails) {
       toast.error(error.statusCode, {
         description: error.message,
       });
