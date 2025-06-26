@@ -64,9 +64,9 @@ export default function CartModal() {
                     className="flex items-center justify-between border p-4 rounded-lg"
                   >
                     <div className="flex items-center gap-4">
-                      {item.product.imagePath && (
+                      {item.product.imageUrl && (
                         <Image
-                          src={item.product.imagePath}
+                          src={item.product.imageUrl}
                           alt={item.product.name}
                           width={60}
                           height={60}

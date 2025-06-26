@@ -3,7 +3,6 @@
 import { useCartState } from "@/context/CartState";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import Link from "next/link";
 import Form from "./Form";
 
 export default function CartPage() {
@@ -40,9 +39,9 @@ export default function CartPage() {
                 className="flex items-center justify-between border p-4 rounded-xl shadow-sm"
               >
                 <div className="flex items-center gap-4">
-                  {item.product.imagePath && (
+                  {item.product.imageUrl && (
                     <Image
-                      src={item.product.imagePath}
+                      src={item.product.imageUrl}
                       alt={item.product.name}
                       width={80}
                       height={80}
