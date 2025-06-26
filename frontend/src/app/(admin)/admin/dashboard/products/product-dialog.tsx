@@ -8,11 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadImage } from "@/lib/api/images";
-import { updateProduct } from "@/lib/api/products";
+import { createProduct, updateProduct } from "@/lib/api/products";
 import { Product } from "@/types/api";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type Props = {
   product: Product;
@@ -58,10 +59,12 @@ const ProductDialog = ({ product, isEdit }: Props) => {
       data.imageUrl = await uploadImage(file);
     }
 
-    if (isEdit) {
-      product = await updateProduct(data);
-    } else {
-      product = await updateProduct(data);
+    try {
+      if (isEdit) product = await updateProduct(data);
+      else product = await createProduct(data);
+    } catch (error) {
+      toast.error(`Nie udało się ${isEdit ? "edytować" : "dodać"} produktu`);
+      return;
     }
   };
 

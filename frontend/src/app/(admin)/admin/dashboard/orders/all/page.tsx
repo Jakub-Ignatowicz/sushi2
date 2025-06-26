@@ -1,10 +1,17 @@
 import { getOrders } from "@/lib/api/orders";
 import OrderComponent from "../order";
+import FetchError from "@/components/fetch-error";
 
 const AllOrdersPage = async () => {
-  const orders = await getOrders();
+  try {
+    const orders = await getOrders();
 
-  return orders.map((order) => <OrderComponent key={order.id} order={order} />);
+    return orders.map((order) => (
+      <OrderComponent key={order.id} order={order} />
+    ));
+  } catch (error: any) {
+    return <FetchError error={error} />;
+  }
 };
 
 export default AllOrdersPage;

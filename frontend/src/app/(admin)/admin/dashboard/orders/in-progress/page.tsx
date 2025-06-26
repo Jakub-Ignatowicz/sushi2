@@ -1,19 +1,16 @@
-import { getInProgressOrders, getNewOrders } from "@/lib/api/orders";
-import { formatDate } from "@/lib/utils";
-import { Dot } from "lucide-react";
-import OrdersClientPage from "../new/page-client";
+import { getInProgressOrders } from "@/lib/api/orders";
 import OrderComponent from "../order";
+import FetchError from "@/components/fetch-error";
 
 const NewOrdersPage = async () => {
-  const orders = await getInProgressOrders();
-
-  return (
-    <>
-      {orders.map((order) => (
-        <OrderComponent key={order.id} order={order} />
-      ))}
-    </>
-  );
+  try {
+    const orders = await getInProgressOrders();
+    return orders.map((order) => (
+      <OrderComponent key={order.id} order={order} />
+    ));
+  } catch (error: any) {
+    return <FetchError error={error} />;
+  }
 };
 
 export default NewOrdersPage;

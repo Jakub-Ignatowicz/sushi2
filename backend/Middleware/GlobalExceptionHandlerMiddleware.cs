@@ -48,32 +48,6 @@ public class GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<Glob
 
             await context.Response.WriteAsJsonAsync(problem);
         }
-        catch (ValidationException ex)
-        {
-            logger.LogError(ex, "Validation error occurred.");
-
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            context.Response.ContentType = "application/json";
-
-            var errors = ex.ValidationResult.MemberNames.Select(field =>
-                {
-                    dynamic item = new ExpandoObject();
-                    item.field = field;
-                    item.message = ex.ValidationResult.ErrorMessage ?? ex.Message;
-                    return item;
-                }
-            ).ToList();
-
-            if (errors.Count == 0)
-                errors.Add(new { field = "UnknownField", message = ex.Message });
-
-            await context.Response.WriteAsJsonAsync(new ErrorResponse
-            {
-                Status = context.Response.StatusCode,
-                Title = "One or more validation errors occurred.",
-                Errors = errors
-            });
-        }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unexpected error");

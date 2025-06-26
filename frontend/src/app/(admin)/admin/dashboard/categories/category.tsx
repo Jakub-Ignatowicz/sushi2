@@ -8,6 +8,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripHorizontal, Pencil, Save, X } from "lucide-react";
 import { useState } from "react";
 import Product from "../products/product";
+import { toast } from "sonner";
 
 type Props = {
   category: CategoryType;
@@ -44,9 +45,14 @@ const Category = ({ category }: Props) => {
               <Button
                 variant="ghost"
                 onClick={async () => {
-                  await changeCategoryName(category.id, inputValue);
-                  category.name = inputValue;
-                  setIsEditing(false);
+                  try {
+                    await changeCategoryName(category.id, inputValue);
+                    category.name = inputValue;
+                    setIsEditing(false);
+                    toast.success("Nazwa kategorii została zaktualizowana");
+                  } catch (error) {
+                    toast.error("Nie udało się zaktualizować nazwy kategorii");
+                  }
                 }}
               >
                 <Save size={20} />

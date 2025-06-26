@@ -14,12 +14,18 @@ type Props = {
 const OrdersClientPage = ({ orders: initOrders }: Props) => {
   const [orders, setOrders] = useState<Order[]>(initOrders);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const [isLive, setIsLive] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const res = await getNewOrders();
-      setOrders(res);
-      setLastUpdate(new Date());
+      try {
+        const res = await getNewOrders();
+        setOrders(res);
+        setLastUpdate(new Date());
+        setIsLive(true);
+      } catch (error: any) {
+        setIsLive(false);
+      }
     };
 
     fetchOrders();
@@ -42,14 +48,23 @@ const OrdersClientPage = ({ orders: initOrders }: Props) => {
         </div>
       )}
       <div className="mx-auto flex items-center gap-2 text-sm">
-        <div className="relative flex h-3 w-3 mt-0.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"></span>
-          <span className="relative inline-flex h-3 w-3 rounded-full bg-red-600"></span>
-        </div>
-        <span className="text-muted-foreground">
-          aktualny stan na{" "}
-          <span className="font-semibold">{formatDate(lastUpdate)}</span>
-        </span>
+        {isLive ? (
+          <>
+            <div className="relative flex h-3 w-3 mt-0.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"></span>
+              <span className="relative inline-flex h-3 w-3 rounded-full bg-red-600"></span>
+            </div>
+            <span className="text-muted-foreground">
+              aktualny stan na{" "}
+              <span className="font-semibold">{formatDate(lastUpdate)}</span>
+            </span>
+          </>
+        ) : (
+          <div className="flex items-center gap-2">
+            <PackageX className="text-red-500" />
+            <span className="text-red-500">Błąd pobierania zamówień</span>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -4,9 +4,17 @@ import ProductComponent from "./product";
 import { groupProductsByCategory } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Tag } from "lucide-react";
+import FetchError from "@/components/fetch-error";
 
 export default async function OrderPage() {
-  const aggregatedProducts = groupProductsByCategory(await getProducts());
+  let products;
+  try {
+    products = await getProducts();
+  } catch (error: any) {
+    return <FetchError error={error} />;
+  }
+
+  const aggregatedProducts = groupProductsByCategory(products);
 
   return (
     <div className="mb-64">

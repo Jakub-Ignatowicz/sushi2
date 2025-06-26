@@ -1,14 +1,14 @@
 import { Product } from "@/types/api";
 import { fetchApi } from ".";
 
-export const getProducts = () => fetchApi<Product[]>("products");
+export const getProducts = () => fetchApi.GET<Product[]>("products");
 
 export const updateProduct = (product: Product) =>
-  fetchApi<Product>(`products/${product.id}`, "POST", {
+  fetchApi.POST<Product>(`products/${product.id}`, {
     body: JSON.stringify(product),
   });
 
 export const createProduct = (product: Product) =>
-  fetchApi<Product>("products", "POST", {
+  fetchApi.POST<Product>("products", {
     body: JSON.stringify(product),
   });

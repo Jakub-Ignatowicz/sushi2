@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Category } from "@/types/api";
 import { updateCategoryOrder } from "@/lib/api/categories";
+import { toast } from "sonner";
 
 type Props = {
   categories: Category[];
@@ -56,9 +57,16 @@ const CategoriesClient = ({ categories }: Props) => {
               disabled={!changed}
               variant="green"
               onClick={async () => {
-                await updateCategoryOrder(items.map((c) => c.id));
-                setOriginalItems(items);
-                setChanged(false);
+                try {
+                  await updateCategoryOrder(items.map((c) => c.id));
+                  setOriginalItems(items);
+                  setChanged(false);
+                  toast.success("Kolejność kategorii została zapisana.");
+                } catch (error) {
+                  toast.error(
+                    "Wystąpił błąd podczas zapisywania kolejności kategorii.",
+                  );
+                }
               }}
             >
               <Save size={16} />

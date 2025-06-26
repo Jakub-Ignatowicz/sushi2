@@ -5,9 +5,15 @@ import { Label } from "@/components/ui/label";
 import { Tag } from "lucide-react";
 import { groupProductsByCategory } from "@/lib/utils";
 import { uploadImage } from "@/lib/api/images";
+import FetchError from "@/components/fetch-error";
 
 const ProductsPage = async () => {
-  const products = await getProducts();
+  let products;
+  try {
+    products = await getProducts();
+  } catch (error: any) {
+    return <FetchError error={error} />;
+  }
 
   const aggregatedProducts = groupProductsByCategory(products);
 
