@@ -8,6 +8,7 @@ import {
   ReactNode,
   useEffect,
 } from "react";
+import { toast } from "sonner";
 
 type CartStateType = {
   cart: OrderProduct[];
@@ -32,8 +33,6 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  console.log("CartState", cart);
-
   const addToCart = (product: Product) => {
     setCart((prev) => {
       const existingItem = prev.find((i) => i.product.id === product.id);
@@ -44,14 +43,17 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
       }
       return [...prev, { product, quantity: 1 }];
     });
+    toast.success("Produkt został dodany do koszyka");
   };
 
   const removeFromCart = (productId: string) => {
     setCart((prev) => prev.filter((item) => item.product.id !== productId));
+    toast.success("Produkt został usunięty z koszyka");
   };
 
   const clearCart = () => {
     setCart([]);
+    toast.success("Koszyk został wyczyszczony");
   };
 
   const value = {

@@ -3,14 +3,15 @@ import { priceToString } from "@/lib/utils";
 import { OrderProduct, Product } from "@/types/api";
 import { X } from "lucide-react";
 import QuantitySelector from "./quantity-selector";
+import { useCartState } from "@/context/CartState";
 
-const CartItem = ({
-  item,
-  onRemove,
-}: {
+type Props = {
   item: OrderProduct;
-  onRemove: (id: string) => void;
-}) => {
+};
+
+export default function CartItem({ item }: Props) {
+  const { removeFromCart } = useCartState();
+
   return (
     <div
       key={item.product.id}
@@ -28,12 +29,10 @@ const CartItem = ({
       </div>
       <div className="flex items-center gap-4">
         <QuantitySelector />
-        <Button variant="ghost" onClick={() => onRemove(item.product.id)}>
+        <Button variant="ghost" onClick={() => removeFromCart(item.product.id)}>
           <X />
         </Button>
       </div>
     </div>
   );
-};
-
-export default CartItem;
+}

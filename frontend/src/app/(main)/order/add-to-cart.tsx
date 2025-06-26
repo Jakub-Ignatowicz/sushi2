@@ -12,7 +12,6 @@ type Props = {
 
 export default function AddToCartButton({ isPreview, product }: Props) {
   const { addToCart } = useCartState();
-
   return (
     <Button
       disabled={isPreview}

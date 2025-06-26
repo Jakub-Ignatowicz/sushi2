@@ -4,10 +4,13 @@ import { useCartState } from "@/context/CartState";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Tag } from "lucide-react";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { categorizeProducts, cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import CartItem from "./cart-item";
+import { Label } from "@/components/ui/label";
+import CartCategory from "./cart-category";
 
 export default function CartDialog() {
   const router = useRouter();
@@ -29,6 +32,8 @@ export default function CartDialog() {
     }
     setTotalCount(newTotalCount);
   }, [newTotalCount, totalCount, controls]);
+
+  const categories = categorizeProducts(cart.map((item) => item.product));
 
   return (
     <Dialog>
@@ -52,41 +57,19 @@ export default function CartDialog() {
           </div>
         </AnimatePresence>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[90vw] md:max-w-[70vw] lg:max-w-[60vw] xl:max-w-[50vw]">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Twój koszyk 🍣</h2>
         </div>
         {cart.length === 0 ? (
           <p className="text-muted-foreground">Koszyk jest pusty.</p>
         ) : (
-          <div className="space-y-4">
-            {cart.map((item) => (
-              <div
-                key={item.product.id}
-                className="flex items-center justify-between border p-4 rounded-lg"
-              >
-                <div className="flex items-center gap-4">
-                  {/* {item.product.imageUrl && ( */}
-                  {/*   <Image */}
-                  {/*     src={item.product.imageUrl} */}
-                  {/*     alt={item.product.name} */}
-                  {/*     width={60} */}
-                  {/*     height={60} */}
-                  {/*     className="rounded-md object-cover" */}
-                  {/*   /> */}
-                  {/* )} */}
-                  <div>
-                    <p className="font-semibold">{item.product.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {item.quantity} × {item.product.price} zł
-                    </p>
-                  </div>
-                </div>
-                <p className="font-bold">
-                  {(item.product.price * item.quantity).toFixed(2)} zł
-                </p>
-              </div>
-            ))}
+          <div>
+            <div className="overflow-auto w-full max-h-[50vh] flex flex-col gap-3 pr-3">
+              {categories.map((cat) => (
+                <CartCategory key={cat.id} category={cat} />
+              ))}
+            </div>
 
             <div className="flex justify-between items-center mt-6">
               <p className="text-lg font-bold">

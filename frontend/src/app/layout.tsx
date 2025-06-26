@@ -5,6 +5,7 @@ import { Georama } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
+import { CartStateProvider } from "@/context/CartState";
 
 const georama = Georama({
   variable: "--font-georama",
@@ -35,9 +36,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="h-full flex flex-col justify-start mx-auto">
-            <div className="flex-grow">{children}</div>
-          </div>
+          <CartStateProvider>
+            <div className="h-full flex flex-col justify-start mx-auto">
+              <div className="flex-grow">{children}</div>
+            </div>
+          </CartStateProvider>
           <Toaster theme="system" />
         </ThemeProvider>
       </body>
