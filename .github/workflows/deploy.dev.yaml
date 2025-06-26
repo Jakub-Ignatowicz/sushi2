@@ -1,0 +1,13 @@
+name: Deploy to development VPS
+
+on:
+  push:
+    branches:
+      - dev2
+
+jobs:
+  call-deploy-dev:
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      environment: development
+      stage: development

@@ -1,0 +1,17 @@
+services:
+  frontend:
+    build:
+      args:
+        NEXT_PUBLIC_API_URL: "http://161.35.212.253:3000/api"
+
+  db:
+    ports:
+      - "5431:5432"
+
+  backend:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Staging
+
+  nginx:
+    ports:
+      - "3000:80"

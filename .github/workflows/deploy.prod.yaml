@@ -1,0 +1,13 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main2
+
+jobs:
+  call-deploy-prod:
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      environment: production
+      stage: production

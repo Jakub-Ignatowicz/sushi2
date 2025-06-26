@@ -11,6 +11,7 @@ using SushiZume.Repositories;
 using SushiZume.Repositories.Interfaces;
 using SushiZume.Services;
 using SushiZume.Services.Interfaces;
+using Microsoft.Extensions.FileProviders;
 
 const string allowLocalhostOrigins = "_myAllowSpecificOrigins";
 
@@ -90,17 +91,37 @@ if (app.Environment.IsDevelopment())
 
     app.MapControllers().AllowAnonymous();
     app.UseCors(allowLocalhostOrigins);
+
+    app.UseStaticFiles();
+}
+else if (app.Environment.IsStaging())
+{
+    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
+    app.MapControllers().AllowAnonymous();
+
+    var homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(Path.Combine(homeDir, "persistent/images")),
+        RequestPath = "/images"
+    });
 }
 else
 {
-    app.MapControllers().AllowAnonymous();
+    app.MapControllers();
+
+    var homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(Path.Combine(homeDir, "persistent/images")),
+        RequestPath = "/images"
+    });
 }
 
 app.ApplyMigrations();
-
-
-// app.UseExceptionHandler(o => { });
-// app.UseStatusCodePages();
 
 // Middleware
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
@@ -108,12 +129,5 @@ app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 // Auth
 // app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseStaticFiles();
-
-// Initialize database
-// using var scope = app.Services.CreateScope();
-// var context = scope.ServiceProvider.GetRequiredService<SushiContext>();
-// await DataInitializer.SeedAsync(context);
 
 app.Run();
