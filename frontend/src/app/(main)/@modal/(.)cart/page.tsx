@@ -94,7 +94,7 @@ export default function CartModal() {
                     className="bg-zume text-white"
                     onClick={handleGoToCart}
                   >
-                    Idź do koszyka
+                    Przejdź do realizacji
                   </Button>
                 </div>
               </div>

@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   addressToString,
   formatDate,
-  groupProductsByCategory,
+  categorizieProducts,
   priceToString,
 } from "@/lib/utils";
 import { Order } from "@/types/api";
@@ -25,7 +25,7 @@ const OrderDetailRow = ({ label, value }: { label: string; value: any }) => {
 };
 
 const OrderDialog = ({ order }: Props) => {
-  const aggregatedProducts = groupProductsByCategory(
+  const categories = categorizieProducts(
     order.orderProducts.map((op) => op.product),
   );
 
@@ -76,27 +76,25 @@ const OrderDialog = ({ order }: Props) => {
             </div>
           </div>
           <Separator className="my-4" />
-          {Object.entries(aggregatedProducts).map(([category, products]) => {
-            return (
-              <div key={category} className="">
-                <Label className="text-lg font-semibold text-muted-foreground flex items-center gap-2">
-                  <Tag size={16} />
-                  {category}
-                </Label>
-                {products.map((product) => (
-                  <div key={product.id}>
-                    <span className="font-semibold ml-3">
-                      {order.orderProducts.find(
-                        (op) => op.product.id === product.id,
-                      )?.quantity || 1}
-                      x{" "}
-                    </span>
-                    <span>{product.name}</span>
-                  </div>
-                ))}
-              </div>
-            );
-          })}
+          {categories.map((cat) => (
+            <div key={cat.id} className="">
+              <Label className="text-lg font-semibold text-muted-foreground flex items-center gap-2">
+                <Tag size={16} />
+                {cat.name}
+              </Label>
+              {cat.products.map((product) => (
+                <div key={product.id}>
+                  <span className="font-semibold ml-3">
+                    {order.orderProducts.find(
+                      (op) => op.product.id === product.id,
+                    )?.quantity || 1}
+                    x{" "}
+                  </span>
+                  <span>{product.name}</span>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
       </DialogContent>
     </Dialog>

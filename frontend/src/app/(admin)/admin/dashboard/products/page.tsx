@@ -3,7 +3,7 @@ import Product from "./product";
 import { Product as ProductType } from "@/types/api";
 import { Label } from "@/components/ui/label";
 import { Tag } from "lucide-react";
-import { groupProductsByCategory } from "@/lib/utils";
+import { categorizieProducts } from "@/lib/utils";
 import { uploadImage } from "@/lib/api/images";
 import FetchError from "@/components/fetch-error";
 
@@ -15,20 +15,20 @@ const ProductsPage = async () => {
     return <FetchError error={error} />;
   }
 
-  const aggregatedProducts = groupProductsByCategory(products);
+  const categories = categorizieProducts(products);
 
   return (
     <div className="flex flex-col">
-      {Object.entries(aggregatedProducts).map(([category, products]) => {
+      {categories.map((cat) => {
         return (
           <div>
             <Label className="text-2xl my-5 mt-8 font-bold">
               <Tag size={16} />
-              {category}
+              {cat.name}
             </Label>
             <div className="flex flex-col gap-4">
-              {products.map((product) => (
-                <Product product={product} categoryId={category} />
+              {cat.products.map((product) => (
+                <Product product={product} categoryId={cat.id} />
               ))}
             </div>
           </div>

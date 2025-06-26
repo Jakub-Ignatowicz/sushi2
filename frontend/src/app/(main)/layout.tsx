@@ -13,8 +13,7 @@ export default function MainLayout({
       <CartStateProvider>
         {modal}
         <Navbar />
-
-        <div className="flex-grow">{children}</div>
+        <div className="flex-grow mb-64 w-[60%] mx-auto">{children}</div>
       </CartStateProvider>
     </div>
   );

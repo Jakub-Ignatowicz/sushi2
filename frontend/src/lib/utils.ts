@@ -1,4 +1,4 @@
-import { Address, Product } from "@/types/api";
+import { Address, Category, Product } from "@/types/api";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -29,34 +29,33 @@ export function formatDate(date: Date): string {
   );
 }
 
+export type AggregatedCategory = Category & {
+  products: Product[];
+};
 export type AggregatedProducts = {
-  [categoryName: string]: Product[];
+  category: Category;
+  products: Product[];
 };
 
-export function groupProductsByCategory(
+export function categorizieProducts(
   products: Product[],
-): AggregatedProducts {
-  const categoryOrder: Record<string, number> = {};
-  const aggregated: AggregatedProducts = {};
+): AggregatedCategory[] {
+  const lookup: Record<string, AggregatedCategory> = {};
 
   for (const product of products) {
     for (const category of product.categories) {
-      categoryOrder[category.name] = category.orderIndex;
-      (aggregated[category.name] ??= []).push(product);
+      if (!lookup[category.id])
+        lookup[category.id] = { ...category, products: [] };
+      lookup[category.id].products.push(product);
     }
   }
 
-  for (const products of Object.values(aggregated)) {
-    products.sort((a, b) => a.name.localeCompare(b.name));
-  }
-
-  console.log("Aggregated products:", categoryOrder);
-
-  return Object.fromEntries(
-    Object.entries(aggregated).sort(
-      (a, b) => categoryOrder[a[0]] - categoryOrder[b[0]],
-    ),
-  );
+  return Object.values(lookup)
+    .map((cat) => {
+      cat.products.sort((a, b) => a.name.localeCompare(b.name));
+      return cat;
+    })
+    .sort((a, b) => a.orderIndex - b.orderIndex);
 }
 
 // export const getImageUrl = (imageName: string): string =>
