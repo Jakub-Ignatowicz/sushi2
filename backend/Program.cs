@@ -17,14 +17,8 @@ const string allowLocalhostOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (builder.Environment.IsDevelopment())
-{
-    DotNetEnv.Env.Load();
-}
-else
-{
-    builder.Configuration.AddEnvironmentVariables();
-}
+DotNetEnv.Env.Load();
+builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

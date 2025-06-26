@@ -1,7 +1,8 @@
 import { env } from "next-runtime-env";
 import { toast } from "sonner";
 
-export const API_URL = env("NEXT_PUBLIC_API_URL") || "http://localhost:5152";
+export const API_URL =
+  env("NEXT_PUBLIC_API_URL") || "http://localhost:5152/api";
 
 export class StatusError extends Error {
   statusCode: number;
@@ -18,7 +19,8 @@ export const fetchApi = async <T>(
   requestType: "GET" | "POST" | "PATCH" | "PUT" = "GET",
   options?: RequestInit,
 ): Promise<T> => {
-  const url = `${API_URL}${endpoint}`;
+  endpoint = endpoint.startsWith("/") ? endpoint.slice(1) : endpoint;
+  const url = `${API_URL}/${endpoint}`;
 
   const response = await fetch(url, {
     method: requestType,
