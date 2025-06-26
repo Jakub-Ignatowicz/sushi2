@@ -6,11 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Tag } from "lucide-react";
 
 export default async function OrderPage() {
-  const products = await getProducts();
-
-  if (products === undefined) return;
-
-  const aggregatedProducts = groupProductsByCategory(products);
+  const aggregatedProducts = groupProductsByCategory(await getProducts());
 
   return (
     <div className="mb-64">

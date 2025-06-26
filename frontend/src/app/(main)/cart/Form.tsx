@@ -9,6 +9,7 @@ import FormInput from "./FormInput";
 import { toast } from "sonner";
 import { createUser } from "@/lib/api/users";
 import { createOrder } from "@/lib/api/orders";
+import { withToast } from "@/lib/api";
 
 export default function Form() {
   const { cart, setCart } = useCartState();
@@ -98,7 +99,7 @@ export default function Form() {
       },
     };
 
-    const userId = await createUser(guest);
+    const userId = await withToast(() => createUser(guest));
     if (!userId) return;
 
     const parsedCart =
@@ -127,7 +128,7 @@ export default function Form() {
       orderProducts,
     };
 
-    const orderResponse: Order | undefined = await createOrder(order);
+    const orderResponse = await withToast(() => createOrder(order));
     if (!orderResponse) return;
 
     toast.success(`Udało się złożyć zamówienie ${orderResponse.id}`);
