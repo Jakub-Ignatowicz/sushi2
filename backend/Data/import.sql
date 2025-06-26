@@ -92,14 +92,15 @@ BEGIN
                     rec.floor,
                     new_user_id);
 
-            insert into orders (id, people_count, payment_method, created_at, notes, address_id, user_id)
+            insert into orders (id, people_count, payment_method, created_at, notes, address_id, user_id, status)
             values (rec."orderId",
                     rec."peopleNumber",
                     rec."paymentMethod",
                     rec."createdAt",
                     rec."notesForOrder",
                     rec."addressId",
-                    new_user_id);
+                    new_user_id,
+                    'Completed');
         END LOOP;
 END;
 $$;
