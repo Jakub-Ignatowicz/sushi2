@@ -1,8 +1,10 @@
+"use client";
+
 import { Label } from "@/components/ui/label";
-import { Tag } from "lucide-react";
+import { Star, Tag } from "lucide-react";
 import CartItem from "./cart-item";
-import { AggregatedCategory } from "@/lib/utils";
 import { useCartState } from "@/context/CartState";
+import { AggregatedCategory, FEATURED_CATEGORY_ID } from "@/lib/utils";
 
 type Props = {
   category: AggregatedCategory;

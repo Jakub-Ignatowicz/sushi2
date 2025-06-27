@@ -18,8 +18,6 @@ export default function CartPage() {
   );
   const hasItems = cart.length > 0;
 
-  console.log("Cart items:", cart);
-
   const categories = categorizeProducts(cart.map((item) => item.product));
 
   return (

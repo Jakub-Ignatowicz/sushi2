@@ -1,9 +1,9 @@
 import { getProducts } from "@/lib/api/products";
 import { Product } from "@/types/api";
 import ProductComponent from "./product";
-import { categorizeProducts } from "@/lib/utils";
+import { categorizeProducts, FEATURED_CATEGORY_ID } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
-import { Tag } from "lucide-react";
+import { Star, Tag } from "lucide-react";
 import FetchError from "@/components/fetch-error";
 
 export default async function OrderPage() {
@@ -14,29 +14,33 @@ export default async function OrderPage() {
     return <FetchError error={error} />;
   }
 
-  const categories = categorizeProducts(products);
+  const categories = categorizeProducts(products, true);
 
   return (
     <div>
-      {categories.map((cat) => (
-        <div key={cat.id}>
-          <div className="mt-24 mb-8">
-            <Label className="text-4xl font-bold">
-              <Tag />
-              {cat.name}
-            </Label>
-            <p className="mt-2">
-              lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </p>
+      {categories.map((cat) => {
+        const isFeatured = cat.id === FEATURED_CATEGORY_ID;
+
+        return (
+          <div key={cat.id}>
+            <div className="mt-24 mb-8">
+              <Label className="text-4xl font-bold">
+                {isFeatured ? <Star color="yellow" /> : <Tag />}
+                {cat.name}
+              </Label>
+              <p className="mt-2">
+                lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              </p>
+            </div>
+            {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12"> */}
+            <div className="flex flex-col gap-6">
+              {cat.products.map((product: Product) => (
+                <ProductComponent key={product.id} product={product} />
+              ))}
+            </div>
           </div>
-          {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12"> */}
-          <div className="flex flex-col gap-6">
-            {cat.products.map((product: Product) => (
-              <ProductComponent key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
