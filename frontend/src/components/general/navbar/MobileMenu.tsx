@@ -16,7 +16,7 @@ export default function MobileMenu({
   const [menuOn, setMenuOn] = useState<boolean>(false);
   const { cart } = useCartState();
 
-  const newTotalCount = cart.reduce((sum, item) => sum + item.count, 0);
+  const newTotalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <div className="relative flex xl:hidden">
