@@ -20,12 +20,13 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         green:
           "bg-green-500 text-primary dark:text-primary-foreground shadow-xs hover:bg-green-600 focus-visible:ring-green-200 dark:focus-visible:ring-green-300 dark:bg-green-400",
-        zume: "border bg-zume shadow-xs hover:bg-zume/90",
+        zume: "border border-zume bg-zume shadow-xs hover:bg-zume/90",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        homePage: "h-9 xl:h-12 rounded-md w-24 xl:w-30",
         icon: "size-9",
       },
     },

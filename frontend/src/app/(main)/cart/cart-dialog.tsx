@@ -37,7 +37,7 @@ export default function CartDialog() {
 
   return (
     <Dialog>
-      <DialogTrigger className="cursor-pointer">
+      <DialogTrigger className="cursor-pointer max-xl:hidden">
         <AnimatePresence>
           <div className="relative p-4">
             {totalCount > 0 && (
@@ -47,7 +47,7 @@ export default function CartDialog() {
                 exit={{ opacity: 0 }}
                 className={cn(
                   "pointer-events-none absolute top-0 right-0 rounded-full bg-zume w-[20px] h-[20px] flex items-center justify-center translate-x-1/4 -translate-y-1/4",
-                  "text-sm font-medium text-primary-foreground",
+                  "text-sm font-medium text-white",
                 )}
               >
                 {totalCount}
