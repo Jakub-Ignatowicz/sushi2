@@ -45,29 +45,31 @@ export default function MobileMenu({ mapLinks }: Props) {
           </AnimatePresence>
         </div>
       </div>
-      {/* <AnimatePresence> */}
-      {/*   {menuOn && ( */}
-      {/*     <motion.div */}
-      {/*       initial={{ opacity: 0 }} */}
-      {/*       animate={{ opacity: 1 }} */}
-      {/*       exit={{ opacity: 0 }} */}
-      {/*       transition={{ duration: 0.1 }} */}
-      {/*       className="flex justify-center  fixed top-0 left-0 w-screen h-screen backdrop-blur-lg z-10 py-20" */}
-      {/*     > */}
-      {/*       <div className="flex items-start flex-col max-w-box w-full text-xl my-6 mx-6"> */}
-      {/*         {Array.from(mapLinks).map(([href, content]) => ( */}
-      {/*           <MobileLink */}
-      {/*             key={href} */}
-      {/*             href={href} */}
-      {/*             content={content} */}
-      {/*             setMenuOn={setMenuOn} */}
-      {/*           /> */}
-      {/*         ))} */}
-      {/*         <ModeToggle className="border-0 my-2 mx-1" /> */}
-      {/*       </div> */}
-      {/*     </motion.div> */}
-      {/*   )} */}
-      {/* </AnimatePresence> */}
+      <AnimatePresence>
+        {menuOn && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.1 }}
+            className="flex justify-center  fixed top-0 left-0 w-screen h-screen backdrop-blur-lg z-10 py-20"
+          >
+            <div className="flex items-start flex-col max-w-box w-full text-xl my-6 mx-6">
+              {Array.from(mapLinks).map(([href, content]) => (
+                <MobileLink
+                  key={href}
+                  href={href}
+                  content={content}
+                  setMenuOn={setMenuOn}
+                />
+              ))}
+              <div className="size-10">
+                <ModeToggle />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
