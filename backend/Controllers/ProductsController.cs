@@ -28,6 +28,13 @@ public class ProductsController(
         return mapper.Map<List<ProductDto>>(all);
     }
 
+    [HttpPost("range")]
+    public async Task<IActionResult> GetProductsRange([FromBody] List<Guid> productIds)
+    {
+        var ranged = await productService.GetRangeAsync(productIds);
+        return Ok(mapper.Map<List<ProductDto>>(ranged));
+    }
+
     [Authorize(Roles = nameof(UserType.Admin))]
     [HttpGet("/available")]
     public async Task<ActionResult<List<ProductDto>>> GetAvailableProducts()
