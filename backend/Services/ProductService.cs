@@ -149,4 +149,13 @@ public class ProductService(
         await context.SaveChangesAsync();
         return product;
     }
+
+    public async Task SetFeaturedAsync(Guid productId, bool featured)
+    {
+        var product = await GetByIdAsync(productId);
+        Console.WriteLine($"Setting product {productId} featured: {featured}");
+        product.IsFeatured = featured;
+
+        await context.SaveChangesAsync();
+    }
 }

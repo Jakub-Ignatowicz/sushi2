@@ -35,6 +35,21 @@ async function parseResponse(response: Response): Promise<any> {
   }
 }
 
+const prepareOptions = (options?: RequestInit): RequestInit => {
+  const newOptions = { ...options };
+
+  if (newOptions.body && typeof newOptions.body !== "string") {
+    newOptions.body = JSON.stringify(newOptions.body);
+  }
+
+  newOptions.headers = {
+    "Content-Type": "application/json",
+    ...(newOptions.headers || {}),
+  };
+
+  return newOptions;
+};
+
 type RequestMethod = "GET" | "POST" | "PATCH" | "PUT";
 
 export const fetchApi = {
@@ -48,8 +63,7 @@ export const fetchApi = {
 
       const response = await fetch(url, {
         method: requestType,
-        headers: { "Content-Type": "application/json" },
-        ...options,
+        ...prepareOptions(options),
       });
 
       const data = await parseResponse(response);

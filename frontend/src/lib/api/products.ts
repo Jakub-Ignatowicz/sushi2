@@ -12,3 +12,8 @@ export const createProduct = (product: Product) =>
   fetchApi.POST<Product>("products", {
     body: JSON.stringify(product),
   });
+
+export const featureProduct = (productId: string, featured: boolean) =>
+  fetchApi.POST<Product>(`products/${productId}/featured`, {
+    body: JSON.stringify(featured),
+  });

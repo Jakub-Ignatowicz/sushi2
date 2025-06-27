@@ -49,18 +49,26 @@ public class ProductsController(
 
     [Authorize(Roles = nameof(UserType.Admin))]
     [HttpPost("{productId:guid}/available")]
-    public async Task<ActionResult<ProductDto>> SetProductAvailable(Guid productId, [FromBody] bool available)
+    public async Task<IActionResult> SetProductAvailable(Guid productId, [FromBody] bool available)
     {
-        var product = await productService.SetAvailableAsync(productId, available);
-        return mapper.Map<ProductDto>(product);
+        await productService.SetAvailableAsync(productId, available);
+        return NoContent();
     }
 
     [Authorize(Roles = nameof(UserType.Admin))]
     [HttpPost("{productId:guid}/visible")]
-    public async Task<ActionResult<ProductDto>> SetProductVisible(Guid productId, [FromBody] bool visible)
+    public async Task<IActionResult> SetProductVisible(Guid productId, [FromBody] bool visible)
     {
-        var product = await productService.SetVisibleAsync(productId, visible);
-        return mapper.Map<ProductDto>(product);
+        await productService.SetVisibleAsync(productId, visible);
+        return NoContent();
+    }
+
+    [Authorize(Roles = nameof(UserType.Admin))]
+    [HttpPost("{productId:guid}/featured")]
+    public async Task<IActionResult> SetProductFeatured(Guid productId, [FromBody] bool featured)
+    {
+        await productService.SetFeaturedAsync(productId, featured);
+        return NoContent();
     }
 
     [Authorize(Roles = nameof(UserType.Admin))]
