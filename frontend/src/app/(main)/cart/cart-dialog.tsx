@@ -2,45 +2,27 @@
 
 import { useCartState } from "@/context/CartState";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { ShoppingCart, Tag } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
-import { categorizeProducts, cn } from "@/lib/utils";
+import { categorizeProducts, cn, priceToString } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import CartItem from "./cart-item";
-import { Label } from "@/components/ui/label";
 import CartCategory from "./cart-category";
 
 export default function CartDialog() {
   const router = useRouter();
-  const { cart } = useCartState();
-  const [totalCount, setTotalCount] = useState(0);
-  const newTotalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const { cartItems, total, count } = useCartState();
 
-  const totalPrice = cart.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0,
-  );
   const controls = useAnimation();
-  useEffect(() => {
-    if (totalCount !== 0 && totalCount !== newTotalCount) {
-      controls.start({
-        scale: [1, 1.4, 1],
-        transition: { duration: 0.3 },
-      });
-    }
-    setTotalCount(newTotalCount);
-  }, [newTotalCount, totalCount, controls]);
 
-  const categories = categorizeProducts(cart.map((item) => item.product));
+  const categories = categorizeProducts(cartItems.map((item) => item.product));
 
   return (
     <Dialog>
       <DialogTrigger className="cursor-pointer">
         <AnimatePresence>
           <div className="relative p-4">
-            {totalCount > 0 && (
+            {count > 0 && (
               <motion.div
                 initial={{ scale: 1 }}
                 animate={controls}
@@ -50,7 +32,7 @@ export default function CartDialog() {
                   "text-sm font-medium text-primary-foreground",
                 )}
               >
-                {totalCount}
+                {count}
               </motion.div>
             )}
             <ShoppingCart />
@@ -61,7 +43,7 @@ export default function CartDialog() {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Twój koszyk 🍣</h2>
         </div>
-        {cart.length === 0 ? (
+        {cartItems.length === 0 ? (
           <p className="text-muted-foreground">Koszyk jest pusty.</p>
         ) : (
           <div>
@@ -72,9 +54,7 @@ export default function CartDialog() {
             </div>
 
             <div className="flex justify-between items-center mt-6">
-              <p className="text-lg font-bold">
-                Suma: {totalPrice.toFixed(2)} zł
-              </p>
+              <p className="text-lg font-bold">Suma: {priceToString(total)}</p>
               <DialogTrigger asChild>
                 <Button onClick={() => router.push("/cart")}>
                   Przejdź do realizacji

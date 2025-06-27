@@ -14,9 +14,7 @@ export default function MobileMenu({
   mapLinks: Map<string, string>;
 }) {
   const [menuOn, setMenuOn] = useState<boolean>(false);
-  const { cart } = useCartState();
-
-  const newTotalCount = cart.reduce((sum, item) => sum + item.count, 0);
+  const { cartItems } = useCartState();
 
   return (
     <div className="relative flex xl:hidden">
@@ -80,10 +78,10 @@ export default function MobileMenu({
                 <div
                   className={cn(
                     "rounded-full bg-zume text-sm w-[25px] h-[25px] flex items-center justify-center",
-                    newTotalCount == 0 ? "hidden" : "",
+                    0 == 0 ? "hidden" : "",
                   )}
                 >
-                  {newTotalCount}
+                  {/* {newTotalCount} */}
                 </div>
               </div>
               <ModeToggle className="border-0 my-2 mx-1" />
