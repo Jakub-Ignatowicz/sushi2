@@ -1,12 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { priceToString } from "@/lib/utils";
-import { OrderProduct, Product } from "@/types/api";
 import { X } from "lucide-react";
 import QuantitySelector from "./quantity-selector";
-import { useCartState } from "@/context/CartState";
+import { CartProduct, useCartState } from "@/context/CartState";
 
 type Props = {
-  item: OrderProduct;
+  item: CartProduct;
 };
 
 export default function CartItem({ item }: Props) {
@@ -28,7 +27,8 @@ export default function CartItem({ item }: Props) {
         </div>
       </div>
       <div className="flex items-center gap-4">
-        <QuantitySelector />
+        <QuantitySelector item={item} />
+        <p>{priceToString(item.total)}</p>
         <Button variant="ghost" onClick={() => removeFromCart(item.product.id)}>
           <X />
         </Button>

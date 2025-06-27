@@ -6,12 +6,16 @@ type Props = React.HTMLAttributes<HTMLDivElement>;
 const AppLogo = ({ ...props }: Props) => {
   return (
     <div {...props}>
-      <Link className="flex justify-center items-center z-40" href="/">
+      <Link
+        className="flex justify-center items-center z-40 max-w-[200px] lg:max-w-[150px]"
+        href="/"
+      >
         <Image
           src={"/sushizume-text-logo.svg"}
           alt="Logo"
-          width={170}
-          height={50}
+          width={150}
+          height={150}
+          className="w-full h-auto"
         />
       </Link>
     </div>

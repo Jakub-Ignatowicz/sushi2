@@ -1,5 +1,6 @@
 "use client";
 
+import { getProductsRange } from "@/lib/api/products";
 import { OrderProduct, Product } from "@/types/api";
 import {
   createContext,
@@ -10,57 +11,140 @@ import {
 } from "react";
 import { toast } from "sonner";
 
+const LOCAL_STORAGE_KEY = "cart";
+
+type CartState = {
+  [key: string]: number;
+};
+
+export type CartProduct = {
+  product: Product;
+  quantity: number;
+  total: number;
+};
+
 type CartStateType = {
-  cart: OrderProduct[];
-  // setCart: (cart: OrderProduct[]) => void;
   addToCart: (item: Product) => void;
   removeFromCart: (productId: string) => void;
   clearCart: () => void;
+  areProductsLoaded: boolean;
+  total: number;
+  cartItems: CartProduct[];
+  count: number;
+  setItemQuantity: (productId: string, quantity: number) => void;
 };
 
 const CartStateContext = createContext<CartStateType | null>(null);
 
 export const CartStateProvider = ({ children }: { children: ReactNode }) => {
-  const [cart, setCart] = useState<OrderProduct[]>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("cart");
-      return saved ? JSON.parse(saved) : [];
-    }
-    return [];
-  });
+  const [areProductsLoaded, setAreProductsLoaded] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [cart, setCart] = useState<CartState>({});
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+    const fetchProducts = async (productIds: string[]) => {
+      try {
+        const res = await getProductsRange(productIds);
+        setProducts(res);
+        setAreProductsLoaded(true);
+      } catch (error) {
+        setAreProductsLoaded(false);
+        toast.error("Nie udało się pobrać produktów");
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (saved) {
+        setAreProductsLoaded(false);
+
+        const parsedCart = JSON.parse(saved);
+        setCart(parsedCart);
+        fetchProducts(Object.keys(parsedCart));
+      } else setAreProductsLoaded(true);
+    } else setAreProductsLoaded(true);
+  }, []);
+
+  // make sure products are loaded before saving to localStorage
+  useEffect(() => {
+    const cartItems = products.reduce((acc, product) => {
+      acc[product.id] = cart[product.id];
+      return acc;
+    }, {} as CartState);
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [products]);
 
   const addToCart = (product: Product) => {
-    setCart((prev) => {
-      const existingItem = prev.find((i) => i.product.id === product.id);
-      if (existingItem) {
-        return prev.map((i) =>
-          i.product.id === product.id ? { ...i, quantity: i.quantity + 1 } : i,
-        );
-      }
-      return [...prev, { product, quantity: 1 }];
-    });
+    setCart((prev) => ({ ...prev, [product.id]: (prev[product.id] ?? 0) + 1 }));
+    setProducts((prev) => [...prev, product]);
     toast.success("Produkt został dodany do koszyka");
   };
 
   const removeFromCart = (productId: string) => {
-    setCart((prev) => prev.filter((item) => item.product.id !== productId));
+    setProducts((prev) => prev.filter((p) => p.id !== productId));
+    setCart((prev) => {
+      const newCart = { ...prev };
+      if (newCart[productId]) delete newCart[productId];
+      return newCart;
+    });
     toast.success("Produkt został usunięty z koszyka");
   };
 
+  const setItemQuantity = (productId: string, quantity: number) => {
+    if (!cart[productId] || cart[productId] === quantity) return; // No change in quantity
+
+    setCart((prev) => {
+      const newCart = { ...prev };
+      if (quantity <= 0) {
+        removeFromCart(productId);
+      } else {
+        newCart[productId] = quantity;
+      }
+      return newCart;
+    });
+  };
+
   const clearCart = () => {
-    setCart([]);
+    setCart({});
+    setProducts([]);
     toast.success("Koszyk został wyczyszczony");
   };
 
-  const value = {
-    cart,
+  const getOrderProducts = () => {
+    return Object.entries(cart)
+      .map(([productId, quantity]) => {
+        const product = products.find((p) => p.id === productId);
+        if (product) {
+          return { product, quantity, total: product.price * quantity };
+        }
+        return null;
+      })
+      .filter(Boolean) as CartProduct[];
+  };
+
+  const getTotal = () => {
+    return Object.entries(cart).reduce((total, [productId, quantity]) => {
+      const product = products.find((p) => p.id === productId);
+      if (product) {
+        return total + product.price * quantity;
+      }
+      return total;
+    }, 0);
+  };
+
+  const getCount = () => {
+    return Object.values(cart).length;
+  };
+
+  const value: CartStateType = {
+    areProductsLoaded,
     addToCart,
     clearCart,
     removeFromCart,
+    total: getTotal(),
+    cartItems: getOrderProducts(),
+    count: getCount(),
+    setItemQuantity,
   };
 
   if (!CartStateContext) {

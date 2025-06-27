@@ -11,8 +11,8 @@ import { createUser } from "@/lib/api/users";
 import { createOrder } from "@/lib/api/orders";
 import { withToast } from "@/lib/api";
 
-export default function Form() {
-  const { cart, clearCart } = useCartState();
+export default function CartForm() {
+  const { clearCart, total } = useCartState();
   const router = useRouter();
 
   type formProps = {
@@ -44,11 +44,6 @@ export default function Form() {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const totalPrice = cart.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0,
-  );
 
   const validatePeopleCount = (count: number) => {
     if (isNaN(count)) return "Liczba osób musi być liczbą.";
@@ -281,7 +276,7 @@ export default function Form() {
           <h2 className="text-xl xl:text-2xl font-bold">
             Do zapłaty:{" "}
             {validatePeopleCount(form.peopleCount) === ""
-              ? `${totalPrice.toFixed(2)} + ${(form.peopleCount * 2).toFixed(2)} (liczba osób) + 8 (dostawa) = ${(totalPrice + form.peopleCount * 2 + 8).toFixed(2)} zł`
+              ? `${total.toFixed(2)} + ${(form.peopleCount * 2).toFixed(2)} (liczba osób) + 8 (dostawa) = ${(total + form.peopleCount * 2 + 8).toFixed(2)} zł`
               : "Niepoprawna liczba osób :("}{" "}
           </h2>
           <Button

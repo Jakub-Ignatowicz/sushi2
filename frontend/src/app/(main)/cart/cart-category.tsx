@@ -1,7 +1,7 @@
 "use client";
 
 import { Label } from "@/components/ui/label";
-import { Star, Tag } from "lucide-react";
+import { Tag } from "lucide-react";
 import CartItem from "./cart-item";
 import { useCartState } from "@/context/CartState";
 import { AggregatedCategory, FEATURED_CATEGORY_ID } from "@/lib/utils";
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export default function CartCategory({ category }: Props) {
-  const { cart } = useCartState();
+  const { cartItems } = useCartState();
 
   return (
     <div key={category.id}>
@@ -23,7 +23,7 @@ export default function CartCategory({ category }: Props) {
         {category.products.map((product) => (
           <CartItem
             key={product.id}
-            item={cart.find((item) => item.product.id === product.id)!}
+            item={cartItems.find((item) => item.product.id === product.id)!}
           />
         ))}
       </div>

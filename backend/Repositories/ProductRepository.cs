@@ -26,4 +26,11 @@ public class ProductRepository(SushiContext context) : Repository<Product>(conte
             .Where(p => p.IsAvailable)
             .ToListAsync();
     }
+
+    public async Task<List<Product>> GetRangeAsync(List<Guid> productIds)
+    {
+        return await DefaultQuery
+            .Where(p => productIds.Contains(p.Id))
+            .ToListAsync();
+    }
 }

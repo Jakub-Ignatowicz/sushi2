@@ -3,6 +3,11 @@ import { fetchApi } from ".";
 
 export const getProducts = () => fetchApi.GET<Product[]>("products");
 
+export const getProductsRange = (productIds: string[]) =>
+  fetchApi.POST<Product[]>("products/range", {
+    body: JSON.stringify(productIds),
+  });
+
 export const updateProduct = (product: Product) =>
   fetchApi.POST<Product>(`products/${product.id}`, {
     body: JSON.stringify(product),

@@ -1,4 +1,4 @@
-import Navbar from "@/components/general/navbar/Navbar";
+import Navbar from "@/components/general/navbar";
 
 export default function MainLayout({
   children,
@@ -6,11 +6,9 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-full flex flex-col justify-start mx-auto">
+    <div className="flex flex-col">
       <Navbar />
-      <div className="flex-grow mb-64 mx-auto xl:w-[60%] md:w-[70%] sm:w-[90%]">
-        {children}
-      </div>
+      <div className="w-[85%] max-w-[1240px] mx-auto">{children}</div>
     </div>
   );
 }

@@ -1,5 +1,9 @@
 import { cn } from "@/lib/utils";
 import NavbarLink from "./NavbarLink";
+import {
+  NavigationMenu,
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu";
 
 export default function NavbarLinks({
   mapLinks,
@@ -7,15 +11,15 @@ export default function NavbarLinks({
   mapLinks: Map<string, string>;
 }) {
   return (
-    <div
-      className={cn(
-        "hidden xl:flex items-center justify-center rounded-4xl h-[50px] mx-6",
-      )}
-    >
-      <NavbarLink href="/" content="Strona główna" />
-      <NavbarLink href="/order" content="Zamów online" />
-      <NavbarLink href="/news" content="Aktualności" />
-      <NavbarLink href="/about" content="O nas" />
-    </div>
+    <NavigationMenu viewport={false}>
+      <NavigationMenuList>
+        <div className={"flex items-center justify-center gap-1"}>
+          <NavbarLink href="/" content="Strona główna" />
+          <NavbarLink href="/order" content="Zamów online" />
+          <NavbarLink href="/news" content="Aktualności" />
+          <NavbarLink href="/about" content="O nas" />
+        </div>
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 }

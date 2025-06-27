@@ -35,6 +35,10 @@ public class ProductService(
         return await productRepo.GetAllAvailableAsync();
     }
 
+    public async Task<List<Product>> GetRangeAsync(List<Guid> productIds)
+    {
+        return await productRepo.GetRangeAsync(productIds);
+    }
 
     public async Task<Product> AddAsync(ProductPostDto dto)
     {
