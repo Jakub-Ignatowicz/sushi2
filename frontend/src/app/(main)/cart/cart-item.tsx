@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { priceToString } from "@/lib/utils";
-import { OrderProduct, Product } from "@/types/api";
 import { X } from "lucide-react";
 import QuantitySelector from "./quantity-selector";
 import { CartProduct, useCartState } from "@/context/CartState";

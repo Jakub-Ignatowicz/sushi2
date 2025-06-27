@@ -9,15 +9,15 @@ type Props = {
 
 const ProductComponent = ({ product, isPreview }: Props) => {
   return (
-    <div className="flex gap-2 bg-primary-foreground p-4 px-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+    <div className="flex flex-col sm:flex-row gap-4 bg-primary-foreground p-4 px-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
       {((isPreview && product.fakePath) || product.imageUrl) && (
         <img
           src={product.fakePath || product.imageUrl}
           alt={product.name}
-          className="w-50 h-full object-cover rounded-lg my-auto mr-6"
+          className="w-50 h-full object-cover rounded-lg mx-auto sm:my-auto"
         />
       )}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 w-full">
         <div>
           <span className="text-lg font-semibold">{product.name}</span>
           <span className="text-muted-foreground ml-2">

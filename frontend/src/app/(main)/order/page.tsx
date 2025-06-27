@@ -22,9 +22,9 @@ export default async function OrderPage() {
         const isFeatured = cat.id === FEATURED_CATEGORY_ID;
 
         return (
-          <div key={cat.id}>
-            <div className="mt-24 mb-8">
-              <Label className="text-4xl font-bold">
+          <div key={cat.id} className="mt-16 md:mt-32">
+            <div className="mb-4">
+              <Label className="text-3xl md:text-4xl font-bold">
                 {isFeatured ? <Star color="yellow" /> : <Tag />}
                 {cat.name}
               </Label>

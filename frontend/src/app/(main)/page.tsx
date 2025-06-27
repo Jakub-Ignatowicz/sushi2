@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="h-full  flex items-center ">
+    <div className="h-full flex items-center ">
       <div className="flex flex-col justify-center max-w-box w-full mx-auto h-full">
         <div>Zanurz się w świecie sushi z naszą restauracją</div>
         <div>
