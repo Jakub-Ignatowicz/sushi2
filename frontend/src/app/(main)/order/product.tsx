@@ -20,12 +20,12 @@ const ProductComponent = ({ product, isPreview }: Props) => {
       <div className="flex flex-col gap-2 w-full">
         <div>
           <span className="text-lg font-semibold">{product.name}</span>
-          <span className="text-muted-foreground ml-2">
+          <span className="text-muted-foreground font-medium ml-2">
             {product.amount} {product.amountUnit}
           </span>
         </div>
         <div className="flex items-center gap-4">
-          <p className="text-xl font-bold text-red-200">
+          <p className="text-xl font-medium text-zume dark:text-red-400">
             {priceToString(product.price)}
           </p>
           <AddToCartButton product={product} isPreview={isPreview} />

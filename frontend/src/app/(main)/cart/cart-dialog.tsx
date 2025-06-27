@@ -21,21 +21,21 @@ export default function CartDialog() {
     <Dialog>
       <DialogTrigger className="cursor-pointer">
         <AnimatePresence>
-          <div className="relative p-4">
+          <div className="relative p-4 lg:p-2">
             {count > 0 && (
               <motion.div
                 initial={{ scale: 1 }}
                 animate={controls}
                 exit={{ opacity: 0 }}
                 className={cn(
-                  "pointer-events-none absolute top-0 right-0 rounded-full bg-zume w-[20px] h-[20px] flex items-center justify-center translate-x-1/4 -translate-y-1/4",
-                  "text-sm font-medium text-primary-foreground",
+                  "pointer-events-none absolute top-0 right-0 rounded-full bg-zume size-8 lg:size-6 flex items-center justify-center translate-x-1/4 -translate-y-1/4",
+                  "text-xl lg:text-base font-semibold text-white",
                 )}
               >
                 {count}
               </motion.div>
             )}
-            <ShoppingCart />
+            <ShoppingCart className="size-full" />
           </div>
         </AnimatePresence>
       </DialogTrigger>

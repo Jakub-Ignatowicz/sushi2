@@ -1,7 +1,7 @@
 import { getProducts } from "@/lib/api/products";
 import { Product } from "@/types/api";
 import ProductComponent from "./product";
-import { categorizeProducts, FEATURED_CATEGORY_ID } from "@/lib/utils";
+import { categorizeProducts, cn, FEATURED_CATEGORY_ID } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Star, Tag } from "lucide-react";
 import FetchError from "@/components/fetch-error";
@@ -16,16 +16,24 @@ export default async function OrderPage() {
 
   const categories = categorizeProducts(products, true);
 
+  const CategoryIcon = (isFeatured: boolean) => {
+    const Icon = isFeatured ? Star : Tag;
+
+    return (
+      <Icon className={cn(isFeatured && "text-yellow-500 fill-yellow-500")} />
+    );
+  };
+
   return (
     <div>
       {categories.map((cat) => {
         const isFeatured = cat.id === FEATURED_CATEGORY_ID;
 
         return (
-          <div key={cat.id} className="mt-16 md:mt-32">
+          <div key={cat.id} className="mt-16 lg:mt-32">
             <div className="mb-4">
               <Label className="text-3xl md:text-4xl font-bold">
-                {isFeatured ? <Star color="yellow" /> : <Tag />}
+                {CategoryIcon(isFeatured)}
                 {cat.name}
               </Label>
               <p className="mt-2">
