@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import NavbarLink from "./NavbarLink";
+import NavbarLink from "./navbar-link";
 import {
   NavigationMenu,
   NavigationMenuList,

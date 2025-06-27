@@ -1,6 +1,6 @@
 "use client";
 
-import { useCartState } from "@/context/CartState";
+import { useCartState } from "@/context/cart-context";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ShoppingCart } from "lucide-react";
@@ -19,7 +19,7 @@ export default function CartDialog() {
 
   return (
     <Dialog>
-      <DialogTrigger className="cursor-pointer max-xl:hidden">
+      <DialogTrigger className="cursor-pointer">
         <AnimatePresence>
           <div className="relative p-4 lg:p-2">
             {count > 0 && (

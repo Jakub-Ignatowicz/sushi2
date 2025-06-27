@@ -3,7 +3,7 @@
 import { Label } from "@/components/ui/label";
 import { Tag } from "lucide-react";
 import CartItem from "./cart-item";
-import { useCartState } from "@/context/CartState";
+import { useCartState } from "@/context/cart-context";
 import { AggregatedCategory, FEATURED_CATEGORY_ID } from "@/lib/utils";
 
 type Props = {

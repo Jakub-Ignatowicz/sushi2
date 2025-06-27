@@ -5,7 +5,7 @@ import { Georama } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
-import { CartStateProvider } from "@/context/CartState";
+import { CartStateProvider } from "@/context/cart-context";
 
 const georama = Georama({
   variable: "--font-georama",

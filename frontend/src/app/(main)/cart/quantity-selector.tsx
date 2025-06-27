@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CartProduct, useCartState } from "@/context/CartState";
+import { CartProduct, useCartState } from "@/context/cart-context";
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 

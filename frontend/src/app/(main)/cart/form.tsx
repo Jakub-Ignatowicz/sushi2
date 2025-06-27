@@ -1,11 +1,11 @@
 "use client";
 
-import { useCartState } from "@/context/CartState";
+import { useCartState } from "@/context/cart-context";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Order, PostOrder, PostUser } from "@/types/api";
-import FormInput from "./FormInput";
+import FormInput from "./form-input";
 import { toast } from "sonner";
 import { createUser } from "@/lib/api/users";
 import { createOrder } from "@/lib/api/orders";

@@ -1,12 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { FaBars, FaRegTimesCircle } from "react-icons/fa";
-import MobileLink from "./MobileLink";
-import { cn } from "@/lib/utils";
-import { useCartState } from "@/context/CartState";
+import { useState } from "react";
+import MobileLink from "./mobile-link";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Hamburger, LucideIcon, Menu, X } from "lucide-react";
 
@@ -20,7 +16,6 @@ type Props = {
 
 export default function MobileMenu({ mapLinks }: Props) {
   const [menuOn, setMenuOn] = useState<boolean>(false);
-  const { count } = useCartState();
 
   const FullSizeIcon = (Icon: LucideIcon) => <Icon className="w-full h-full" />;
 

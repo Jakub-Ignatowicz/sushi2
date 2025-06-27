@@ -1,4 +1,4 @@
-import NavbarLinks from "./NavbarLinks";
+import NavbarLinks from "./navbar-links";
 import MobileMenu from "./mobile-menu";
 import { ModeToggle } from "@/components/mode-toggle";
 import AppLogo from "@/components/logo";

@@ -65,7 +65,6 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
     } else setAreProductsLoaded(true);
   }, []);
 
-  // make sure products are loaded before saving to localStorage
   useEffect(() => {
     const cartItems = products.reduce((acc, product) => {
       acc[product.id] = cart[product.id];

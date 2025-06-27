@@ -1,11 +1,11 @@
 "use client";
 
-import { useCartState } from "@/context/CartState";
+import { useCartState } from "@/context/cart-context";
 import { Button } from "@/components/ui/button";
 import { categorizeProducts, priceToString } from "@/lib/utils";
 import CartCategory from "./cart-category";
 import { LoadingSpinner } from "@/components/loading-spinner";
-import CartForm from "./Form";
+import CartForm from "./form";
 
 export default function CartPageClient() {
   const { clearCart, cartItems, total, areProductsLoaded } = useCartState();
