@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function HeroImage() {
   return (
-    <div>
+    <div className="z-[-10]">
       <div className="hidden xl:inline">
         <motion.div
           initial={{ x: "100%" }}

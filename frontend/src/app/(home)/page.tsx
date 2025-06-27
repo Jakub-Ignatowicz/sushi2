@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/button";
 import HeroImage from "@/components/ui/hero-image";
-import { Ghost } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="relative w-full h-full flex items-center overflow-hidden">
       <div className="mx-[10%] flex flex-col justify-evenly h-full">
-        <div className="z-10 flex flex-col xl:items-start items-center">
+        <div className=" flex flex-col xl:items-start items-center">
           <div className="text-5xl xl:text-7xl font-bold text-center xl:text-left mb-4 max-w-[1000px]">
             Zanurz się w świecie sushi z
             <div className="inline max-xl:[-webkit-text-stroke:_1px_var(--primary)] max-xl:[text-stroke:_1px_var(--primary)] text-shadow-background border-primary text-zume">
