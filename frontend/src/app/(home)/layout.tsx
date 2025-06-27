@@ -8,7 +8,7 @@ export default function MainLayout({
   return (
     <div className="h-full flex flex-col justify-start mx-auto">
       <Navbar />
-      <div className="flex-grow mx-auto md:w-[70%] sm:w-[90%]">{children}</div>
+      {children}
     </div>
   );
 }
