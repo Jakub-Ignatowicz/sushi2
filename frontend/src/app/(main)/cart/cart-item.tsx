@@ -14,11 +14,11 @@ export default function CartItem({ item }: Props) {
   return (
     <div
       key={item.product.id}
-      className="flex items-center justify-between border px-4 py-3 rounded-lg shadow-sm bg-primary-foreground"
+      className="flex flex-col justify-between border px-4 py-3 rounded-lg shadow-sm bg-primary-foreground gap-2"
     >
-      <div className="flex items-center gap-4">
-        <div>
-          <h2 className="text-lg font-semibold text-muted-foreground">
+      <div className="flex gap-2 min-w-0">
+        <div className="w-full">
+          <h2 className="text-lg font-semibold text-muted-foreground break-words whitespace-normal max-w-fit">
             {item.product.name}
           </h2>
           <p className="font-semibold text-base">
@@ -26,10 +26,13 @@ export default function CartItem({ item }: Props) {
           </p>
         </div>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between">
         <QuantitySelector item={item} />
-        <p>{priceToString(item.total)}</p>
-        <Button variant="ghost" onClick={() => removeFromCart(item.product.id)}>
+        <p className="text-sm">{priceToString(item.total)}</p>
+        <Button
+          variant="outline"
+          onClick={() => removeFromCart(item.product.id)}
+        >
           <X />
         </Button>
       </div>

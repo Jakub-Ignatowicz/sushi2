@@ -4,6 +4,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import AppLogo from "@/components/logo";
 import CartDialog from "@/app/(main)/cart/cart-dialog";
 import { cva } from "class-variance-authority";
+import CartFloatDialog from "@/app/(main)/cart/cart-float-dialog";
 
 const mapLinks = new Map<string, string>([
   ["/", "Strona Główna"],
@@ -21,7 +22,7 @@ export default function Navbar() {
     >
       <div className="flex w-full items-center justify-between max-w-box">
         <div className="flex items-center justify-between gap-4">
-          <div className="-mt-2">
+          <div className="-mt-1">
             <AppLogo />
           </div>
           <div className="hidden lg:flex">
@@ -37,11 +38,7 @@ export default function Navbar() {
         </div>
 
         {/* Floating cart dialog, mobile only */}
-        <div className="fixed lg:hidden right-10 bottom-10">
-          <div className="bg-zume flex items-center justify-center w-16 h-16 rounded-full">
-            <CartDialog />
-          </div>
-        </div>
+        <CartFloatDialog />
 
         {/* Mobile burger menu */}
         <div className="flex items-center lg:hidden">

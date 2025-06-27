@@ -15,7 +15,7 @@ export default function CartCategory({ category }: Props) {
 
   return (
     <div key={category.id}>
-      <Label className="text-2xl font-bold flex items-center gap-2 mb-4 text-muted-foreground">
+      <Label className="text-xl lg:text-2xl font-bold flex items-center gap-2 mb-4 text-muted-foreground">
         <Tag size={20} />
         {category.name}
       </Label>

@@ -13,14 +13,14 @@ export default function CartPageClient() {
   const categories = categorizeProducts(cartItems.map((item) => item.product));
 
   return (
-    <div className="mx-4 xl:mx-20 mt-32">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Twój koszyk 🍣</h1>
+    <div className="mt-16">
+      <div className="flex flex-col justify-between ">
         {cartItems.length > 0 && (
           <Button variant="outline" onClick={clearCart}>
             Wyczyść koszyk
           </Button>
         )}
+        <h1 className="text-3xl my-4 font-bold">Twój koszyk 🍣</h1>
       </div>
 
       {!areProductsLoaded ? (

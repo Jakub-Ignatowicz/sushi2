@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ShoppingCart } from "lucide-react";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { categorizeProducts, cn, priceToString } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import CartCategory from "./cart-category";
 
 export default function CartDialog() {
@@ -39,7 +39,7 @@ export default function CartDialog() {
           </div>
         </AnimatePresence>
       </DialogTrigger>
-      <DialogContent className="min-w-[95%] sm:min-w-[80%] lg:min-w-0">
+      <DialogContent className="min-w-[95%] sm:min-w-[80%] lg:min-w-[1440px]">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Twój koszyk 🍣</h2>
         </div>
