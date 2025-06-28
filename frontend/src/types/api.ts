@@ -30,16 +30,54 @@ export type OrderProduct = {
   product: Product;
 };
 
+export enum PaymentMethod {
+  Cash = 0,
+  Cash2 = 1,
+}
+
+export enum OrderStatus {
+  Pending = 0,
+  Preparing = 1,
+  Completed = 2,
+  Cancelled = 3,
+}
+
+export function paymentMethodToString(method: PaymentMethod): string {
+  switch (method) {
+    case PaymentMethod.Cash:
+      return "Gotówka";
+    case PaymentMethod.Cash2:
+      return "Gotówka 2";
+    default:
+      return "Nieznana metoda płatności";
+  }
+}
+
+export function orderStatusToString(status: OrderStatus): string {
+  switch (status) {
+    case OrderStatus.Pending:
+      return "Oczekujące";
+    case OrderStatus.Preparing:
+      return "W przygotowaniu";
+    case OrderStatus.Completed:
+      return "Zakończone";
+    case OrderStatus.Cancelled:
+      return "Anulowane";
+    default:
+      return "Nieznany status";
+  }
+}
+
 export type Order = {
   id: string;
   address: Address;
   peopleCount: number;
-  status: "Pending" | "Preparing" | "Completed" | "Cancelled";
   notes: string;
   createdAt: Date;
   orderProducts: OrderProduct[];
   totalPrice: number;
-  paymentMethod: number;
+  paymentMethod: PaymentMethod;
+  status: OrderStatus;
   user: User;
 };
 

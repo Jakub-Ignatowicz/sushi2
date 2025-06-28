@@ -1,18 +1,18 @@
 "use client";
 
-import { Order } from "@/types/api";
-import OrderComponent from "../order";
+import { Order as OrderType } from "@/types/api";
+import Order from "../order";
 import { useEffect, useState } from "react";
 import { getNewOrders } from "@/lib/api/orders";
 import { formatDate } from "@/lib/utils";
 import { PackageX } from "lucide-react";
 
 type Props = {
-  orders: Order[];
+  orders: OrderType[];
 };
 
 const OrdersClientPage = ({ orders: initOrders }: Props) => {
-  const [orders, setOrders] = useState<Order[]>(initOrders);
+  const [orders, setOrders] = useState<OrderType[]>(initOrders);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [isLive, setIsLive] = useState<boolean>(true);
 
@@ -38,7 +38,7 @@ const OrdersClientPage = ({ orders: initOrders }: Props) => {
       {orders.length !== 0 ? (
         <>
           {orders.map((order) => (
-            <OrderComponent key={order.id} order={order} />
+            <Order key={order.id} order={order} />
           ))}
         </>
       ) : (

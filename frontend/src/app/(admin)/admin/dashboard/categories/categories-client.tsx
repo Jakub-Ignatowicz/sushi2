@@ -5,26 +5,13 @@ import { Label } from "@/components/ui/label";
 import { Info, RefreshCw, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import DraggableCategoryList from "./draggable";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
 import { Category } from "@/types/api";
 import { updateCategoryOrder } from "@/lib/api/categories";
 import { toast } from "sonner";
+import TooltipButton from "@/components/tooltip-button";
 
 type Props = {
   categories: Category[];
-};
-
-const TooltipButton = ({ children, label }: any) => {
-  return (
-    <Tooltip>
-      <TooltipTrigger>{children}</TooltipTrigger>
-      <TooltipContent>{label}</TooltipContent>
-    </Tooltip>
-  );
 };
 
 const CategoriesClient = ({ categories }: Props) => {

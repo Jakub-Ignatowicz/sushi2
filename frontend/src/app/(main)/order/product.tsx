@@ -21,7 +21,8 @@ const ProductComponent = ({ product, isPreview }: Props) => {
         <div>
           <span className="text-lg font-semibold">{product.name}</span>
           <span className="text-muted-foreground font-medium ml-2">
-            {product.amount} {product.amountUnit}
+            {product.amount}
+            {product.amountUnit}
           </span>
         </div>
         <div className="flex items-center gap-4">

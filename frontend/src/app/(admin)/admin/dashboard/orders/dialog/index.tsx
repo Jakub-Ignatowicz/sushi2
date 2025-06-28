@@ -1,3 +1,4 @@
+import TooltipButton from "@/components/tooltip-button";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -9,7 +10,7 @@ import {
   priceToString,
 } from "@/lib/utils";
 import { Order } from "@/types/api";
-import { Tag, Trash2 } from "lucide-react";
+import { Info, Tag, Trash2 } from "lucide-react";
 
 type Props = {
   order: Order;
@@ -31,8 +32,12 @@ const OrderDialog = ({ order }: Props) => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">Szczegóły</Button>
+      <DialogTrigger>
+        <TooltipButton label="Szczegóły">
+          <Button variant="outline">
+            <Info />
+          </Button>
+        </TooltipButton>
       </DialogTrigger>
       <DialogContent className="">
         <Label className="text-xl font-bold">Szczegóły zamówienia</Label>

@@ -12,7 +12,7 @@ using SushiZume.Data;
 namespace SushiZume.Migrations
 {
     [DbContext(typeof(SushiContext))]
-    [Migration("20250625120121_Init")]
+    [Migration("20250628131709_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -135,10 +135,11 @@ namespace SushiZume.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("people_count");
 
-                    b.Property<int>("Status")
+                    b.Property<string>("Status")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0)
+                        .HasColumnType("text")
+                        .HasDefaultValue("Pending")
                         .HasColumnName("status");
 
                     b.Property<Guid>("UserId")

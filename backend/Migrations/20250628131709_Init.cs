@@ -189,7 +189,7 @@ namespace SushiZume.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     people_count = table.Column<int>(type: "integer", nullable: false),
                     payment_method = table.Column<string>(type: "text", nullable: false),
-                    status = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
+                    status = table.Column<string>(type: "text", nullable: false, defaultValue: "Pending"),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     notes = table.Column<string>(type: "text", nullable: true),
                     address_id = table.Column<Guid>(type: "uuid", nullable: false),
