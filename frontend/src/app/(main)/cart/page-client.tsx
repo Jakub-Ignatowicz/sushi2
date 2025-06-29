@@ -35,12 +35,6 @@ export default function CartPageClient() {
               <CartCategory key={cat.id} category={cat} />
             ))}
           </div>
-
-          <div className="flex justify-between items-end w-full">
-            <h2 className="text-xl xl:text-2xl font-bold items-end w-full">
-              Suma w koszyku: {priceToString(total)}
-            </h2>
-          </div>
           <CartForm />
         </div>
       ) : (

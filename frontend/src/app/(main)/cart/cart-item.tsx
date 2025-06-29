@@ -28,7 +28,7 @@ export default function CartItem({ item }: Props) {
       </div>
       <div className="flex items-center justify-between sm:gap-4">
         <QuantitySelector item={item} />
-        <p className="text-sm sm:w-[10ch] text-right">
+        <p className="text-sm font-medium sm:w-[10ch] text-right">
           {priceToString(item.total)}
         </p>
         <Button
