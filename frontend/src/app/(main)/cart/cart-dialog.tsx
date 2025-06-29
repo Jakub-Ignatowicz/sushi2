@@ -39,7 +39,7 @@ export default function CartDialog() {
           </div>
         </AnimatePresence>
       </DialogTrigger>
-      <DialogContent className="min-w-[95%] sm:min-w-[80%] lg:min-w-[1440px]">
+      <DialogContent className="w-[95%] sm:max-w-[800px]">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Twój koszyk 🍣</h2>
         </div>

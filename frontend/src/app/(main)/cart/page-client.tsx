@@ -14,13 +14,13 @@ export default function CartPageClient() {
 
   return (
     <div className="mt-16">
-      <div className="flex flex-col justify-between ">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <h1 className="text-3xl font-bold">Twój koszyk 🍣</h1>
         {cartItems.length > 0 && (
           <Button variant="outline" onClick={clearCart}>
             Wyczyść koszyk
           </Button>
         )}
-        <h1 className="text-3xl my-4 font-bold">Twój koszyk 🍣</h1>
       </div>
 
       {!areProductsLoaded ? (

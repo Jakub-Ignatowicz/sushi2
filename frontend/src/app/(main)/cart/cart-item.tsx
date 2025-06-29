@@ -14,7 +14,7 @@ export default function CartItem({ item }: Props) {
   return (
     <div
       key={item.product.id}
-      className="flex flex-col justify-between border px-4 py-3 rounded-lg shadow-sm bg-primary-foreground gap-2"
+      className="flex flex-col sm:flex-row justify-between border px-4 py-3 rounded-lg shadow-sm bg-primary-foreground gap-2"
     >
       <div className="flex gap-2 min-w-0">
         <div className="w-full">
@@ -26,9 +26,11 @@ export default function CartItem({ item }: Props) {
           </p>
         </div>
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between sm:gap-4">
         <QuantitySelector item={item} />
-        <p className="text-sm">{priceToString(item.total)}</p>
+        <p className="text-sm sm:w-[10ch] text-right">
+          {priceToString(item.total)}
+        </p>
         <Button
           variant="outline"
           onClick={() => removeFromCart(item.product.id)}
