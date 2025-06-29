@@ -6,14 +6,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Order, PostOrder, PostUser } from "@/types/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormInput from "./form-input";
 import { toast } from "sonner";
 import { createUserGuest } from "@/lib/api/users";
 import { createOrder } from "@/lib/api/orders";
 import { withToast } from "@/lib/api";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -32,19 +30,12 @@ import {
 } from "@/components/ui/form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { priceToString } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { CartCostSummary } from "../cart-cost-summary";
 
-const DELIVERY_FEE = 8; // Fixed delivery price
+export const DELIVERY_FEE = 8;
+export const PERSON_COST = 2;
 
 const FormSchema = z.object({
   phoneNumber: z
@@ -70,10 +61,10 @@ const FormSchema = z.object({
   notes: z.string(),
 });
 
+export type CartFormSchemaType = z.infer<typeof FormSchema>;
+
 export default function CartForm() {
-  const { clearCart, total } = useCartState();
-  const router = useRouter();
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const form = useForm<CartFormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       phoneNumber: "",
@@ -92,53 +83,6 @@ export default function CartForm() {
     },
   });
 
-  // const onSubmit = async (form: FormProps) => {
-  //   if (!validate(form)) return;
-  //
-  //   let userId;
-  //   try {
-  //     userId = await createUserGuest({
-  //       phoneNumber: form.phoneNumber,
-  //       email: form.email,
-  //     });
-  //   } catch (error) {
-  //     toast.error("Nie udało się utworzyć użytkownika");
-  //     return;
-  //   }
-  //
-  //   if (!userId) return;
-  //
-  //   // const parsedCart =
-  //   //   typeof window !== "undefined" && localStorage.getItem("cart")
-  //   //     ? JSON.parse(localStorage.getItem("cart")!)
-  //   //     : [];
-  //   //
-  //   // const orderProducts = parsedCart.map((item: any) => ({
-  //   //   productId: item.product.id,
-  //   //   quantity: item.quantity,
-  //   // }));
-  //
-  //   // const order: PostOrder = { ...form, orderProducts };
-  //   //
-  //   // const orderResponse = await withToast(() => createOrder(order));
-  //   // if (!orderResponse) return;
-  //   //
-  //   // toast.success(`Udało się złożyć zamówienie ${orderResponse.id}`);
-  //   // clearCart();
-  //   //
-  //   // router.push("/");
-  // };
-
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast("You submitted the following values", {
-      description: (
-        <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-  }
-
   const Section = ({
     title,
     children,
@@ -146,23 +90,22 @@ export default function CartForm() {
     title: string;
     children: React.ReactNode;
   }) => (
-    <div className="space-y-4">
-      <p className="text-xl font-medium mb-2">{title}</p>
-      {children}
+    <div>
+      <p className="text-xl font-semibold mb-4 text-muted-foreground">
+        {title}
+      </p>
+      <div className="space-y-4">{children}</div>
     </div>
   );
 
-  // const peopleCount = form.watch("peopleCount") || 0;
-  const paymentPrice = Number(5) * 2 + total + DELIVERY_FEE;
-
   return (
     <Form {...form}>
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-4">
         <p className="text-3xl font-bold">Zamówienie</p>
       </div>
-      <form className="mb-32" onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="p-4 border rounded-lg shadow-md bg-primary-foreground space-y-4 w-full flex-2">
+      <form className="mb-32">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-4">
+          <div className="p-4 border rounded-lg shadow-md bg-primary-foreground space-y-8 w-full flex-2">
             <Section title="Dane kontaktowe">
               <FormField
                 control={form.control}
@@ -250,7 +193,7 @@ export default function CartForm() {
                 name="address.apartmentNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Numer mieszkania *</FormLabel>
+                    <FormLabel>Numer mieszkania</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -295,13 +238,16 @@ export default function CartForm() {
                   <FormItem>
                     <FormLabel>Metoda płatności przy odbiorze</FormLabel>
                     <FormControl>
-                      <Select>
+                      <Select
+                        onValueChange={(val) => field.onChange(Number(val))}
+                        value={String(field.value)}
+                      >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Gotówka" {...field} />
+                          <SelectValue placeholder="Gotówka" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={"0"}>Gotówka</SelectItem>
-                          <SelectItem value={"1"}>Karta</SelectItem>
+                          <SelectItem value="0">Gotówka</SelectItem>
+                          <SelectItem value="1">Karta</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -316,7 +262,7 @@ export default function CartForm() {
                   <FormItem>
                     <FormLabel>Uwagi do zamówienia</FormLabel>
                     <FormControl>
-                      <Textarea {...field} />
+                      <Textarea {...field} rows={4} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -324,30 +270,7 @@ export default function CartForm() {
               />
             </Section>
           </div>
-          <div className="p-4 bg-primary-foreground rounded-lg shadow-md w-full h-fit flex-1">
-            <div className="text-muted-foreground">
-              <div className="flex justify-between">
-                <p>Liczba osób</p>
-                <p>{priceToString(5 * 2)}</p>
-              </div>
-              <div className="flex justify-between">
-                <p>Dostawa</p>
-                <p>{priceToString(DELIVERY_FEE)}</p>
-              </div>
-              <div className="flex justify-between">
-                <p>Koszyk</p>
-                <p>{priceToString(total)}</p>
-              </div>
-            </div>
-            <Separator className="mt-2 mb-1" />
-            <div className="flex justify-between">
-              <p className="font-bold">Do zapłaty</p>
-              <p className="font-medium">{priceToString(paymentPrice)}</p>
-            </div>
-            <Button variant="zume" className="w-full mt-2">
-              Zamawiam
-            </Button>
-          </div>
+          <CartCostSummary form={form} />
         </div>
       </form>
     </Form>

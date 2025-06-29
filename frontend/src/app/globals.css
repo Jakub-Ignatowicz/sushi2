@@ -5,15 +5,6 @@
 
 :root {
 	--zume: #f2070c;
-	--zume-100: #fee2e2;
-	--zume-200: #fecaca;
-	--zume-300: #fca5a5;
-	--zume-400: #f87171;
-	--zume-500: #ef4444;
-	--zume-600: #dc2626;
-	--zume-700: #b91c1c;
-	--zume-800: #991b1b;
-	--zume-900: #7f1d1d;
 
 	--background: oklch(1 0 0);
 	--foreground: oklch(0.145 0 0);
@@ -51,16 +42,7 @@
 }
 
 .dark {
-	--zume: #f87171;
-	--zume-100: #7f1d1d;
-	--zume-200: #991b1b;
-	--zume-300: #b91c1c;
-	--zume-400: #dc2626;
-	--zume-500: #ef4444;
-	--zume-600: #f87171;
-	--zume-700: #fca5a5;
-	--zume-800: #fecaca;
-	--zume-900: #fee2e2;
+	--zume: #f2070c;
 
 	--background: oklch(0.145 0 0);
 	--foreground: oklch(0.985 0 0);
@@ -98,15 +80,6 @@
 
 @theme inline {
 	--color-zume: var(--zume);
-	--color-zume-100: var(--zume-100);
-	--color-zume-200: var(--zume-200);
-	--color-zume-300: var(--zume-300);
-	--color-zume-400: var(--zume-400);
-	--color-zume-500: var(--zume-500);
-	--color-zume-600: var(--zume-600);
-	--color-zume-700: var(--zume-700);
-	--color-zume-800: var(--zume-800);
-	--color-zume-900: var(--zume-900);
 
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);

@@ -8,7 +8,7 @@ import { LoadingSpinner } from "@/components/loading-spinner";
 import CartForm from "./form";
 
 export default function CartPageClient() {
-  const { clearCart, cartItems, total, areProductsLoaded } = useCartState();
+  const { clearCart, cartItems, areProductsLoaded } = useCartState();
 
   const categories = categorizeProducts(cartItems.map((item) => item.product));
 

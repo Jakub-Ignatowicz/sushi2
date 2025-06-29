@@ -116,7 +116,7 @@ export type User = {
   firstName?: string | null;
   lastName?: string | null;
   fullName?: string | null;
-  createdAt: string;
+  createdAt: Date;
   type: "Admin" | "Regular" | "Guest";
 };
 
