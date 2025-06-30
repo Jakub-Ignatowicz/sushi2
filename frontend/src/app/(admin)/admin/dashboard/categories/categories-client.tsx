@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Info, RefreshCw, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import DraggableCategoryList from "./draggable";
-import { Category } from "@/types/api";
+import { Category, Product } from "@/types/api";
 import { updateCategoryOrder } from "@/lib/api/categories";
 import { toast } from "sonner";
 import TooltipButton from "@/components/tooltip-button";
@@ -72,7 +72,11 @@ const CategoriesClient = ({ categories }: Props) => {
             </Button>
           </TooltipButton>
         </div>
-        <DraggableCategoryList items={items} setItems={setItems} />
+        <DraggableCategoryList
+          items={items}
+          setItems={setItems}
+          products={products}
+        />
       </div>
     </div>
   );

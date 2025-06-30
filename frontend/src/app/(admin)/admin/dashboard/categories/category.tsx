@@ -2,14 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { changeCategoryName } from "@/lib/api/categories";
-import { Category as CategoryType } from "@/types/api";
+import { Category as CategoryType, Product } from "@/types/api";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripHorizontal, Pencil, Save, X } from "lucide-react";
 import { useState } from "react";
-import Product from "../products/product";
 import { toast } from "sonner";
 import CategoryEditDialog from "./edit-dialog";
+import RemoveCategoryDialog from "./remove-dialog";
 
 type Props = {
   category: CategoryType;
@@ -18,7 +18,6 @@ type Props = {
 const Category = ({ category }: Props) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: category.id });
-  const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(category.name);
 
   const style = {
@@ -29,48 +28,26 @@ const Category = ({ category }: Props) => {
   return (
     <div style={style} ref={setNodeRef}>
       <div className="flex items-center px-4 py-2 border rounded-lg shadow-sm bg-primary-foreground">
-        <div className="flex items-center gap-2">
-          <GripHorizontal
-            {...attributes}
-            {...listeners}
-            size={20}
-            className="cursor-grab"
-          />
-          {isEditing ? (
-            <div className="flex items-center gap-1">
-              <Input
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                className="min-w-100"
-              />
-              <Button
-                variant="ghost"
-                onClick={async () => {
-                  try {
-                    await changeCategoryName(category.id, inputValue);
-                    category.name = inputValue;
-                    setIsEditing(false);
-                    toast.success("Nazwa kategorii została zaktualizowana");
-                  } catch (error) {
-                    toast.error("Nie udało się zaktualizować nazwy kategorii");
-                  }
-                }}
-              >
-                <Save size={20} />
-              </Button>
-            </div>
-          ) : (
+        <div>
+          <div className="flex items-center gap-2">
+            <GripHorizontal
+              {...attributes}
+              {...listeners}
+              size={20}
+              className="cursor-grab"
+            />
             <Label className="font-semibold">{category.name}</Label>
+          </div>
+          {category.description && (
+            <p className="text-sm text-muted-foreground mt-1">
+              {category.description}
+            </p>
           )}
         </div>
-        {/* <Button */}
-        {/*   variant="outline" */}
-        {/*   className="ml-auto" */}
-        {/*   onClick={() => setIsEditing(!isEditing)} */}
-        {/* > */}
-        {/*   {isEditing ? <X size={20} /> : <Pencil size={20} />} */}
-        {/* </Button> */}
-        <CategoryEditDialog />
+        <div className="space-x-2 ml-auto">
+          <CategoryEditDialog category={category} />
+          <RemoveCategoryDialog category={category} />
+        </div>
       </div>
     </div>
   );

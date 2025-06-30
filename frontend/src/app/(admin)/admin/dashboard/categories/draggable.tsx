@@ -13,7 +13,7 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { Category as CategoryType } from "@/types/api";
+import { Category as CategoryType, Product } from "@/types/api";
 import Category from "./category";
 
 type Props = {

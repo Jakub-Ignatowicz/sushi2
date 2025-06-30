@@ -4,6 +4,11 @@ import { fetchApi } from ".";
 export const createCategory = async (dto: CategoryPost) =>
   fetchApi.POST<Category>("/categories", { body: JSON.stringify(dto) });
 
+export const editCategory = async (categoryId: string, dto: CategoryPost) =>
+  fetchApi.PATCH<Category>(`/categories/${categoryId}`, {
+    body: JSON.stringify(dto),
+  });
+
 export const getCategories = async () =>
   fetchApi.GET<Category[]>("/categories");
 
