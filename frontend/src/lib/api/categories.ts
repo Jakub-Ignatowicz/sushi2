@@ -1,5 +1,8 @@
-import { Category } from "@/types/api";
+import { Category, CategoryPost } from "@/types/api";
 import { fetchApi } from ".";
+
+export const createCategory = async (dto: CategoryPost) =>
+  fetchApi.POST<Category>("/categories", { body: JSON.stringify(dto) });
 
 export const getCategories = async () =>
   fetchApi.GET<Category[]>("/categories");

@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SushiZume.Data;
 using SushiZume.Models;
@@ -6,7 +7,7 @@ using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Services;
 
-public class CategoryService(ICategoryRepository categoryRepo, SushiContext context) : ICategoryService
+public class CategoryService(ICategoryRepository categoryRepo, SushiContext context, IMapper mapper) : ICategoryService
 {
     public async Task<List<Category>> GetAllAsync()
     {
@@ -16,6 +17,14 @@ public class CategoryService(ICategoryRepository categoryRepo, SushiContext cont
     public async Task<List<Category>> GetAllWithProductsAsync()
     {
         return await categoryRepo.GetAllWithProductsAsync();
+    }
+
+    public async Task<Category> GetByIdAsync(Guid categoryId)
+    {
+        var category = await categoryRepo.GetByIdAsync(categoryId);
+        if (category == null)
+            throw new KeyNotFoundException($"Category with ID {categoryId} not found.");
+        return category;
     }
 
     public async Task OrderCategoriesAsync(List<string> categoryIds)
@@ -41,5 +50,13 @@ public class CategoryService(ICategoryRepository categoryRepo, SushiContext cont
 
         category.Name = name;
         await context.SaveChangesAsync();
+    }
+
+    public async Task<Guid> CreateAsync(CategoryPostDto dto)
+    {
+        var category = mapper.Map<Category>(dto);
+        await categoryRepo.AddAsync(category);
+        await context.SaveChangesAsync();
+        return category.Id;
     }
 }

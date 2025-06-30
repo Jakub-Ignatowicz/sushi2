@@ -12,6 +12,11 @@ export type Product = {
   fakePath?: string; // Used for previewing products without an image
 };
 
+export type CategoryPost = {
+  name: string;
+  description?: string;
+};
+
 export type Category = {
   id: string;
   name: string;

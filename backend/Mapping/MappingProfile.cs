@@ -24,6 +24,7 @@ public class MappingProfile : Profile
         CreateMap<User, UserDto>().ReverseMap();
 
         // Post
+        CreateMap<CategoryPostDto, Category>();
         CreateMap<AddressPostDto, Address>();
         CreateMap<ProductPostDto, Product>()
             .ForMember(dest => dest.Categories, opt => opt.Ignore())

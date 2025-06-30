@@ -30,8 +30,8 @@ const CategoriesClient = ({ categories }: Props) => {
 
   return (
     <div>
-      <div>
-        <Label className="py-4 text-muted-foreground">
+      <div className="mb-4">
+        <Label className="text-muted-foreground">
           <Info size={16} />
           Przeciągnij i upuść, aby zmienić kolejność wyświetlania kategorii na
           stronie głównej

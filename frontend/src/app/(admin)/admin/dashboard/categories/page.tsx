@@ -2,11 +2,17 @@ import { getCategories } from "@/lib/api/categories";
 import CategoriesClient from "./categories-client";
 import { IProblemDetails, ProblemDetails } from "@/lib/api";
 import FetchError from "@/components/fetch-error";
+import CategoryActionPanel from "./action-panel";
 
 const CategoriesPage = async () => {
   try {
     const categories = await getCategories();
-    return <CategoriesClient categories={categories} />;
+    return (
+      <div className="space-y-4">
+        <CategoryActionPanel />
+        <CategoriesClient categories={categories} />
+      </div>
+    );
   } catch (error: any) {
     return <FetchError error={error} />;
   }

@@ -9,6 +9,7 @@ import { GripHorizontal, Pencil, Save, X } from "lucide-react";
 import { useState } from "react";
 import Product from "../products/product";
 import { toast } from "sonner";
+import CategoryEditDialog from "./edit-dialog";
 
 type Props = {
   category: CategoryType;
@@ -62,13 +63,14 @@ const Category = ({ category }: Props) => {
             <Label className="font-semibold">{category.name}</Label>
           )}
         </div>
-        <Button
-          variant="outline"
-          className="ml-auto"
-          onClick={() => setIsEditing(!isEditing)}
-        >
-          {isEditing ? <X size={20} /> : <Pencil size={20} />}
-        </Button>
+        {/* <Button */}
+        {/*   variant="outline" */}
+        {/*   className="ml-auto" */}
+        {/*   onClick={() => setIsEditing(!isEditing)} */}
+        {/* > */}
+        {/*   {isEditing ? <X size={20} /> : <Pencil size={20} />} */}
+        {/* </Button> */}
+        <CategoryEditDialog />
       </div>
     </div>
   );
