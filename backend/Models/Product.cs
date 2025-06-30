@@ -16,7 +16,8 @@ public class Product
     public double? Amount { get; set; }
     public string? AmountUnit { get; set; }
     public string? Description { get; set; }
-    public List<ProductCategory> Categories { get; init; } = [];
+    public Guid CategoryId { get; init; }
+    public Category Category { get; init; }
     public List<OrderProduct> OrderProducts { get; init; } = [];
     public List<ProductItem> Items { get; init; } = [];
 }

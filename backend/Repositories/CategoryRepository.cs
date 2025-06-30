@@ -11,7 +11,6 @@ public class CategoryRepository(SushiContext context) : Repository<Category>(con
     {
         return DefaultQuery
             .Include(c => c.Products)
-            .ThenInclude(pc => pc.Product)
             .ToListAsync();
     }
 }

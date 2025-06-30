@@ -10,8 +10,7 @@ public class ProductRepository(SushiContext context) : Repository<Product>(conte
 {
     protected override IQueryable<Product> DefaultQuery =>
         base.DefaultQuery
-            .Include(p => p.Categories)
-            .ThenInclude(pc => pc.Category)
+            .Include(p => p.Category)
             .Include(p => p.Items);
 
     public new async Task<List<Product>> GetAllAsync()

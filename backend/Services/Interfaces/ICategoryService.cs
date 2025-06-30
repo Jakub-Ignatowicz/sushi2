@@ -10,4 +10,5 @@ public interface ICategoryService
     Task OrderCategoriesAsync(List<string> categoryIds);
     Task ChangeNameAsync(Guid categoryId, string name);
     Task<Guid> CreateAsync(CategoryPostDto dto);
+    Task UpdateAsync(Guid categoryId, CategoryPostDto dto);
 }

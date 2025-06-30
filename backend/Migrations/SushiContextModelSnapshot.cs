@@ -97,6 +97,10 @@ namespace SushiZume.Migrations
                     b.HasKey("Id")
                         .HasName("pk_categories");
 
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_categories_name");
+
                     b.ToTable("categories", (string)null);
                 });
 

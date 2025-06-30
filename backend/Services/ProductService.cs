@@ -87,32 +87,6 @@ public class ProductService(
         return product;
     }
 
-    public async Task<bool> AddCategoriesAsync(Guid productId, List<Guid> categoryIds)
-    {
-        var productCategories = categoryIds
-            .Select(id => new ProductCategory
-            {
-                ProductId = productId,
-                CategoryId = id,
-            }).ToList();
-
-        context.ProductCategories.AddRange(productCategories);
-
-        await context.SaveChangesAsync();
-        return true;
-    }
-
-    public async Task<bool> RemoveCategoriesAsync(Guid productId, List<Guid> categoryIds)
-    {
-        var productCategories = context.ProductCategories
-            .Where(pc => pc.ProductId == productId && categoryIds.Contains(pc.CategoryId))
-            .ToList();
-        context.ProductCategories.RemoveRange(productCategories);
-
-        await context.SaveChangesAsync();
-        return true;
-    }
-
     public async Task<bool> AddItemsAsync(Guid productId, List<ProductItemPostDto> dtos)
     {
         var productItems = mapper.Map<List<ProductItem>>(dtos);

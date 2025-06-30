@@ -9,6 +9,6 @@ public record ProductPostDto(
     string Description,
     double Amount,
     string AmountUnit,
-    List<Guid> CategoryIds,
+    Guid CategoryId,
     List<ProductItemPostDto> ProductItems
 );

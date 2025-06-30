@@ -13,6 +13,6 @@ public record ProductDto(
     decimal Price,
     double? Amount,
     string? Description,
-    List<CategoryDto> Categories,
+    Category Category,
     List<ProductItemDto> Items
 );

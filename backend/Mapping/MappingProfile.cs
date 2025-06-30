@@ -10,9 +10,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<ProductCategory, CategoryDto>()
-            .ConstructUsing(pc =>
-                new CategoryDto(pc.Category.Id, pc.Category.Name, pc.Category.Description, pc.Category.OrderIndex));
+        // CreateMap<ProductCategory, CategoryDto>()
+        //     .ConstructUsing(pc =>
+        //         new CategoryDto(pc.Category.Id, pc.Category.Name, pc.Category.Description, pc.Category.OrderIndex));
         CreateMap<Product, ProductDto>().ReverseMap();
         CreateMap<Product, CategoryWithProductsDto_ProductDto>().ReverseMap();
         CreateMap<ProductItem, ProductItemDto>().ReverseMap();
@@ -27,17 +27,9 @@ public class MappingProfile : Profile
         CreateMap<CategoryPostDto, Category>();
         CreateMap<AddressPostDto, Address>();
         CreateMap<ProductPostDto, Product>()
-            .ForMember(dest => dest.Categories, opt => opt.Ignore())
             .ForMember(dest => dest.Items, opt => opt.Ignore())
             .AfterMap((src, dest, context) =>
             {
-                var categories = src.CategoryIds.Select(id => new ProductCategory
-                {
-                    CategoryId = id,
-                    ProductId = dest.Id
-                }).ToList();
-                dest.Categories.AddRange(categories);
-
                 var items = context.Mapper.Map<List<ProductItem>>(src.ProductItems);
                 foreach (var item in items)
                     item.ProductId = dest.Id;

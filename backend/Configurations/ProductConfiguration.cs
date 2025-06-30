@@ -35,9 +35,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Description)
             .IsRequired(false);
 
-        builder.HasMany(p => p.Categories)
-            .WithOne(pc => pc.Product)
-            .HasForeignKey(pc => pc.ProductId);
+        builder.HasOne(p => p.Category)
+            .WithMany(c => c.Products)
+            .HasForeignKey(p => p.CategoryId);
 
         builder.HasMany(p => p.OrderProducts)
             .WithOne(op => op.Product)

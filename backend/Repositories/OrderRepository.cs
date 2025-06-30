@@ -12,8 +12,7 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
         base.DefaultQuery
             .Include(o => o.OrderProducts)
             .ThenInclude(op => op.Product)
-            .ThenInclude(p => p.Categories)
-            .ThenInclude(pc => pc.Category)
+            .ThenInclude(p => p.Category)
             .Include(o => o.OrderProducts)
             .ThenInclude(op => op.Product)
             .ThenInclude(p => p.Items)

@@ -55,8 +55,24 @@ public class CategoryService(ICategoryRepository categoryRepo, SushiContext cont
     public async Task<Guid> CreateAsync(CategoryPostDto dto)
     {
         var category = mapper.Map<Category>(dto);
+        var maxOrderIndex = await context.Categories.MaxAsync(c => (int?)c.OrderIndex) ?? 0;
+        category.OrderIndex = maxOrderIndex + 1;
         await categoryRepo.AddAsync(category);
         await context.SaveChangesAsync();
         return category.Id;
+    }
+
+    public async Task UpdateAsync(Guid categoryId, CategoryPostDto dto)
+    {
+        var category = await GetByIdAsync(categoryId);
+
+        category.Name = dto.Name;
+        if (!string.IsNullOrWhiteSpace(dto.Description))
+        {
+            category.Description = dto.Description;
+        }
+
+        context.Entry(category).State = EntityState.Modified;
+        await context.SaveChangesAsync();
     }
 }

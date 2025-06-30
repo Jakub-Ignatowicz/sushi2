@@ -105,20 +105,4 @@ public class ProductsController(
         await productService.RemoveItemsAsync(productId, itemIds);
         return NoContent();
     }
-
-    [Authorize(Roles = nameof(UserType.Admin))]
-    [HttpPost("{productId:guid}/categories")]
-    public async Task<ActionResult> AddProductCategories(Guid productId, [FromBody] List<Guid> categoryIds)
-    {
-        var result = await productService.AddCategoriesAsync(productId, categoryIds);
-        return Ok(result);
-    }
-
-    [Authorize(Roles = nameof(UserType.Admin))]
-    [HttpDelete("{productId:guid}/categories")]
-    public async Task<ActionResult> RemoveProductCategories(Guid productId, [FromBody] List<Guid> categoryIds)
-    {
-        var result = await productService.RemoveCategoriesAsync(productId, categoryIds);
-        return Ok(result);
-    }
 }

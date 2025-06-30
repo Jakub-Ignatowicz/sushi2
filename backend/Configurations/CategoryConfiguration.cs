@@ -16,6 +16,8 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         builder.Property(c => c.OrderIndex)
             .HasDefaultValue(1);
 
+        builder.HasIndex(c => c.Name).IsUnique();
+
         builder.Property(c => c.Description)
             .IsRequired(false);
 

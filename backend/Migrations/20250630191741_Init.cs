@@ -243,6 +243,12 @@ namespace SushiZume.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_categories_name",
+                table: "categories",
+                column: "name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "ix_order_products_product_id",
                 table: "order_products",
                 column: "product_id");

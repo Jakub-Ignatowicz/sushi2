@@ -35,9 +35,11 @@ public class CategoriesController(ICategoryService categoryService, IValidator<C
     }
 
     [HttpPatch("{categoryId:guid}")]
-    public async Task<IActionResult> UpdateCategoryName(Guid categoryId, [FromBody] UpdateCategoryNameDto dto)
+    public async Task<IActionResult> UpdateCategory(Guid categoryId, [FromBody] CategoryPostDto dto)
     {
-        await categoryService.ChangeNameAsync(categoryId, dto.Name);
+        await validator.ValidateAndThrowAsync(dto);
+
+        await categoryService.UpdateAsync(categoryId, dto);
         return NoContent();
     }
 }

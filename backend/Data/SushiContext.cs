@@ -11,7 +11,6 @@ public class SushiContext(DbContextOptions<SushiContext> options) : DbContext(op
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderProduct> OrderProducts { get; set; }
     public DbSet<Product> Products { get; set; }
-    public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<ProductItem> ProductItems { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }

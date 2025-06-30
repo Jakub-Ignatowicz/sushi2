@@ -12,7 +12,7 @@ using SushiZume.Data;
 namespace SushiZume.Migrations
 {
     [DbContext(typeof(SushiContext))]
-    [Migration("20250630164249_Init")]
+    [Migration("20250630191741_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -99,6 +99,10 @@ namespace SushiZume.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_categories");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_categories_name");
 
                     b.ToTable("categories", (string)null);
                 });
