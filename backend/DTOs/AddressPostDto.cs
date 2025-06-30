@@ -5,6 +5,6 @@ public record AddressPostDto(
     string District,
     string Street,
     string HomeNumber,
-    string ApartmentNumber,
+    string? ApartmentNumber,
     int? Floor
 );

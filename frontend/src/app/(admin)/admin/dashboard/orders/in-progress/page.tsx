@@ -7,11 +7,7 @@ const NewOrdersPage = async () => {
   try {
     const orders = await getInProgressOrders();
 
-    return (
-      <div className="container mx-auto py-10">
-        <OrdersTable columns={columns} data={orders} />
-      </div>
-    );
+    return <OrdersTable columns={columns} data={orders} />;
   } catch (error: any) {
     return <FetchError error={error} />;
   }

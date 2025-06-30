@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { getNewOrders } from "@/lib/api/orders";
 import { formatDate } from "@/lib/utils";
 import { PackageX } from "lucide-react";
+import { OrdersTable } from "../data-table";
+import { columns } from "../columns";
 
 type Props = {
   orders: OrderType[];
@@ -35,22 +37,11 @@ const OrdersClientPage = ({ orders: initOrders }: Props) => {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      {orders.length !== 0 ? (
-        <>
-          {orders.map((order) => (
-            <Order key={order.id} order={order} />
-          ))}
-        </>
-      ) : (
-        <div className="flex items-center justify-center gap-2 py-16">
-          <div className="text-2xl">🍣</div>
-          <span className="text-xl">Brak nowych zamówień</span>
-        </div>
-      )}
+      <OrdersTable columns={columns} data={orders} />
       <div className="mx-auto flex items-center gap-2 text-sm">
         {isLive ? (
           <>
-            <div className="relative flex h-3 w-3 mt-0.5">
+            <div className="relative flex h-3 w-3">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"></span>
               <span className="relative inline-flex h-3 w-3 rounded-full bg-red-600"></span>
             </div>

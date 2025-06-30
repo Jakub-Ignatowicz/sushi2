@@ -10,14 +10,19 @@ using SushiZume.Validators;
 namespace SushiZume.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
+using SushiZume.Repositories.Interfaces;
+using SushiZume.Services;
 
 [Authorize(Roles = nameof(UserType.Admin))]
 [ApiController]
 [Route("api/[controller]")]
 public class OrdersController(
     IOrderService orderService,
+    IUserService userService,
     IMapper mapper,
     IValidator<OrderPostDto> validator,
+    IValidator<AddressPostDto> addressValidator,
+    IAddressRepository addressRepo,
     IOrderRepository orderRepo)
     : ControllerBase
 {
@@ -52,13 +57,31 @@ public class OrdersController(
 
     [AllowAnonymous]
     [HttpPost]
-    public async Task<ActionResult<OrderDto>> CreateOrder([FromBody] OrderPostDto dto)
+    public async Task<IActionResult> CreateOrder([FromBody] OrderPostDto dto)
     {
         await validator.ValidateAndThrowAsync(dto);
 
         var order = await orderService.AddAsync(dto);
         var created = await orderService.GetByIdAsync(order.Id);
-        return mapper.Map<OrderDto>(created);
+        return Ok(mapper.Map<OrderDto>(created));
+    }
+
+    [AllowAnonymous]
+    [HttpPost("with-address")]
+    public async Task<IActionResult> CreateOrderWithAddress([FromBody] OrderPostWithAddressDto dto)
+    {
+        await addressValidator.ValidateAndThrowAsync(dto.Address);
+
+        var addressId = await userService.AddAddressAsync(dto.UserId, dto.Address);
+
+        var orderPostDto = new OrderPostDto(dto.PeopleCount, dto.Notes, dto.PaymentMethod, dto.UserId, addressId, dto.OrderProducts);
+        await validator.ValidateAndThrowAsync(orderPostDto);
+
+        Console.WriteLine("cwel4");
+
+        var order = await orderService.AddAsync(orderPostDto);
+        var created = await orderService.GetByIdAsync(order.Id);
+        return Ok(mapper.Map<OrderDto>(created));
     }
 
     [HttpGet("count")]

@@ -20,9 +20,9 @@ public class OrderValidator : AbstractValidator<OrderPostDto>
             .NotEmpty().WithMessage("Identyfikator użytkownika jest wymagany.")
             .Must(x => x != Guid.Empty).WithMessage("Identyfikator użytkownika nie może być pusty.");
 
-        RuleFor(x => x.Address)
-            .NotNull().WithMessage("Adres jest wymagany.")
-            .SetValidator(new AddressValidator());
+        RuleFor(x => x.AddressId)
+            .NotEmpty().WithMessage("Identyfikator adresu jest wymagany.")
+            .Must(x => x != Guid.Empty).WithMessage("Identyfikator adresu nie może być pusty.");
 
         RuleForEach(x => x.OrderProducts)
             .SetValidator(new OrderProductValidator());

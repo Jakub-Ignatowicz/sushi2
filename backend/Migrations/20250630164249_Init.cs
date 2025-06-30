@@ -116,7 +116,7 @@ namespace SushiZume.Migrations
                     district = table.Column<string>(type: "text", nullable: false),
                     street = table.Column<string>(type: "text", nullable: false),
                     home_number = table.Column<string>(type: "text", nullable: false),
-                    apartment_number = table.Column<string>(type: "text", nullable: false),
+                    apartment_number = table.Column<string>(type: "text", nullable: true),
                     floor = table.Column<int>(type: "integer", nullable: true),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },

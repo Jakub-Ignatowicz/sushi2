@@ -5,7 +5,7 @@ namespace SushiZume.Models;
 
 public class Category
 {
-    public Guid Id { get; init; }
+    public Guid Id { get; init; } = Guid.NewGuid();
     public string Name { get; set; }
     public int OrderIndex { get; set; }
     public string? Description { get; set; }

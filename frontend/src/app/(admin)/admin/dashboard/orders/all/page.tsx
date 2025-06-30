@@ -8,11 +8,7 @@ const AllOrdersPage = async () => {
     const orders = await getOrders();
     console.log(orders);
 
-    return (
-      <div className="container mx-auto py-10">
-        <OrdersTable columns={columns} data={orders} />
-      </div>
-    );
+    return <OrdersTable columns={columns} data={orders} />;
   } catch (error: any) {
     return <FetchError error={error} />;
   }

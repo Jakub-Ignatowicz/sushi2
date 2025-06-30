@@ -3,10 +3,10 @@ using SushiZume.Models;
 
 namespace SushiZume.DTOs;
 
-public record OrderPostDto(
+public record OrderPostWithAddressDto(
     int PeopleCount,
     string Notes,
     OrderPaymentMethod PaymentMethod,
     Guid UserId,
-    Guid AddressId,
+    AddressPostDto Address,
     List<OrderProductPostDto> OrderProducts);

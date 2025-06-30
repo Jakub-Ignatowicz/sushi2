@@ -10,12 +10,14 @@ import {
   categorizeProducts,
   priceToString,
 } from "@/lib/utils";
-import { Order } from "@/types/api";
+import { Order, PostOrder, PostOrderWithAddress } from "@/types/api";
 import { Info, Tag, Trash2 } from "lucide-react";
 import { Control, UseFormReturn, useWatch } from "react-hook-form";
 import { CartFormSchemaType } from "./form";
 import { toast } from "sonner";
 import { useState } from "react";
+import { createUserGuest } from "@/lib/api/users";
+import { createOrder, createOrderWithAddress } from "@/lib/api/orders";
 
 type Props = {
   form: UseFormReturn<CartFormSchemaType>;
@@ -37,15 +39,40 @@ const CartSummaryDialog = ({ form }: Props) => {
   const values = useWatch<CartFormSchemaType>({ control: form.control });
   const [open, setOpen] = useState(false);
 
-  function onSubmit(data: CartFormSchemaType) {
-    toast("You submitted the following values", {
-      description: (
-        <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-  }
+  const onSubmit = async (data: CartFormSchemaType) => {
+    let userId;
+    try {
+      userId = await createUserGuest({
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+      });
+    } catch (error) {
+      toast.error(
+        "Potwierdzenie zamówienia nie powiodło się. Spróbuj ponownie.",
+      );
+    }
+
+    const orderProducts = cartItems.map((item) => ({
+      productId: item.product.id,
+      quantity: item.quantity,
+    }));
+
+    const payload: PostOrderWithAddress = {
+      ...form.getValues(),
+      userId,
+      orderProducts,
+    } as any;
+
+    try {
+      await createOrderWithAddress(payload);
+      toast.success("Zamówienie zostało złożone pomyślnie!");
+    } catch (error) {
+      console.error("Error creating order:", error);
+      toast.error(
+        "Wystąpił błąd podczas składania zamówienia. Spróbuj ponownie.",
+      );
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

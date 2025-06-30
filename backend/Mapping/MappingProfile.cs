@@ -45,6 +45,7 @@ public class MappingProfile : Profile
             });
         CreateMap<ProductItemPostDto, ProductItem>();
         CreateMap<OrderPostDto, Order>();
+        CreateMap<OrderPostWithAddressDto, Order>();
         CreateMap<OrderProductPostDto, OrderProduct>();
         CreateMap<UserPostDto_Guest, User>();
         CreateMap<UserPostDto_Normal, User>();

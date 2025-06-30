@@ -7,7 +7,7 @@ namespace SushiZume.Models;
 
 public class User
 {
-    public Guid Id { get; init; }
+    public Guid Id { get; init; } = Guid.NewGuid();
     public DateTime CreatedAt { get; init; }
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }

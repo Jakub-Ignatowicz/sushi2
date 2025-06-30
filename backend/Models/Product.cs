@@ -6,7 +6,7 @@ namespace SushiZume.Models;
 
 public class Product
 {
-    public Guid Id { get; init; }
+    public Guid Id { get; init; } = Guid.NewGuid();
     public string Name { get; set; }
     public decimal Price { get; set; }
     public bool IsAvailable { get; set; }

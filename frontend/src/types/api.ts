@@ -85,6 +85,15 @@ export type PostOrder = {
   peopleCount: number;
   notes: string;
   paymentMethod: number;
+  addressId: string;
+  userId: string;
+  orderProducts: { productId: string; quantity: number }[];
+};
+
+export type PostOrderWithAddress = {
+  peopleCount: number;
+  notes: string;
+  paymentMethod: number;
   address: PostAddress;
   userId: string;
   orderProducts: { productId: string; quantity: number }[];

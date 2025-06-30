@@ -12,7 +12,7 @@ using SushiZume.Data;
 namespace SushiZume.Migrations
 {
     [DbContext(typeof(SushiContext))]
-    [Migration("20250628131709_Init")]
+    [Migration("20250630164249_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -34,7 +34,6 @@ namespace SushiZume.Migrations
                         .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("ApartmentNumber")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("apartment_number");
 

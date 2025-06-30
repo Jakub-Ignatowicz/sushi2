@@ -17,7 +17,7 @@ const ProductComponent = ({ product, isPreview }: Props) => {
           className="w-50 h-full object-cover rounded-lg mx-auto sm:my-auto"
         />
       )}
-      <div className="flex flex-col gap-2 w-full">
+      <div className="flex flex-col gap-2 lg:gap-1 w-full">
         <div>
           <span className="text-lg font-semibold">{product.name}</span>
           <span className="text-muted-foreground font-medium ml-2">
@@ -25,7 +25,7 @@ const ProductComponent = ({ product, isPreview }: Props) => {
             {product.amountUnit}
           </span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <p className="text-xl font-medium text-zume dark:text-red-400">
             {priceToString(product.price)}
           </p>

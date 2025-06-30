@@ -31,7 +31,6 @@ namespace SushiZume.Migrations
                         .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("ApartmentNumber")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("apartment_number");
 

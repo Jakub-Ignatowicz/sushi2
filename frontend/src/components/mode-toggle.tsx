@@ -26,13 +26,12 @@ export function ModeToggle({ className }: Props) {
   return (
     <Button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className={cn(className, "size-full")}
+      className={cn(className, "size-fit p-2")}
       variant="ghost"
       size="icon"
     >
-      {/* TODO; animacja zmiany theme nie dziala idk */}
-      <Sun className="hidden dark:block size-full" />
-      <Moon className="block dark:hidden size-full" />
+      <Sun className="hidden dark:block size-fit" />
+      <Moon className="block dark:hidden size-fit" />
     </Button>
   );
 }

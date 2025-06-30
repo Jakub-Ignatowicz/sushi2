@@ -7,7 +7,7 @@ namespace SushiZume.Models;
 
 public class Order
 {
-    public Guid Id { get; init; }
+    public Guid Id { get; init; } = Guid.NewGuid();
     public int PeopleCount { get; set; }
     public OrderPaymentMethod PaymentMethod { get; set; }
     public OrderStatus Status { get; set; }

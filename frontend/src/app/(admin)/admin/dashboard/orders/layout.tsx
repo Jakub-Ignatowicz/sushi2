@@ -21,7 +21,7 @@ const OrdersLayout = ({ children }: { children: React.ReactNode }) => {
           </Button>
         </Link>
       </div>
-      {children}
+      <div className="">{children}</div>
     </div>
   );
 };

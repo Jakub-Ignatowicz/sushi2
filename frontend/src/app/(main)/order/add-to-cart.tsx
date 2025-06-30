@@ -1,5 +1,6 @@
 "use client";
 
+import TooltipButton from "@/components/tooltip-button";
 import { Button } from "@/components/ui/button";
 import { useCartState } from "@/context/cart-context";
 import { Product } from "@/types/api";
@@ -13,13 +14,15 @@ type Props = {
 export default function AddToCartButton({ isPreview, product }: Props) {
   const { addToCart } = useCartState();
   return (
-    <Button
-      disabled={isPreview}
-      variant="outline"
-      className="size-8"
-      onClick={() => addToCart(product)}
-    >
-      <Plus />
-    </Button>
+    <TooltipButton label="Dodaj do koszyka">
+      <Button
+        disabled={isPreview}
+        variant="outline"
+        className="size-8"
+        onClick={() => addToCart(product)}
+      >
+        <Plus />
+      </Button>
+    </TooltipButton>
   );
 }

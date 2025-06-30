@@ -31,9 +31,7 @@ export default function Navbar() {
         </div>
 
         <div className="hidden lg:flex gap-4 items-center justify-center h-10">
-          <div className="size-5">
-            <ModeToggle />
-          </div>
+          <ModeToggle />
           <CartDialog />
         </div>
 
