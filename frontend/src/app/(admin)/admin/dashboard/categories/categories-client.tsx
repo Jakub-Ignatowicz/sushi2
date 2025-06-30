@@ -28,8 +28,6 @@ const CategoriesClient = ({ categories }: Props) => {
     setChanged(changed);
   }, [items]);
 
-  console.log(items);
-
   return (
     <div>
       <div className="mb-4">

@@ -6,7 +6,6 @@ import { columns } from "../columns";
 const AllOrdersPage = async () => {
   try {
     const orders = await getOrders();
-    console.log(orders);
 
     return <OrdersTable columns={columns} data={orders} />;
   } catch (error: any) {

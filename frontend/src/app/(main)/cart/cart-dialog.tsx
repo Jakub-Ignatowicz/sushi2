@@ -54,7 +54,9 @@ export default function CartDialog() {
             </div>
 
             <div className="flex justify-between items-center mt-6">
-              <p className="text-lg font-bold">Suma: {priceToString(total)}</p>
+              <p className="text-base md:text-lg font-bold">
+                Suma: {priceToString(total)}
+              </p>
               <DialogTrigger asChild>
                 <Button onClick={() => router.push("/cart")}>
                   Przejdź do realizacji

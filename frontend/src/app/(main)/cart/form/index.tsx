@@ -105,7 +105,7 @@ export default function CartForm() {
       </div>
       <form className="mb-32">
         <div className="flex flex-col md:flex-row gap-8 md:gap-4">
-          <div className="p-4 border rounded-lg shadow-md bg-primary-foreground space-y-8 w-full flex-2">
+          <div className="p-4 border rounded-lg shadow-md bg-primary-foreground/50 space-y-8 w-full flex-2">
             <Section title="Dane kontaktowe">
               <FormField
                 control={form.control}

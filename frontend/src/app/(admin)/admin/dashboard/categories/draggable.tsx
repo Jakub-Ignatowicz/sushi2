@@ -23,7 +23,6 @@ type Props = {
 
 export default function DraggableCategoryList({ items, setItems }: Props) {
   const ids = items.map((c) => c.id);
-  console.log(items);
 
   const sensors = useSensors(useSensor(PointerSensor));
 

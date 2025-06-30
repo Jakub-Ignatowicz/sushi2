@@ -39,7 +39,6 @@ export default function NewCategoryDialog() {
   });
 
   const onSubmit = async (data: CategoryFormData) => {
-    console.log("Submitted:", data);
     try {
       await createCategory(data);
       window.location.reload();

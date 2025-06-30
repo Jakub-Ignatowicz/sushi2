@@ -17,7 +17,8 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
             .ThenInclude(op => op.Product)
             .ThenInclude(p => p.Items)
             .Include(p => p.Address)
-            .Include(o => o.User);
+            .Include(o => o.User)
+            .OrderByDescending(o => o.CreatedAt);
 
     public new async Task<List<Order>> GetAllAsync()
     {

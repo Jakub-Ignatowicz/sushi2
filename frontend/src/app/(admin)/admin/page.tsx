@@ -22,7 +22,6 @@ const AdminPage = () => {
           variant="default"
           onClick={() => {
             router.push("/admin/dashboard/orders/new");
-            console.log("Zaloguj się clicked");
           }}
         >
           Zaloguj się
