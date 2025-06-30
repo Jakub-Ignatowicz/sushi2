@@ -16,8 +16,6 @@ type Props = {
 };
 
 const ProductDeleteDialog = ({ product, categoryId }: Props) => {
-  const categoryNames = product.categories.map((c) => c.name);
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -28,28 +26,13 @@ const ProductDeleteDialog = ({ product, categoryId }: Props) => {
       <DialogContent className="">
         <Label className="text-xl font-bold">Usuń produkt</Label>
         <p className="text-sm text-muted-foreground">
-          <span className="font-bold">{product.name}</span> należy do
-          następujących kategorii:
+          Czy na pewno chcesz usunąć produkt:{" "}
+          <span className="font-bold">{product.name}</span> należący do
+          kategorii <span className="font-bold">{product.category.name}</span>.
         </p>
-        <div>
-          {categoryNames.map((name, index) => (
-            <div key={index} className="flex items-center gap-2 text-sm">
-              <ChevronRightIcon size={16} />
-              {name}
-            </div>
-          ))}
-        </div>
-        <Button disabled={categoryNames.length <= 1} variant="outline">
-          Usuń tylko z kategorii {categoryId}
-        </Button>
         <Button variant="destructive" className="">
-          Usuń produkt
+          Potwierdź usunięcie
         </Button>
-        <p className="text-xs text-muted-foreground mt-2">
-          <Info size={15} className="inline mr-1" />
-          Jeżeli produkt należy tylko do jednej kategorii, zostanie usunięty z
-          bazy danych.
-        </p>
       </DialogContent>
     </Dialog>
   );

@@ -42,11 +42,10 @@ export function categorizeProducts(
   const lookup: Record<string, AggregatedCategory> = {};
 
   for (const product of products) {
-    for (const category of product.categories) {
-      if (!lookup[category.id])
-        lookup[category.id] = { ...category, products: [] };
-      lookup[category.id].products.push(product);
-    }
+    const category = product.category;
+    if (!lookup[category.id])
+      lookup[category.id] = { ...category, products: [] };
+    lookup[category.id].products.push(product);
   }
 
   if (withFeatured) {

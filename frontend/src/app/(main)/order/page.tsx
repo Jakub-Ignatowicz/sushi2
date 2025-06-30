@@ -25,25 +25,30 @@ export default async function OrderPage() {
   };
 
   return (
-    <div>
+    <div className="space-y-16 mt-16 lg:mt-32">
       {categories.map((cat) => {
         const isFeatured = cat.id === FEATURED_CATEGORY_ID;
 
         return (
-          <div key={cat.id} className="mt-16 lg:mt-32">
+          <div key={cat.id}>
             <div className="mb-4">
               <Label className="text-3xl md:text-4xl font-bold">
                 {CategoryIcon(isFeatured)}
                 {cat.name}
               </Label>
-              <p className="mt-2">
-                lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              </p>
+              {cat.description && (
+                <p className="mt-2 font-medium text-base text-muted-foreground">
+                  {cat.description}
+                </p>
+              )}
             </div>
-            {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12"> */}
             <div className="flex flex-col gap-6">
               {cat.products.map((product: Product) => (
-                <ProductComponent key={product.id} product={product} />
+                <ProductComponent
+                  key={product.id}
+                  product={product}
+                  isFeatured={isFeatured}
+                />
               ))}
             </div>
           </div>

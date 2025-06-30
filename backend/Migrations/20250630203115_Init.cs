@@ -26,26 +26,6 @@ namespace SushiZume.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "products",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    price = table.Column<decimal>(type: "numeric", nullable: false),
-                    is_available = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
-                    is_visible = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
-                    is_featured = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    image_url = table.Column<string>(type: "text", nullable: true),
-                    amount = table.Column<double>(type: "double precision", nullable: true),
-                    amount_unit = table.Column<string>(type: "text", nullable: true),
-                    description = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_products", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "users",
                 columns: table => new
                 {
@@ -64,45 +44,28 @@ namespace SushiZume.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "product_categories",
+                name: "products",
                 columns: table => new
                 {
-                    product_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    price = table.Column<decimal>(type: "numeric", nullable: false),
+                    is_available = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
+                    is_visible = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
+                    is_featured = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    image_url = table.Column<string>(type: "text", nullable: true),
+                    amount = table.Column<double>(type: "double precision", nullable: true),
+                    amount_unit = table.Column<string>(type: "text", nullable: true),
+                    description = table.Column<string>(type: "text", nullable: true),
                     category_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_product_categories", x => new { x.product_id, x.category_id });
+                    table.PrimaryKey("pk_products", x => x.id);
                     table.ForeignKey(
-                        name: "fk_product_categories_categories_category_id",
+                        name: "fk_products_categories_category_id",
                         column: x => x.category_id,
                         principalTable: "categories",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_product_categories_products_product_id",
-                        column: x => x.product_id,
-                        principalTable: "products",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "product_items",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
-                    description = table.Column<string>(type: "text", nullable: false),
-                    quantity = table.Column<int>(type: "integer", nullable: false),
-                    product_id = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_product_items", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_product_items_products_product_id",
-                        column: x => x.product_id,
-                        principalTable: "products",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -178,6 +141,26 @@ namespace SushiZume.Migrations
                         name: "fk_refresh_tokens_users_user_id",
                         column: x => x.user_id,
                         principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "product_items",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    description = table.Column<string>(type: "text", nullable: false),
+                    quantity = table.Column<int>(type: "integer", nullable: false),
+                    product_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_product_items", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_product_items_products_product_id",
+                        column: x => x.product_id,
+                        principalTable: "products",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -269,14 +252,14 @@ namespace SushiZume.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_product_categories_category_id",
-                table: "product_categories",
-                column: "category_id");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_product_items_product_id",
                 table: "product_items",
                 column: "product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_products_category_id",
+                table: "products",
+                column: "category_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_refresh_tokens_replaced_by_token_id",
@@ -300,9 +283,6 @@ namespace SushiZume.Migrations
                 name: "password_reset_tokens");
 
             migrationBuilder.DropTable(
-                name: "product_categories");
-
-            migrationBuilder.DropTable(
                 name: "product_items");
 
             migrationBuilder.DropTable(
@@ -312,13 +292,13 @@ namespace SushiZume.Migrations
                 name: "orders");
 
             migrationBuilder.DropTable(
-                name: "categories");
-
-            migrationBuilder.DropTable(
                 name: "products");
 
             migrationBuilder.DropTable(
                 name: "addresses");
+
+            migrationBuilder.DropTable(
+                name: "categories");
 
             migrationBuilder.DropTable(
                 name: "users");

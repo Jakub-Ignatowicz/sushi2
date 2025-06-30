@@ -1,31 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS dblink;
 SELECT dblink_connect('source_conn', '{{SOURCE_CONN}}');
 
-INSERT INTO products (id, name, price, is_available, is_visible, image_url, amount, amount_unit,
-                      description)
-SELECT id::uuid,       -- cast id from text to uuid
-       name,
-       price::numeric, -- cast price from integer to numeric
-       available,
-       visible,
-       imagePath,
-       amount,
-       amountName,
-       description
-FROM dblink('source_conn',
-            'SELECT name, price, available, visible, "imagePath", amount, "amountName", id, description FROM "Product"'
-     ) AS source(
-                 name text,
-                 price integer,
-                 available boolean,
-                 visible boolean,
-                 imagePath text,
-                 amount numeric,
-                 amountName text,
-                 id text,
-                 description text
-    );
-
 insert into categories (id, name, description)
 select id::uuid,
        name,
@@ -34,12 +9,39 @@ from dblink('source_conn',
             'SELECT id, name from "Category"')
          AS source(id text, name text);
 
-insert into product_categories (product_id, category_id)
-select id::uuid,
-       "categoryId"::uuid
-from dblink('source_conn',
-            'SELECT id, "categoryId" from "Product"')
-         as source(id text, "categoryId" text);
+INSERT INTO products (id, name, price, is_available, is_visible, image_url, amount, amount_unit,
+                      description, category_id)
+SELECT id,       -- cast id from text to uuid
+       name,
+       price::numeric, -- cast price from integer to numeric
+       available,
+       visible,
+       imagePath,
+       amount,
+       amountName,
+       description,
+			 categoryId
+FROM dblink('source_conn',
+            'SELECT name, price, available, visible, "imagePath", amount, "amountName", id, description, "categoryId" FROM "Product"'
+     ) AS source(
+                 name text,
+                 price integer,
+                 available boolean,
+                 visible boolean,
+                 imagePath text,
+                 amount numeric,
+                 amountName text,
+                 id uuid,
+                 description text,
+								 categoryId uuid
+    );
+
+-- insert into product_categories (product_id, category_id)
+-- select id::uuid,
+--        "categoryId"::uuid
+-- from dblink('source_conn',
+--             'SELECT id, "categoryId" from "Product"')
+--          as source(id text, "categoryId" text);
 
 
 CREATE OR REPLACE FUNCTION import_users_from_orders()

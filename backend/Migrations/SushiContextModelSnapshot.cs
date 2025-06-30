@@ -228,6 +228,10 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("amount_unit");
 
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
+
                     b.Property<string>("Description")
                         .HasColumnType("text")
                         .HasColumnName("description");
@@ -266,26 +270,10 @@ namespace SushiZume.Migrations
                     b.HasKey("Id")
                         .HasName("pk_products");
 
-                    b.ToTable("products", (string)null);
-                });
-
-            modelBuilder.Entity("SushiZume.Models.ProductCategory", b =>
-                {
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("product_id");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("category_id");
-
-                    b.HasKey("ProductId", "CategoryId")
-                        .HasName("pk_product_categories");
-
                     b.HasIndex("CategoryId")
-                        .HasDatabaseName("ix_product_categories_category_id");
+                        .HasDatabaseName("ix_products_category_id");
 
-                    b.ToTable("product_categories", (string)null);
+                    b.ToTable("products", (string)null);
                 });
 
             modelBuilder.Entity("SushiZume.Models.ProductItem", b =>
@@ -487,25 +475,16 @@ namespace SushiZume.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SushiZume.Models.ProductCategory", b =>
+            modelBuilder.Entity("SushiZume.Models.Product", b =>
                 {
                     b.HasOne("SushiZume.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_product_categories_categories_category_id");
-
-                    b.HasOne("SushiZume.Models.Product", "Product")
-                        .WithMany("Categories")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_product_categories_products_product_id");
+                        .HasConstraintName("fk_products_categories_category_id");
 
                     b.Navigation("Category");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SushiZume.Models.ProductItem", b =>
@@ -557,8 +536,6 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.Product", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("Items");
 
                     b.Navigation("OrderProducts");

@@ -8,6 +8,7 @@ export type Product = {
   amountUnit?: string;
   description?: string;
   categories: Category[];
+  category: Category;
   items: ProductItem[];
   fakePath?: string; // Used for previewing products without an image
 };

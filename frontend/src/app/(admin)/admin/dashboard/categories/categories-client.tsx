@@ -28,6 +28,8 @@ const CategoriesClient = ({ categories }: Props) => {
     setChanged(changed);
   }, [items]);
 
+  console.log(items);
+
   return (
     <div>
       <div className="mb-4">
@@ -72,11 +74,7 @@ const CategoriesClient = ({ categories }: Props) => {
             </Button>
           </TooltipButton>
         </div>
-        <DraggableCategoryList
-          items={items}
-          setItems={setItems}
-          products={products}
-        />
+        <DraggableCategoryList items={items} setItems={setItems} />
       </div>
     </div>
   );
