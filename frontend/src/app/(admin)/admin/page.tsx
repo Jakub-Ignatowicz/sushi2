@@ -21,7 +21,7 @@ const AdminPage = () => {
           className="w-full cursor-pointer"
           variant="default"
           onClick={() => {
-            router.push("/admin/dashboard");
+            router.push("/admin/dashboard/orders/new");
             console.log("Zaloguj się clicked");
           }}
         >

@@ -9,7 +9,7 @@ type Props = {
 
 const ProductComponent = ({ product, isPreview }: Props) => {
   return (
-    <div className="flex flex-col sm:flex-row gap-4 bg-primary-foreground p-4 px-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+    <div className="flex flex-col sm:flex-row gap-4 bg-primary-foreground p-4 lg:py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
       {((isPreview && product.fakePath) || product.imageUrl) && (
         <img
           src={product.fakePath || product.imageUrl}

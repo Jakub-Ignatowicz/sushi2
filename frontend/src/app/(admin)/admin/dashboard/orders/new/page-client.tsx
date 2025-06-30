@@ -1,7 +1,6 @@
 "use client";
 
 import { Order as OrderType } from "@/types/api";
-import Order from "../order";
 import { useEffect, useState } from "react";
 import { getNewOrders } from "@/lib/api/orders";
 import { formatDate } from "@/lib/utils";
@@ -18,18 +17,18 @@ const OrdersClientPage = ({ orders: initOrders }: Props) => {
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [isLive, setIsLive] = useState<boolean>(true);
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const res = await getNewOrders();
-        setOrders(res);
-        setLastUpdate(new Date());
-        setIsLive(true);
-      } catch (error: any) {
-        setIsLive(false);
-      }
-    };
+  const fetchOrders = async () => {
+    try {
+      const res = await getNewOrders();
+      setOrders(res);
+      setLastUpdate(new Date());
+      setIsLive(true);
+    } catch (error: any) {
+      setIsLive(false);
+    }
+  };
 
+  useEffect(() => {
     fetchOrders();
     const interval = setInterval(fetchOrders, 5_000);
     return () => clearInterval(interval);

@@ -74,7 +74,7 @@ export function OrdersTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                Brak danych
+                Brak danych do wyświetlenia
               </TableCell>
             </TableRow>
           )}

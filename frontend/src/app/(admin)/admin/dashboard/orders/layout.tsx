@@ -1,27 +1,30 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const OrdersLayout = ({ children }: { children: React.ReactNode }) => {
+  const pathname = usePathname();
+
+  const navItems = [
+    { href: "/admin/dashboard/orders/new", label: "Nowe" },
+    { href: "/admin/dashboard/orders/in-progress", label: "W trakcie" },
+    { href: "/admin/dashboard/orders/all", label: "Wszystkie" },
+  ];
+
   return (
     <div className="flex flex-col gap-4 pt-10">
       <div className="flex justify-center w-full gap-8">
-        <Link href="/admin/dashboard/orders/new">
-          <Button variant={"ghost"} className="font-bold">
-            Nowe
-          </Button>
-        </Link>
-        <Link href="/admin/dashboard/orders/in-progress">
-          <Button variant={"ghost"} className="font-bold">
-            W trakcie
-          </Button>
-        </Link>
-        <Link href="/admin/dashboard/orders/all">
-          <Button variant={"ghost"} className="font-bold">
-            Wszystkie
-          </Button>
-        </Link>
+        {navItems.map(({ href, label }) => (
+          <Link href={href} key={href}>
+            <Button variant={pathname === href ? "default" : "ghost"}>
+              {label}
+            </Button>
+          </Link>
+        ))}
       </div>
-      <div className="">{children}</div>
+      <div>{children}</div>
     </div>
   );
 };

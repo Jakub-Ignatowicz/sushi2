@@ -11,7 +11,6 @@ type Props = {
 export default function OrderStatus({ order }: Props) {
   const status = order.status;
   const statusName = orderStatusToString(status);
-  let color;
 
   const statusColors = {
     [OrderStatusEnum.Pending]: {

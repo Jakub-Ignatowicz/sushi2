@@ -5,12 +5,15 @@ import { Check, X } from "lucide-react";
 import TooltipButton from "@/components/tooltip-button";
 import { changeOrderStatus } from "@/lib/api/orders";
 import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 
 type Props = {
   order: Order;
 };
 
 export default function OrderActions({ order }: Props) {
+  const pathname = usePathname();
+
   const AcceptButton = () => (
     <TooltipButton label={"Akceptuj"}>
       <Button
@@ -19,7 +22,7 @@ export default function OrderActions({ order }: Props) {
         onClick={async () => {
           try {
             await changeOrderStatus(order.id, OrderStatus.Preparing);
-            toast.success("Zamówienie zaakceptowane");
+            window.location.reload();
           } catch (error) {
             toast.error("Nie udało się zaakceptować zamówienia");
           }
@@ -38,7 +41,7 @@ export default function OrderActions({ order }: Props) {
         onClick={async () => {
           try {
             await changeOrderStatus(order.id, OrderStatus.Cancelled);
-            toast.success("Zamówienie anulowane");
+            window.location.reload();
           } catch (error) {
             toast.error("Nie udało się anulować zamówienia");
           }
@@ -57,7 +60,7 @@ export default function OrderActions({ order }: Props) {
         onClick={async () => {
           try {
             await changeOrderStatus(order.id, OrderStatus.Completed);
-            toast.success("Zamówienie oznaczone jako zrealizowane");
+            window.location.reload();
           } catch (error) {
             toast.error("Nie udało się oznaczyć zamówienia jako zrealizowane");
           }
@@ -70,17 +73,21 @@ export default function OrderActions({ order }: Props) {
 
   return (
     <div className="flex items-center gap-2 justify-end">
-      {order.status === OrderStatus.Pending ? (
+      {order.status === OrderStatus.Pending &&
+      pathname === "/admin/dashboard/orders/new" ? (
         <>
           <AcceptButton />
           <CancelButton />
         </>
-      ) : order.status === OrderStatus.Preparing ? (
-        <>
-          <CompleteButton />
-          <CancelButton />
-        </>
-      ) : null}
+      ) : (
+        order.status === OrderStatus.Preparing &&
+        pathname === "/admin/dashboard/orders/in-progress" && (
+          <>
+            <CompleteButton />
+            <CancelButton />
+          </>
+        )
+      )}
       <OrderDialog order={order} />
     </div>
   );
