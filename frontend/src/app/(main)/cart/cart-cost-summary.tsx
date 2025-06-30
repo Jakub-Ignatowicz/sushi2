@@ -20,7 +20,7 @@ export function CartCostSummary({ form }: Props) {
   const totalCost = peopleCost + DELIVERY_FEE + total;
 
   return (
-    <div className="p-4 bg-primary-foreground rounded-lg shadow-md w-full h-fit flex-1">
+    <div className="p-4 border-1 rounded-lg shadow-md w-full h-fit flex-1">
       <div className="text-muted-foreground">
         <div className="flex justify-between">
           <p>Liczba osób</p>
