@@ -59,7 +59,12 @@ export const fetchApi = {
     options?: RequestInit,
   ): Promise<T> => {
     try {
-      const url = `${API_URL}/${endpoint.replace(/^\//, "")}`;
+      let url;
+      if (endpoint.startsWith("http")) {
+        url = endpoint;
+      } else {
+        url = `${API_URL}/${endpoint.replace(/^\//, "")}`;
+      }
 
       const response = await fetch(url, {
         method: requestType,

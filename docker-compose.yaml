@@ -16,7 +16,7 @@ services:
     build:
       context: ./frontend
       args:
-        NEXT_PUBLIC_API_URL: http://161.35.212.253/api
+        API_URL: http://161.35.212.253/api
     depends_on:
       - backend
     networks:

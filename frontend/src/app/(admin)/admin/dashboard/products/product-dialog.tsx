@@ -57,15 +57,16 @@ const ProductDialog = ({ product, isEdit }: Props) => {
   const onSubmit = async (data: Product) => {
     if (file) {
       data.imageUrl = await uploadImage(file);
+      console.log(data.imageUrl);
     }
 
-    try {
-      if (isEdit) product = await updateProduct(data);
-      else product = await createProduct(data);
-    } catch (error) {
-      toast.error(`Nie udało się ${isEdit ? "edytować" : "dodać"} produktu`);
-      return;
-    }
+    // try {
+    //   if (isEdit) product = await updateProduct(data);
+    //   else product = await createProduct(data);
+    // } catch (error) {
+    //   toast.error(`Nie udało się ${isEdit ? "edytować" : "dodać"} produktu`);
+    //   return;
+    // }
   };
 
   return (

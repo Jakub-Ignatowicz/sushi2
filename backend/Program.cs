@@ -23,6 +23,7 @@ builder.Configuration.AddEnvironmentVariables();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+var config = builder.Configuration;
 
 // DB
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -49,7 +50,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IImageService, ImageService>();
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -101,5 +101,7 @@ else
 {
     app.MapControllers();
 }
+
+app.UseConfiguredStaticImages(config);
 
 app.Run();
