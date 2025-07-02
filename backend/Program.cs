@@ -37,7 +37,6 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IProductItemRepository, ProductItemRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
@@ -57,12 +56,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 // CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: allowLocalhostOrigins, policy =>
-    {
-        policy.AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
+    options.AddPolicy(name: allowLocalhostOrigins,
+        policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
 });
 
 // Controllers
@@ -75,27 +70,23 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInte
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(5152); // Listen on port 5152
-});
+builder.WebHost.ConfigureKestrel(options => { options.ListenAnyIP(5152); });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.ApplyMigrations();
+
+app.UseAuthorization();
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    app.MapControllers().AllowAnonymous();
     app.UseCors(allowLocalhostOrigins);
-
-    var homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-    Console.WriteLine($"Home Directory: {homeDir}");
-
-    app.UseStaticFiles();
+    app.MapControllers().AllowAnonymous();
 }
 else if (app.Environment.IsStaging())
 {
@@ -104,37 +95,10 @@ else if (app.Environment.IsStaging())
     app.UseSwaggerUI();
 
     app.MapControllers().AllowAnonymous();
-
-    var homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-    var imagesPath = Path.Combine(homeDir, "persistent/images");
-    Directory.CreateDirectory(imagesPath); // creates it if it doesn't exist
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(imagesPath),
-        RequestPath = "/images"
-    });
 }
 else
 {
     app.MapControllers();
-
-    var homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-    var imagesPath = Path.Combine(homeDir, "persistent/images");
-    Directory.CreateDirectory(imagesPath); // creates it if it doesn't exist
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(imagesPath),
-        RequestPath = "/images"
-    });
 }
-
-app.ApplyMigrations();
-
-// Middleware
-app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
-
-// Auth
-// app.UseAuthentication();
-app.UseAuthorization();
 
 app.Run();

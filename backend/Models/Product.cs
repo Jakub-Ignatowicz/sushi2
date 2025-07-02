@@ -18,6 +18,6 @@ public class Product
     public string? Description { get; set; }
     public Guid CategoryId { get; init; }
     public Category Category { get; init; }
-    public List<OrderProduct> OrderProducts { get; init; } = [];
-    public List<ProductItem> Items { get; init; } = [];
+    public ICollection<OrderProduct> OrderProducts { get; init; } = [];
+    public ICollection<ProductItem> Items { get; init; } = [];
 }

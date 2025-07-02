@@ -13,10 +13,10 @@ public class RefreshTokenRepository(SushiContext context) : Repository<RefreshTo
             .Include(rt => rt.ReplacedByToken);
 
 
-    public Task<RefreshToken?> GetByTokenAsync(string token)
+    public Task<RefreshToken?> GetByTokenAsync(string token, CancellationToken cancellationToken)
     {
         return DefaultQuery
             .AsNoTracking()
-            .FirstOrDefaultAsync(rt => rt.Token == token);
+            .FirstOrDefaultAsync(rt => rt.Token == token, cancellationToken);
     }
 }

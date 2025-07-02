@@ -20,76 +20,78 @@ public class UsersController(
     : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<Guid>> CreateUser([FromBody] UserPostDto dto)
+    public async Task<IActionResult> CreateUser([FromBody] UserPostDto dto, CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(dto);
+        await validator.ValidateAndThrowAsync(dto, cancellationToken);
 
-        var id = await userService.AddAsync(dto);
+        var id = await userService.AddAsync(dto, cancellationToken);
         return Ok(id);
     }
 
     [Authorize(Roles = nameof(UserType.Admin))]
     [HttpGet]
-    public async Task<ActionResult<List<UserDto>>> GetUsers()
+    public async Task<IActionResult> GetUsers(CancellationToken cancellationToken)
     {
-        var users = await userService.GetAllAsync();
-        return mapper.Map<List<UserDto>>(users);
+        var users = await userService.GetAllAsync(cancellationToken);
+        return Ok(mapper.Map<List<UserDto>>(users));
     }
 
     [Authorize(Roles = nameof(UserType.Admin))]
     [HttpGet("{userId:guid}")]
-    public async Task<ActionResult<UserDto>> GetUserById(Guid userId)
+    public async Task<IActionResult> GetUserById(Guid userId, CancellationToken cancellationToken)
     {
-        var user = await userService.TryGetByIdAsync(userId);
-        return mapper.Map<UserDto>(user);
+        var user = await userService.TryGetByIdAsync(userId, cancellationToken);
+        return Ok(mapper.Map<UserDto>(user));
     }
 
     [Authorize]
     [SameUserOnly]
     [HttpGet("{userId:guid}/orders")]
-    public async Task<ActionResult<List<OrderDto>>> GetUserOrders(Guid userId)
+    public async Task<IActionResult> GetUserOrders(Guid userId, CancellationToken cancellationToken)
     {
-        var orders = await userService.GetOrdersAsync(userId);
-        return mapper.Map<List<OrderDto>>(orders);
+        var orders = await userService.GetOrdersAsync(userId, cancellationToken);
+        return Ok(mapper.Map<List<OrderDto>>(orders));
     }
 
     [Authorize]
     [SameUserOnly]
     [HttpGet("{userId:guid}/addresses")]
-    public async Task<ActionResult<List<AddressDto>>> GetUserAddresses(Guid userId)
+    public async Task<IActionResult> GetUserAddresses(Guid userId, CancellationToken cancellationToken)
     {
         var addresses = await userService.GetAddressesAsync(userId);
-        return mapper.Map<List<AddressDto>>(addresses);
+        return Ok(mapper.Map<List<AddressDto>>(addresses));
     }
 
     [Authorize]
     [SameUserOnly]
     [HttpPost("{userId:guid}/addresses")]
-    public async Task<ActionResult<Guid>> AddAddress(Guid userId, [FromBody] AddressPostDto dto)
+    public async Task<ActionResult<Guid>> AddAddress(Guid userId, [FromBody] AddressPostDto dto,
+        CancellationToken cancellationToken)
     {
-        await addressValidator.ValidateAndThrowAsync(dto);
+        await addressValidator.ValidateAndThrowAsync(dto, cancellationToken);
 
-        var addressId = await userService.AddAddressAsync(userId, dto);
+        var addressId = await userService.AddAddressAsync(userId, dto, cancellationToken);
         return Ok(addressId);
     }
 
     [Authorize]
     [SameUserOnly]
     [HttpDelete("{userId:guid}/addresses/{addressId:guid}")]
-    public async Task<ActionResult> DeleteAddress(Guid userId, Guid addressId)
+    public async Task<IActionResult> DeleteAddress(Guid userId, Guid addressId, CancellationToken cancellationToken)
     {
-        await userService.DeleteAddressAsync(userId, addressId);
+        await userService.DeleteAddressAsync(userId, addressId, cancellationToken);
         return NoContent();
     }
 
     [Authorize]
     [SameUserOnly]
     [HttpPost("{userId:guid}/password")]
-    public async Task<ActionResult> ChangePassword(Guid userId, [FromBody] UserChangePasswordDto dto)
+    public async Task<IActionResult> ChangePassword(Guid userId, [FromBody] UserChangePasswordDto dto,
+        CancellationToken cancellationToken)
     {
-        await changePasswordValidator.ValidateAndThrowAsync(dto);
+        await changePasswordValidator.ValidateAndThrowAsync(dto, cancellationToken);
 
-        await userService.ChangePasswordAsync(userId, dto);
+        await userService.ChangePasswordAsync(userId, dto, cancellationToken);
         return NoContent();
     }
 }

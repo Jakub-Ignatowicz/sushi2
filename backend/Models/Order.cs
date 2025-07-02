@@ -7,6 +7,9 @@ namespace SushiZume.Models;
 
 public class Order
 {
+    private static readonly decimal PerPersonPrice = 2m; // Example price per person
+    private static readonly decimal DeliveryFee = 8m; // Example delivery fee
+
     public Guid Id { get; init; } = Guid.NewGuid();
     public int PeopleCount { get; set; }
     public OrderPaymentMethod PaymentMethod { get; set; }
@@ -20,5 +23,6 @@ public class Order
     public List<OrderProduct> OrderProducts { get; set; } = [];
     public User User { get; init; }
 
-    public decimal TotalPrice => OrderProducts.Sum(op => op.Product.Price * op.Quantity);
+    public decimal TotalPrice =>
+        OrderProducts.Sum(op => op.Product.Price * op.Quantity) + DeliveryFee + PerPersonPrice * PeopleCount;
 }

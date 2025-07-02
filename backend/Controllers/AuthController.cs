@@ -25,15 +25,16 @@ public class AuthController(
     : ControllerBase
 {
     [HttpPost("register")]
-    public async Task<ActionResult<Guid>> Register([FromBody] UserPostDto dto)
+    public async Task<IActionResult> Register([FromBody] UserPostDto dto, CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(dto);
+        await validator.ValidateAndThrowAsync(dto, cancellationToken);
 
-        var id = await userService.AddAsync(dto);
+        var id = await userService.AddAsync(dto, cancellationToken);
         return Ok(id);
     }
 
-    private async Task<(string, Guid)> IssueTokens(User user, string? ipAddress, string? userAgent)
+    private async Task<(string, Guid)> IssueTokens(User user, string? ipAddress, string? userAgent,
+        CancellationToken cancellationToken)
     {
         var payload = jwtService.GeneratePayload(user);
 
@@ -44,8 +45,8 @@ public class AuthController(
             user.Id
         );
 
-        var tokenId = await refreshTokenService.CreateAsync(refreshTokenPostDto);
-        var createdToken = await refreshTokenService.TryGetByIdAsync(tokenId);
+        var tokenId = await refreshTokenService.CreateAsync(refreshTokenPostDto, cancellationToken);
+        var createdToken = await refreshTokenService.TryGetByIdAsync(tokenId, cancellationToken);
 
         Response.Cookies.Append("refreshToken", createdToken.Token, new CookieOptions
         {
@@ -59,9 +60,9 @@ public class AuthController(
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<TokenDto>> Login([FromBody] UserLoginDto dto)
+    public async Task<IActionResult> Login([FromBody] UserLoginDto dto, CancellationToken cancellationToken)
     {
-        var user = await userService.TryAuthenticate(dto.Email, dto.Password);
+        var user = await userService.TryAuthenticateAsync(dto.Email, dto.Password, cancellationToken);
 
         var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
         var userAgent = Request.Headers.UserAgent.ToString();
@@ -69,7 +70,8 @@ public class AuthController(
         var (token, _) = await IssueTokens(
             user,
             ipAddress,
-            userAgent
+            userAgent,
+            cancellationToken
         );
 
 
@@ -77,29 +79,29 @@ public class AuthController(
     }
 
     [HttpPost("logout")]
-    public async Task<IActionResult> Logout()
+    public async Task<IActionResult> Logout(CancellationToken cancellationToken)
     {
         var refreshToken = Request.Cookies["refreshToken"];
         if (string.IsNullOrEmpty(refreshToken))
             return NoContent();
 
-        var storedToken = await refreshTokenService.TryGetByTokenAsync(refreshToken);
+        var storedToken = await refreshTokenService.TryGetByTokenAsync(refreshToken, cancellationToken);
         if (!storedToken.IsExpired)
             return NoContent();
 
-        await refreshTokenService.MarkAsRevokedAsync(storedToken.Id);
+        await refreshTokenService.MarkAsRevokedAsync(storedToken.Id, cancellationToken);
 
         return NoContent();
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> RefreshToken()
+    public async Task<IActionResult> RefreshToken(CancellationToken cancellationToken)
     {
         var refreshToken = Request.Cookies["refreshToken"];
         if (string.IsNullOrEmpty(refreshToken))
             return Unauthorized("No refresh token provided.");
 
-        var storedToken = await refreshTokenService.TryGetByTokenAsync(refreshToken);
+        var storedToken = await refreshTokenService.TryGetByTokenAsync(refreshToken, cancellationToken);
         if (!storedToken.IsActive)
             return Unauthorized("Refresh token is not active or has been revoked.");
 
@@ -109,50 +111,52 @@ public class AuthController(
         var (token, createdTokenId) = await IssueTokens(
             storedToken.User,
             ipAddress,
-            userAgent
+            userAgent,
+            cancellationToken
         );
 
-        await refreshTokenService.ReplaceAsync(storedToken.Id, createdTokenId);
+        await refreshTokenService.ReplaceAsync(storedToken.Id, createdTokenId, cancellationToken);
 
         return Ok(new { token });
     }
 
     [HttpPost("reset-password/request")]
-    public async Task<IActionResult> RequestPasswordReset([FromBody] UserResetPasswordRequestDto dto)
+    public async Task<IActionResult> RequestPasswordReset([FromBody] UserResetPasswordRequestDto dto,
+        CancellationToken cancellationToken)
     {
-        await userService.GeneratePasswordResetToken(dto.Email);
+        await userService.GeneratePasswordResetToken(dto.Email, cancellationToken);
         return NoContent();
     }
 
     [HttpPost("reset-password/{tokenId:guid}")]
-    public async Task<IActionResult> ResetPassword(Guid tokenId, [FromBody] UserResetPasswordDto dto)
+    public async Task<IActionResult> ResetPassword(Guid tokenId, [FromBody] UserResetPasswordDto dto,
+        CancellationToken cancellationToken)
     {
-        await resetPasswordValidator.ValidateAndThrowAsync(dto);
+        await resetPasswordValidator.ValidateAndThrowAsync(dto, cancellationToken);
 
-        await userService.ResetPasswordAsync(tokenId, dto);
+        await userService.ResetPasswordAsync(tokenId, dto, cancellationToken);
         return NoContent();
     }
 
     [Authorize]
     [SameUserOnly]
     [HttpPost("change-password/{userId:guid}")]
-    public async Task<ActionResult> ChangePassword(Guid userId, [FromBody] UserChangePasswordDto dto)
+    public async Task<IActionResult> ChangePassword(Guid userId, [FromBody] UserChangePasswordDto dto,
+        CancellationToken cancellationToken)
     {
-        await changePasswordValidator.ValidateAndThrowAsync(dto);
+        await changePasswordValidator.ValidateAndThrowAsync(dto, cancellationToken);
 
-        await userService.ChangePasswordAsync(userId, dto);
+        await userService.ChangePasswordAsync(userId, dto, cancellationToken);
         return NoContent();
     }
 
     [Authorize]
     [HttpGet("me")]
-    public async Task<ActionResult<UserDto>> GetCurrentUser()
+    public async Task<IActionResult> GetCurrentUser(CancellationToken cancellationToken)
     {
         var userId = User.RequireUserId();
 
-        // return Problem("123123");
-
-        var user = await userService.TryGetByIdAsync(userId);
-        return mapper.Map<UserDto>(user);
+        var user = await userService.TryGetByIdAsync(userId, cancellationToken);
+        return Ok(mapper.Map<UserDto>(user));
     }
 }

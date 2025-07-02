@@ -4,5 +4,5 @@ namespace SushiZume.Repositories.Interfaces;
 
 public interface IRefreshTokenRepository : IRepository<RefreshToken>
 {
-    Task<RefreshToken?> GetByTokenAsync(string token);
+    Task<RefreshToken?> GetByTokenAsync(string token, CancellationToken cancellationToken = default);
 }

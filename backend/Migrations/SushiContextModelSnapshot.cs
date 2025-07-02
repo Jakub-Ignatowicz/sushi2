@@ -276,36 +276,6 @@ namespace SushiZume.Migrations
                     b.ToTable("products", (string)null);
                 });
 
-            modelBuilder.Entity("SushiZume.Models.ProductItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("gen_random_uuid()");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("product_id");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer")
-                        .HasColumnName("quantity");
-
-                    b.HasKey("Id")
-                        .HasName("pk_product_items");
-
-                    b.HasIndex("ProductId")
-                        .HasDatabaseName("ix_product_items_product_id");
-
-                    b.ToTable("product_items", (string)null);
-                });
-
             modelBuilder.Entity("SushiZume.Models.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -484,19 +454,42 @@ namespace SushiZume.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_products_categories_category_id");
 
+                    b.OwnsMany("SushiZume.Models.ProductItem", "Items", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("description");
+
+                            b1.Property<Guid>("ProductId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("product_id");
+
+                            b1.Property<int>("Quantity")
+                                .HasColumnType("integer")
+                                .HasColumnName("quantity");
+
+                            b1.HasKey("Id")
+                                .HasName("pk_product_item");
+
+                            b1.HasIndex("ProductId")
+                                .HasDatabaseName("ix_product_item_product_id");
+
+                            b1.ToTable("product_item", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId")
+                                .HasConstraintName("fk_product_item_products_product_id");
+                        });
+
                     b.Navigation("Category");
-                });
 
-            modelBuilder.Entity("SushiZume.Models.ProductItem", b =>
-                {
-                    b.HasOne("SushiZume.Models.Product", "Product")
-                        .WithMany("Items")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_product_items_products_product_id");
-
-                    b.Navigation("Product");
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("SushiZume.Models.RefreshToken", b =>
@@ -536,8 +529,6 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.Product", b =>
                 {
-                    b.Navigation("Items");
-
                     b.Navigation("OrderProducts");
                 });
 

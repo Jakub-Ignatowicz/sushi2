@@ -146,19 +146,19 @@ namespace SushiZume.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "product_items",
+                name: "product_item",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
-                    description = table.Column<string>(type: "text", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     quantity = table.Column<int>(type: "integer", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: false),
                     product_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_product_items", x => x.id);
+                    table.PrimaryKey("pk_product_item", x => x.id);
                     table.ForeignKey(
-                        name: "fk_product_items_products_product_id",
+                        name: "fk_product_item_products_product_id",
                         column: x => x.product_id,
                         principalTable: "products",
                         principalColumn: "id",
@@ -252,8 +252,8 @@ namespace SushiZume.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_product_items_product_id",
-                table: "product_items",
+                name: "ix_product_item_product_id",
+                table: "product_item",
                 column: "product_id");
 
             migrationBuilder.CreateIndex(
@@ -283,7 +283,7 @@ namespace SushiZume.Migrations
                 name: "password_reset_tokens");
 
             migrationBuilder.DropTable(
-                name: "product_items");
+                name: "product_item");
 
             migrationBuilder.DropTable(
                 name: "refresh_tokens");

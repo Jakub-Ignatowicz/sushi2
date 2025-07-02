@@ -13,23 +13,17 @@ public class ProductRepository(SushiContext context) : Repository<Product>(conte
             .Include(p => p.Category)
             .Include(p => p.Items);
 
-    public new async Task<List<Product>> GetAllAsync()
+    public Task<List<Product>> GetAllAvailableAsync(CancellationToken cancellationToken)
     {
-        return await DefaultQuery
-            .ToListAsync();
-    }
-
-    public async Task<List<Product>> GetAllAvailableAsync()
-    {
-        return await DefaultQuery
+        return DefaultQuery
             .Where(p => p.IsAvailable)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<List<Product>> GetRangeAsync(List<Guid> productIds)
+    public Task<List<Product>> GetRangeAsync(List<Guid> productIds, CancellationToken cancellationToken)
     {
-        return await DefaultQuery
+        return DefaultQuery
             .Where(p => productIds.Contains(p.Id))
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

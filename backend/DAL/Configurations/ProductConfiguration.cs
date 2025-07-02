@@ -37,14 +37,23 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasOne(p => p.Category)
             .WithMany(c => c.Products)
-            .HasForeignKey(p => p.CategoryId);
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(p => p.OrderProducts)
             .WithOne(op => op.Product)
             .HasForeignKey(op => op.ProductId);
 
-        builder.HasMany(p => p.Items)
-            .WithOne(pi => pi.Product)
-            .HasForeignKey(pi => pi.ProductId);
+        // builder.HasMany(p => p.Items)
+        //     .WithOne(pi => pi.Product)
+        //     .HasForeignKey(pi => pi.ProductId);
+
+        builder.OwnsMany(p => p.Items, items =>
+        {
+            items.WithOwner().HasForeignKey("ProductId");
+            items.HasKey(i => i.Id);
+
+            items.Property(i => i.Description);
+        });
     }
 }

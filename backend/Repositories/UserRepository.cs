@@ -8,10 +8,10 @@ namespace SushiZume.Repositories;
 
 public class UserRepository(SushiContext context) : Repository<User>(context), IUserRepository
 {
-    public Task<User?> GetByEmailAsync(string email)
+    public Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
         return DefaultQuery
             .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Email == email && u.Type == UserType.Regular);
+            .FirstOrDefaultAsync(u => u.Email == email && u.Type == UserType.Regular, cancellationToken);
     }
 }

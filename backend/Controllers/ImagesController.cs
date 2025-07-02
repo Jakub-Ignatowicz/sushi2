@@ -11,7 +11,7 @@ public class ImagesController(IImageService imageService, IProductService produc
 {
     [Authorize(Roles = nameof(UserType.Admin))]
     [HttpPost("upload")]
-    public async Task<IActionResult> UploadImage(IFormFile image)
+    public async Task<IActionResult> UploadImage(IFormFile image, CancellationToken cancellationToken)
     {
         var fileName = await imageService.Upload(image);
         return Ok(fileName);

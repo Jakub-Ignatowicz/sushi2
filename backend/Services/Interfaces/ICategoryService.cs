@@ -4,11 +4,11 @@ namespace SushiZume.Services.Interfaces;
 
 public interface ICategoryService
 {
-    Task<List<Category>> GetAllAsync();
-    Task<List<Category>> GetAllWithProductsAsync();
-    Task<Category> GetByIdAsync(Guid categoryId);
-    Task OrderCategoriesAsync(List<string> categoryIds);
-    Task ChangeNameAsync(Guid categoryId, string name);
-    Task<Guid> CreateAsync(CategoryPostDto dto);
-    Task UpdateAsync(Guid categoryId, CategoryPostDto dto);
+    Task<List<Category>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<List<Category>> GetAllWithProductsAsync(CancellationToken cancellationToken = default);
+    Task<Category> GetByIdAsync(Guid categoryId, CancellationToken cancellationToken = default);
+    Task OrderCategoriesAsync(List<string> categoryIds, CancellationToken cancellationToken = default);
+    Task ChangeNameAsync(Guid categoryId, string name, CancellationToken cancellationToken = default);
+    Task<Guid> CreateAsync(CategoryPostDto dto, CancellationToken cancellationToken = default);
+    Task UpdateAsync(Guid categoryId, CategoryPostDto dto, CancellationToken cancellationToken = default);
 }

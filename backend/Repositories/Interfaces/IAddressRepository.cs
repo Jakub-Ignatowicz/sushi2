@@ -4,5 +4,5 @@ namespace SushiZume.Repositories.Interfaces;
 
 public interface IAddressRepository : IRepository<Address>
 {
-    Task<List<Address>> GetByUserIdAsync(Guid userId);
+    Task<List<Address>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
 }

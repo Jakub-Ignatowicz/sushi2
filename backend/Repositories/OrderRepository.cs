@@ -20,39 +20,33 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
             .Include(o => o.User)
             .OrderByDescending(o => o.CreatedAt);
 
-    public new async Task<List<Order>> GetAllAsync()
+    public Task<List<Order>> GetAllNewAsync(CancellationToken cancellationToken)
     {
-        return await DefaultQuery
-            .ToListAsync();
-    }
-
-    public async Task<List<Order>> GetAllNewAsync()
-    {
-        return await DefaultQuery
+        return DefaultQuery
             .Where(o => o.Status == OrderStatus.Pending)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<List<Order>> GetAllInProgressAsync()
+    public Task<List<Order>> GetAllInProgressAsync(CancellationToken cancellationToken)
     {
-        return await DefaultQuery
+        return DefaultQuery
             .Where(o => o.Status == OrderStatus.Preparing)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<List<Order>> GetWithPaginationAsync(int skip, int pageSize)
+    public async Task<List<Order>> GetWithPaginationAsync(int skip, int pageSize, CancellationToken cancellationToken)
     {
         return await DefaultQuery
             .OrderByDescending(o => o.CreatedAt)
             .Skip(skip)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<List<Order>> GetByUserIdAsync(Guid userId)
+    public async Task<List<Order>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
     {
         return await DefaultQuery
             .Where(o => o.UserId == userId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

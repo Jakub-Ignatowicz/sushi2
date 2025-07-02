@@ -7,10 +7,10 @@ namespace SushiZume.Repositories;
 
 public class AddressRepository(SushiContext context) : Repository<Address>(context), IAddressRepository
 {
-    public async Task<List<Address>> GetByUserIdAsync(Guid userId)
+    public Task<List<Address>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
     {
-        return await DefaultQuery
+        return DefaultQuery
             .Where(a => a.UserId == userId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }
