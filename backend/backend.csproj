@@ -29,13 +29,40 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="wwwroot\images\"/>
         <Content Include="DAL\import.sql">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <None Update=".env">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="wwwroot\images\1dd9cde0-2e95-46cf-b864-ae1a0f4958b5.png"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\30e8992c-b9e5-4ccb-8c3f-6b6e1b30bf97.png"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\375f662a-f373-4c1a-bbbe-62d12023ead3.png"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\3b6b045c-8451-45a5-b3c3-f984a4c4b6b1.png"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\5731011c-a9ce-49bc-8d4e-a823459a0a80.jpg"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\5aa4ec19-0f69-494f-ad0f-1762fbabda58.png"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\707d40d0-9220-4082-ae43-5266a2f2c408.png"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\8b61581b-4c06-4f38-ad0f-a89dc580745f.png"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\92bd08b1-d382-4fae-8651-81aef6907114.png"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\a26656e7-1d4b-4684-aba9-e287be6b2954.png"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\a4314cf1-8791-4f76-8bba-91af91266643.jpeg"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\a6be8aaa-e31f-4386-94f6-cc84a85746c9.png"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\c8854800-69b9-4282-b2b8-47ca42a6fea5.png"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\ea41177a-9ce3-4423-81f3-f9119777f1fc.png"/>
+        <_ContentIncludedByDefault Remove="wwwroot\images\ef6fee43-2bbb-4c20-bd1e-c187945f9fd1.png"/>
+        <_ContentIncludedByDefault Remove="out\web.config" />
+        <_ContentIncludedByDefault Remove="out\appsettings.Development.json" />
+        <_ContentIncludedByDefault Remove="out\appsettings.json" />
+        <_ContentIncludedByDefault Remove="out\backend.deps.json" />
+        <_ContentIncludedByDefault Remove="out\backend.runtimeconfig.json" />
+        <_ContentIncludedByDefault Remove="out\backend.staticwebassets.endpoints.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\" />
     </ItemGroup>
 
 </Project>

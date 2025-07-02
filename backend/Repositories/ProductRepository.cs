@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 
 namespace SushiZume.Repositories;
 
@@ -20,7 +21,7 @@ public class ProductRepository(SushiContext context) : Repository<Product>(conte
             .ToListAsync(cancellationToken);
     }
 
-    public Task<List<Product>> GetRangeAsync(List<Guid> productIds, CancellationToken cancellationToken)
+    public Task<List<Product>> GetRangeAsync(ICollection<Guid> productIds, CancellationToken cancellationToken)
     {
         return DefaultQuery
             .Where(p => productIds.Contains(p.Id))

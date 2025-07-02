@@ -44,16 +44,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .WithOne(op => op.Product)
             .HasForeignKey(op => op.ProductId);
 
-        // builder.HasMany(p => p.Items)
-        //     .WithOne(pi => pi.Product)
-        //     .HasForeignKey(pi => pi.ProductId);
-
-        builder.OwnsMany(p => p.Items, items =>
-        {
-            items.WithOwner().HasForeignKey("ProductId");
-            items.HasKey(i => i.Id);
-
-            items.Property(i => i.Description);
-        });
+        builder.HasMany(p => p.Items)
+            .WithOne(pi => pi.Product)
+            .HasForeignKey(pi => pi.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

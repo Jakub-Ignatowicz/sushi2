@@ -20,7 +20,7 @@ public class Order
     public Guid UserId { get; set; }
 
     public Address Address { get; init; }
-    public List<OrderProduct> OrderProducts { get; set; } = [];
+    public ICollection<OrderProduct> OrderProducts { get; set; } = [];
     public User User { get; init; }
 
     public decimal TotalPrice =>

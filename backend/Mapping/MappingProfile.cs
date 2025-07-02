@@ -26,16 +26,16 @@ public class MappingProfile : Profile
         // Post
         CreateMap<CategoryPostDto, Category>();
         CreateMap<AddressPostDto, Address>();
-        CreateMap<ProductPostDto, Product>();
-        // .ForMember(dest => dest.Items, opt => opt.Ignore())
-        // .AfterMap((src, dest, context) =>
-        // {
-        //     var items = context.Mapper.Map<List<ProductItem>>(src.ProductItems);
-        //     foreach (var item in items)
-        //         item.ProductId = dest.Id;
-        //
-        //     dest.Items.AddRange(items);
-        // });
+        CreateMap<ProductPostDto, Product>()
+            .ForMember(dest => dest.Items, opt => opt.Ignore())
+            .AfterMap((src, dest, context) =>
+            {
+                var items = context.Mapper.Map<List<ProductItem>>(src.ProductItems);
+                foreach (var item in items)
+                    item.ProductId = dest.Id;
+
+                dest.Items.AddRange(items);
+            });
         CreateMap<ProductItemPostDto, ProductItem>();
         CreateMap<OrderPostDto, Order>();
         CreateMap<OrderPostWithAddressDto, Order>();

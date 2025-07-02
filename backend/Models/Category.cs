@@ -10,5 +10,5 @@ public class Category
     public int OrderIndex { get; set; }
     public string? Description { get; set; }
 
-    public List<Product> Products { get; set; } = [];
+    public ICollection<Product> Products { get; set; } = [];
 }

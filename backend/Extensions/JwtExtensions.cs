@@ -26,6 +26,19 @@ public static class JwtExtensions
                     ValidAudience = "sushizume",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            context.Response.Headers.Append("Token-expired", "true");
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
         services.AddAuthorization();

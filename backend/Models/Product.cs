@@ -19,5 +19,5 @@ public class Product
     public Guid CategoryId { get; init; }
     public Category Category { get; init; }
     public ICollection<OrderProduct> OrderProducts { get; init; } = [];
-    public ICollection<ProductItem> Items { get; init; } = [];
+    public ICollection<ProductItem> Items { get; set; } = [];
 }

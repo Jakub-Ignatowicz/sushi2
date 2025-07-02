@@ -12,7 +12,8 @@ namespace SushiZume.Services;
 public class ProductService(
     IProductRepository productRepository,
     IMapper mapper,
-    ICategoryRepository categoryRepo)
+    ICategoryRepository categoryRepo,
+    IProductItemRepository productItemRepository)
     : IProductService
 {
     public async Task<Product> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -33,7 +34,7 @@ public class ProductService(
         return await productRepository.GetAllAvailableAsync(cancellationToken);
     }
 
-    public async Task<List<Product>> GetRangeAsync(List<Guid> productIds, CancellationToken cancellationToken)
+    public async Task<List<Product>> GetRangeAsync(ICollection<Guid> productIds, CancellationToken cancellationToken)
     {
         return await productRepository.GetRangeAsync(productIds, cancellationToken);
     }
@@ -86,7 +87,15 @@ public class ProductService(
     {
         var product = await GetByIdAsync(productId, cancellationToken);
         var productItems = mapper.Map<List<ProductItem>>(dtos);
-        product.Items.AddRange(productItems);
+
+        foreach (var item in productItems)
+        {
+            if (item.ProductId != productId)
+                item.ProductId = productId;
+
+            product.Items.Add(item);
+            productItemRepository.Add(item);
+        }
 
         await productRepository.SaveChangesAsync(cancellationToken);
         return true;
@@ -103,6 +112,7 @@ public class ProductService(
                 product.Items.Remove(item);
         }
 
+        productRepository.Update(product);
         await productRepository.SaveChangesAsync(cancellationToken);
         return true;
     }

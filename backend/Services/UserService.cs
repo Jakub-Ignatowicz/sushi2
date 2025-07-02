@@ -1,6 +1,5 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using SushiZume.Data;
 using SushiZume.DTOs;
 using SushiZume.Enums;
@@ -146,7 +145,7 @@ public class UserService(
 
     public async Task GeneratePasswordResetToken(string email, CancellationToken cancellationToken)
     {
-        var user = await userRepo.GetByEmailAsync(email);
+        var user = await userRepo.GetByEmailAsync(email, cancellationToken);
 
         if (user == null)
             throw new KeyNotFoundException($"User with email {email} not found.");

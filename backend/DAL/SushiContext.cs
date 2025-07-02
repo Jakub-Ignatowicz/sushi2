@@ -13,7 +13,7 @@ public class SushiContext(DbContextOptions<SushiContext> options) : DbContext(op
 
     public DbSet<Product> Products { get; set; }
 
-    // public DbSet<ProductItem> ProductItems { get; set; }
+    public DbSet<ProductItem> ProductItems { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }

@@ -31,6 +31,8 @@ public class Repository<T> : IRepository<T> where T : class
 
     public void Delete(T entity) => _dbSet.Remove(entity);
 
+    public void Add(T entity) => _dbSet.Add(entity);
+
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entries = _context.ChangeTracker.Entries()
