@@ -27,6 +27,7 @@ type CartStateType = {
   addToCart: (item: Product) => void;
   removeFromCart: (productId: string) => void;
   clearCart: () => void;
+  clearCartSilent: () => void;
   areProductsLoaded: boolean;
   total: number;
   cartItems: CartProduct[];
@@ -103,9 +104,13 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const clearCart = () => {
+  const clearCartSilent = () => {
     setCart({});
     setProducts([]);
+  };
+
+  const clearCart = () => {
+    clearCartSilent();
     toast.success("Koszyk został wyczyszczony");
   };
 
@@ -139,6 +144,7 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
     areProductsLoaded,
     addToCart,
     clearCart,
+    clearCartSilent,
     removeFromCart,
     total: getTotal(),
     cartItems: getOrderProducts(),

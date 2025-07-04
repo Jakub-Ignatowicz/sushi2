@@ -1,17 +1,8 @@
 "use client";
 
-import { useCartState } from "@/context/cart-context";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Order, PostOrder, PostUser } from "@/types/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { createUserGuest } from "@/lib/api/users";
-import { createOrder } from "@/lib/api/orders";
-import { withToast } from "@/lib/api";
 import { Textarea } from "@/components/ui/textarea";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -30,8 +21,6 @@ import {
 } from "@/components/ui/form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { priceToString } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
 import { CartCostSummary } from "../cart-cost-summary";
 
 export const DELIVERY_FEE = 8;

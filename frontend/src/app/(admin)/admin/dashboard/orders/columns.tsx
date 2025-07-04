@@ -38,11 +38,11 @@ export const columns: ColumnDef<Order>[] = [
     },
   },
   {
-    accessorKey: "totalPrice",
+    accessorKey: "totalCost",
     header: "Kwota",
     cell: ({ row }) => {
-      const totalPrice = row.getValue("totalPrice") as number;
-      return priceToString(totalPrice);
+      const totalCost = row.getValue("totalCost") as number;
+      return priceToString(totalCost);
     },
   },
   {

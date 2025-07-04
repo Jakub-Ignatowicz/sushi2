@@ -9,7 +9,7 @@ export const getProductsRange = (productIds: string[]) =>
   });
 
 export const updateProduct = (product: Product) =>
-  fetchApi.POST<Product>(`products/${product.id}`, {
+  fetchApi.PUT<Product>(`products/${product.id}`, {
     body: JSON.stringify(product),
   });
 
@@ -19,6 +19,6 @@ export const createProduct = (product: Product) =>
   });
 
 export const featureProduct = (productId: string, featured: boolean) =>
-  fetchApi.POST<Product>(`products/${productId}/featured`, {
+  fetchApi.PATCH<Product>(`products/${productId}/featured`, {
     body: JSON.stringify(featured),
   });

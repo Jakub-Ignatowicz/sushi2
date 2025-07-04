@@ -10,14 +10,14 @@ import {
   categorizeProducts,
   priceToString,
 } from "@/lib/utils";
-import { Order, PostOrder, PostOrderWithAddress } from "@/types/api";
+import { Order, OrderPost } from "@/types/api";
 import { Info, Tag, Trash2 } from "lucide-react";
 import { Control, UseFormReturn, useWatch } from "react-hook-form";
 import { CartFormSchemaType } from "./form";
 import { toast } from "sonner";
 import { useState } from "react";
-import { createUserGuest } from "@/lib/api/users";
-import { createOrder, createOrderWithAddress } from "@/lib/api/orders";
+import { createOrder } from "@/lib/api/orders";
+import { useRouter } from "next/navigation";
 
 type Props = {
   form: UseFormReturn<CartFormSchemaType>;
@@ -33,39 +33,30 @@ const OrderDetailRow = ({ label, value }: { label: string; value: any }) => {
 };
 
 const CartSummaryDialog = ({ form }: Props) => {
-  const { cartItems } = useCartState();
+  const { cartItems, clearCartSilent } = useCartState();
+  const router = useRouter();
 
   const categories = categorizeProducts(cartItems.map((item) => item.product));
   const values = useWatch<CartFormSchemaType>({ control: form.control });
   const [open, setOpen] = useState(false);
 
   const onSubmit = async (data: CartFormSchemaType) => {
-    let userId;
-    try {
-      userId = await createUserGuest({
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-      });
-    } catch (error) {
-      toast.error(
-        "Potwierdzenie zamówienia nie powiodło się. Spróbuj ponownie.",
-      );
-    }
-
     const orderProducts = cartItems.map((item) => ({
       productId: item.product.id,
       quantity: item.quantity,
     }));
 
-    const payload: PostOrderWithAddress = {
-      ...form.getValues(),
-      userId,
+    const payload: OrderPost = {
+      ...data,
       orderProducts,
     } as any;
 
     try {
-      await createOrderWithAddress(payload);
+      await createOrder(payload);
       toast.success("Zamówienie zostało złożone pomyślnie!");
+      clearCartSilent();
+      form.reset();
+      router.push("/");
     } catch (error) {
       console.error("Error creating order:", error);
       toast.error(
