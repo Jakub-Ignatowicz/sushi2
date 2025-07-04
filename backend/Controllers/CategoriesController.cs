@@ -2,13 +2,14 @@ using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using SushiZume.DTOs;
+using SushiZume.Models;
 using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CategoriesController(ICategoryService categoryService, IValidator<CategoryPostDto> validator)
+public class CategoriesController(ICategoryService categoryService)
     : ControllerBase
 {
     [HttpGet]
@@ -29,8 +30,6 @@ public class CategoriesController(ICategoryService categoryService, IValidator<C
     [HttpPost]
     public async Task<IActionResult> CreateCategory([FromBody] CategoryPostDto dto, CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(dto, cancellationToken);
-
         var categoryId = await categoryService.CreateAsync(dto, cancellationToken);
         var category = await categoryService.GetByIdAsync(categoryId, cancellationToken);
         return Ok(category);
@@ -40,8 +39,6 @@ public class CategoriesController(ICategoryService categoryService, IValidator<C
     public async Task<IActionResult> UpdateCategory(Guid categoryId, [FromBody] CategoryPostDto dto,
         CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(dto, cancellationToken);
-
         await categoryService.UpdateAsync(categoryId, dto, cancellationToken);
         return NoContent();
     }

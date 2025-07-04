@@ -12,8 +12,6 @@ public class Address
     public string HomeNumber { get; set; }
     public string? ApartmentNumber { get; set; }
     public int? Floor { get; set; }
-    public Guid UserId { get; set; }
-
-    public User User { get; set; }
-    public ICollection<Order> Orders { get; set; } = [];
+    public Guid OrderId { get; set; }
+    public Order Order { get; init; }
 }

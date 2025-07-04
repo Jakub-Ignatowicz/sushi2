@@ -18,6 +18,5 @@ public interface IProductService
 
     Task<bool> RemoveItemsAsync(Guid productId, List<Guid> itemIds, CancellationToken cancellationToken = default);
     Task SetAvailableAsync(Guid productId, bool available, CancellationToken cancellationToken = default);
-    Task SetVisibleAsync(Guid productId, bool visible, CancellationToken cancellationToken = default);
     Task SetFeaturedAsync(Guid productId, bool featured, CancellationToken cancellationToken = default);
 }

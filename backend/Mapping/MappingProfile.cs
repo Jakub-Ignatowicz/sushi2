@@ -21,7 +21,6 @@ public class MappingProfile : Profile
         CreateMap<Address, AddressDto>().ReverseMap();
         CreateMap<Category, CategoryDto>().ReverseMap();
         CreateMap<Category, CategoryWithProductsDto>().ReverseMap();
-        CreateMap<User, UserDto>().ReverseMap();
 
         // Post
         CreateMap<CategoryPostDto, Category>();
@@ -38,29 +37,25 @@ public class MappingProfile : Profile
             });
         CreateMap<ProductItemPostDto, ProductItem>();
         CreateMap<OrderPostDto, Order>();
-        CreateMap<OrderPostWithAddressDto, Order>();
         CreateMap<OrderProductPostDto, OrderProduct>();
-        CreateMap<UserPostDto_Guest, User>();
-        CreateMap<UserPostDto_Normal, User>();
-        CreateMap<UserPostDto, User>()
-            .ConvertUsing((src, _, context) =>
-            {
-                if (src.Normal is not null)
-                {
-                    var user = context.Mapper.Map<User>(src.Normal);
-                    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(src.Normal.Password);
-                    user.Type = UserType.Regular;
-                    return user;
-                }
-
-                if (src.Guest is not null)
-                {
-                    var guest = context.Mapper.Map<User>(src.Guest);
-                    guest.Type = UserType.Guest;
-                    return guest;
-                }
-
-                throw new ArgumentException("Invalid UserPostDto type");
-            });
+        // .ConvertUsing((src, _, context) =>
+        // {
+        //     if (src.Normal is not null)
+        //     {
+        //         var user = context.Mapper.Map<User>(src.Normal);
+        //         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(src.Normal.Password);
+        //         user.Type = UserType.Regular;
+        //         return user;
+        //     }
+        //
+        //     if (src.Guest is not null)
+        //     {
+        //         var guest = context.Mapper.Map<User>(src.Guest);
+        //         guest.Type = UserType.Guest;
+        //         return guest;
+        //     }
+        //
+        //     throw new ArgumentException("Invalid UserPostDto type");
+        // });
     }
 }

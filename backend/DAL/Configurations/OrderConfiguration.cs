@@ -27,18 +27,13 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .HasConversion<string>()
             .HasDefaultValue(OrderStatus.Pending);
 
-        builder.HasOne(o => o.Address)
-            .WithMany(a => a.Orders)
-            .HasForeignKey(o => o.AddressId)
-            .OnDelete(DeleteBehavior.Restrict);
-
         builder.HasMany(o => o.OrderProducts)
             .WithOne(op => op.Order)
             .HasForeignKey(op => op.OrderId);
 
-        builder.HasOne(o => o.User)
-            .WithMany(u => u.Orders)
-            .HasForeignKey(o => o.UserId)
+        builder.HasOne(o => o.Address)
+            .WithOne(a => a.Order)
+            .HasForeignKey<Address>(a => a.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

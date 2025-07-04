@@ -18,12 +18,10 @@ using SushiZume.Services;
 [Route("api/[controller]")]
 public class OrdersController(
     IOrderService orderService,
-    IUserService userService,
     IMapper mapper,
-    IValidator<OrderPostDto> validator,
-    IValidator<AddressPostDto> addressValidator,
-    IAddressRepository addressRepo,
-    IOrderRepository orderRepo)
+    IValidator<Order> orderValidator,
+    IValidator<Address> addressValidator,
+    IOrderRepository orderRepository)
     : ControllerBase
 {
     [HttpGet]
@@ -37,14 +35,14 @@ public class OrdersController(
     [HttpGet("new")]
     public async Task<IActionResult> GetNewOrders(CancellationToken cancellationToken)
     {
-        var orders = await orderRepo.GetAllNewAsync(cancellationToken);
+        var orders = await orderRepository.GetAllNewAsync(cancellationToken);
         return Ok(mapper.Map<List<OrderDto>>(orders));
     }
 
     [HttpGet("in-progress")]
     public async Task<IActionResult> GetInProgressOrders(CancellationToken cancellationToken)
     {
-        var orders = await orderRepo.GetAllInProgressAsync(cancellationToken);
+        var orders = await orderRepository.GetAllInProgressAsync(cancellationToken);
         return Ok(mapper.Map<List<OrderDto>>(orders));
     }
 
@@ -60,27 +58,7 @@ public class OrdersController(
     [HttpPost]
     public async Task<IActionResult> CreateOrder([FromBody] OrderPostDto dto, CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(dto, cancellationToken);
-
         var order = await orderService.AddAsync(dto, cancellationToken);
-        var created = await orderService.GetByIdAsync(order.Id, cancellationToken);
-        return Ok(mapper.Map<OrderDto>(created));
-    }
-
-    [AllowAnonymous]
-    [HttpPost("with-address")]
-    public async Task<IActionResult> CreateOrderWithAddress([FromBody] OrderPostWithAddressDto dto,
-        CancellationToken cancellationToken)
-    {
-        await addressValidator.ValidateAndThrowAsync(dto.Address, cancellationToken);
-
-        var addressId = await userService.AddAddressAsync(dto.UserId, dto.Address, cancellationToken);
-
-        var orderPostDto = new OrderPostDto(dto.PeopleCount, dto.Notes, dto.PaymentMethod, dto.UserId, addressId,
-            dto.OrderProducts);
-        await validator.ValidateAndThrowAsync(orderPostDto, cancellationToken);
-
-        var order = await orderService.AddAsync(orderPostDto, cancellationToken);
         var created = await orderService.GetByIdAsync(order.Id, cancellationToken);
         return Ok(mapper.Map<OrderDto>(created));
     }

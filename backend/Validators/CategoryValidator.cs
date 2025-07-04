@@ -4,7 +4,7 @@ using SushiZume.Models;
 
 namespace SushiZume.Validators;
 
-public class CategoryValidator : AbstractValidator<CategoryPostDto>
+public class CategoryValidator : AbstractValidator<Category>
 {
     public CategoryValidator()
     {

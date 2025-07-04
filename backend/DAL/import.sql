@@ -9,18 +9,17 @@ from dblink('source_conn',
             'SELECT id, name from "Category"')
          AS source(id text, name text);
 
-INSERT INTO products (id, name, price, is_available, is_visible, image_url, amount, amount_unit,
+INSERT INTO products (id, name, price, is_available, image_url, amount, amount_unit,
                       description, category_id)
-SELECT id,       -- cast id from text to uuid
+SELECT id,             -- cast id from text to uuid
        name,
        price::numeric, -- cast price from integer to numeric
        available,
-       visible,
        imagePath,
        amount,
        amountName,
        description,
-			 categoryId
+       categoryId
 FROM dblink('source_conn',
             'SELECT name, price, available, visible, "imagePath", amount, "amountName", id, description, "categoryId" FROM "Product"'
      ) AS source(
@@ -33,7 +32,7 @@ FROM dblink('source_conn',
                  amountName text,
                  id uuid,
                  description text,
-								 categoryId uuid
+                 categoryId uuid
     );
 
 -- insert into product_categories (product_id, category_id)
@@ -76,15 +75,19 @@ BEGIN
                                   floor integer
                 )
         LOOP
-            new_user_id := gen_random_uuid();
-
-            INSERT INTO users (id, email, phone_number, type)
-            values (new_user_id,
+            insert into orders (id, people_count, total_cost, email, phone_number, payment_method, status, created_at,
+                                notes)
+            values (rec."orderId",
+                    rec."peopleNumber",
+                    -1,
                     rec.email,
                     rec.phone,
-                    'Guest');
+                    rec."paymentMethod",
+                    'Completed',
+                    rec."createdAt",
+                    rec."notesForOrder");
 
-            insert into addresses (id, city, district, street, home_number, apartment_number, floor, user_id)
+            insert into addresses (id, city, district, street, home_number, apartment_number, floor, order_id)
             values (rec."addressId",
                     rec.city,
                     rec.district,
@@ -92,17 +95,7 @@ BEGIN
                     rec."homeNumber",
                     rec."apartmentNumber",
                     rec.floor,
-                    new_user_id);
-
-            insert into orders (id, people_count, payment_method, created_at, notes, address_id, user_id, status)
-            values (rec."orderId",
-                    rec."peopleNumber",
-                    rec."paymentMethod",
-                    rec."createdAt",
-                    rec."notesForOrder",
-                    rec."addressId",
-                    new_user_id,
-                    'Completed');
+                    rec."orderId");
         END LOOP;
 END;
 $$;

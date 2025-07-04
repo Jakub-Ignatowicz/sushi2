@@ -17,9 +17,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.IsAvailable)
             .HasDefaultValue(true);
 
-        builder.Property(p => p.IsVisible)
-            .HasDefaultValue(true);
-
         builder.Property(p => p.IsFeatured)
             .HasDefaultValue(false);
 

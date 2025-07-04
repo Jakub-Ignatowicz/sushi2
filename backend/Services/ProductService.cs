@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 using SushiZume.Data;
@@ -13,7 +14,9 @@ public class ProductService(
     IProductRepository productRepository,
     IMapper mapper,
     ICategoryRepository categoryRepo,
-    IProductItemRepository productItemRepository)
+    IProductItemRepository productItemRepository,
+    IValidator<Product> productValidator,
+    IValidator<ProductItem> productItemValidator)
     : IProductService
 {
     public async Task<Product> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -43,6 +46,8 @@ public class ProductService(
     {
         var product = mapper.Map<Product>(dto);
 
+        await productValidator.ValidateAndThrowAsync(product, cancellationToken);
+
         await productRepository.AddAsync(product, cancellationToken);
         await productRepository.SaveChangesAsync(cancellationToken);
         return product;
@@ -59,7 +64,6 @@ public class ProductService(
         product.Amount = dto.Amount ?? product.Amount;
         product.Description = dto.Description ?? product.Description;
         product.IsAvailable = dto.Available ?? product.IsAvailable;
-        product.IsVisible = dto.Visible ?? product.IsVisible;
 
         if (dto.Items != null)
         {
@@ -77,6 +81,8 @@ public class ProductService(
             }
         }
 
+        await productValidator.ValidateAndThrowAsync(product, cancellationToken);
+
         productRepository.Update(product);
         await productRepository.SaveChangesAsync(cancellationToken);
         return product;
@@ -93,6 +99,7 @@ public class ProductService(
             if (item.ProductId != productId)
                 item.ProductId = productId;
 
+            await productItemValidator.ValidateAndThrowAsync(item, cancellationToken);
             product.Items.Add(item);
             productItemRepository.Add(item);
         }
@@ -121,15 +128,6 @@ public class ProductService(
     {
         var product = await GetByIdAsync(productId, cancellationToken);
         product.IsAvailable = available;
-
-        productRepository.Update(product);
-        await productRepository.SaveChangesAsync(cancellationToken);
-    }
-
-    public async Task SetVisibleAsync(Guid productId, bool visible, CancellationToken cancellationToken)
-    {
-        var product = await GetByIdAsync(productId, cancellationToken);
-        product.IsVisible = visible;
 
         productRepository.Update(product);
         await productRepository.SaveChangesAsync(cancellationToken);

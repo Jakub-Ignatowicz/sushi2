@@ -1,9 +1,10 @@
 using FluentValidation;
 using SushiZume.DTOs;
+using SushiZume.Models;
 
 namespace SushiZume.Validators;
 
-public class OrderValidator : AbstractValidator<OrderPostDto>
+public class OrderValidator : AbstractValidator<Order>
 {
     public OrderValidator()
     {
@@ -16,15 +17,10 @@ public class OrderValidator : AbstractValidator<OrderPostDto>
         RuleFor(x => x.PaymentMethod)
             .IsInEnum().WithMessage("Nieprawidłowa metoda płatności.");
 
-        RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("Identyfikator użytkownika jest wymagany.")
-            .Must(x => x != Guid.Empty).WithMessage("Identyfikator użytkownika nie może być pusty.");
-
-        RuleFor(x => x.AddressId)
-            .NotEmpty().WithMessage("Identyfikator adresu jest wymagany.")
-            .Must(x => x != Guid.Empty).WithMessage("Identyfikator adresu nie może być pusty.");
-
         RuleForEach(x => x.OrderProducts)
             .SetValidator(new OrderProductValidator());
+
+        RuleFor(x => x.Address)
+            .SetValidator(new AddressValidator());
     }
 }

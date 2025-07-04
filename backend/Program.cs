@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 using SushiZume.Data;
 using Microsoft.EntityFrameworkCore;
 using SushiZume.Exceptions;
@@ -12,6 +13,7 @@ using SushiZume.Repositories.Interfaces;
 using SushiZume.Services;
 using SushiZume.Services.Interfaces;
 using Microsoft.Extensions.FileProviders;
+using SushiZume.Models;
 
 const string allowLocalhostOrigins = "_myAllowSpecificOrigins";
 
@@ -26,12 +28,15 @@ builder.Services.AddOpenApi();
 var config = builder.Configuration;
 
 // DB
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+builder.Services.AddIdentityCore<User>()
+    .AddEntityFrameworkStores<SushiContext>()
+    .AddApiEndpoints();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<SushiContext>(options =>
     options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
-
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication().AddCookie();
 
 // Register repositories
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -39,32 +44,21 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductItemRepository, ProductItemRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
 // Register services
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
-builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allowLocalhostOrigins,
         policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
 });
-
-// Controllers
 builder.Services.AddControllers();
-
-// Validation
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
 // Swagger
@@ -102,6 +96,7 @@ else
     app.MapControllers();
 }
 
+app.MapIdentityApi<User>();
 app.UseConfiguredStaticImages(config);
 
 app.Run();

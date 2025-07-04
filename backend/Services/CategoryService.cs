@@ -1,4 +1,6 @@
 using AutoMapper;
+using EFCore.NamingConventions.Internal;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using SushiZume.Data;
 using SushiZume.Models;
@@ -7,7 +9,10 @@ using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Services;
 
-public class CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
+public class CategoryService(
+    ICategoryRepository categoryRepository,
+    IMapper mapper,
+    IValidator<Category> categoryValidator)
     : ICategoryService
 {
     public Task<List<Category>> GetAllAsync(CancellationToken cancellationToken)
@@ -63,6 +68,8 @@ public class CategoryService(ICategoryRepository categoryRepository, IMapper map
         var maxOrderIndex = await categoryRepository.GetMaxIndexOrderValueAsync(cancellationToken);
         category.OrderIndex = maxOrderIndex + 1;
 
+        await categoryValidator.ValidateAndThrowAsync(category, cancellationToken);
+
         await categoryRepository.AddAsync(category, cancellationToken);
         await categoryRepository.SaveChangesAsync(cancellationToken);
         return category.Id;
@@ -77,6 +84,8 @@ public class CategoryService(ICategoryRepository categoryRepository, IMapper map
         {
             category.Description = dto.Description;
         }
+
+        await categoryValidator.ValidateAndThrowAsync(category, cancellationToken);
 
         categoryRepository.Update(category);
         await categoryRepository.SaveChangesAsync(cancellationToken);

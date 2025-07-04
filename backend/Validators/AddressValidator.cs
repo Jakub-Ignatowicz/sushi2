@@ -4,7 +4,7 @@ using SushiZume.Models;
 
 namespace SushiZume.Validators;
 
-public class AddressValidator : AbstractValidator<AddressPostDto>
+public class AddressValidator : AbstractValidator<Address>
 {
     public AddressValidator()
     {

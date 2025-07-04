@@ -1,9 +1,10 @@
 using FluentValidation;
 using SushiZume.DTOs;
+using SushiZume.Models;
 
 namespace SushiZume.Validators;
 
-public class ProductItemValidator : AbstractValidator<ProductItemPostDto>
+public class ProductItemValidator : AbstractValidator<ProductItem>
 {
     public ProductItemValidator()
     {

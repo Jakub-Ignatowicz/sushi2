@@ -10,11 +10,12 @@ public record OrderDto_OrderProductDto(
 public record OrderDto(
     Guid Id,
     int PeopleCount,
+    string Email,
+    string PhoneNumber,
     string Notes,
-    decimal TotalPrice,
+    decimal TotalCost,
     OrderPaymentMethod PaymentMethod,
     OrderStatus Status,
-    UserDto User,
     DateTime CreatedAt,
     AddressDto Address,
     List<OrderDto_OrderProductDto> OrderProducts

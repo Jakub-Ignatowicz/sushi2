@@ -13,12 +13,15 @@ public class AddressConfiguration : IEntityTypeConfiguration<Address>
         builder.Property(a => a.Id)
             .HasDefaultValueSql("gen_random_uuid()");
 
+        builder.Property(a => a.ApartmentNumber)
+            .IsRequired(false);
+
         builder.Property(a => a.Floor)
             .IsRequired(false);
 
-        builder.HasMany(a => a.Orders)
-            .WithOne(o => o.Address)
-            .HasForeignKey(o => o.AddressId)
-            .OnDelete(DeleteBehavior.Restrict);
+        // builder.HasOne(o => o.Address)
+        //     .WithOne(a => a.Order)
+        //     .HasForeignKey<Address>(a => a.OrderId)
+        //     .OnDelete(DeleteBehavior.Cascade);
     }
 }

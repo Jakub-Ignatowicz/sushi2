@@ -10,7 +10,6 @@ public class Product
     public string Name { get; set; }
     public decimal Price { get; set; }
     public bool IsAvailable { get; set; }
-    public bool IsVisible { get; set; }
     public bool IsFeatured { get; set; }
     public string? ImageUrl { get; set; }
     public double? Amount { get; set; }

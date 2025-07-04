@@ -17,7 +17,6 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
             .ThenInclude(op => op.Product)
             .ThenInclude(p => p.Items)
             .Include(p => p.Address)
-            .Include(o => o.User)
             .OrderByDescending(o => o.CreatedAt);
 
     public Task<List<Order>> GetAllNewAsync(CancellationToken cancellationToken)
@@ -40,13 +39,6 @@ public class OrderRepository(SushiContext context) : Repository<Order>(context),
             .OrderByDescending(o => o.CreatedAt)
             .Skip(skip)
             .Take(pageSize)
-            .ToListAsync(cancellationToken);
-    }
-
-    public async Task<List<Order>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
-    {
-        return await DefaultQuery
-            .Where(o => o.UserId == userId)
             .ToListAsync(cancellationToken);
     }
 }
