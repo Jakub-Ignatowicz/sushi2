@@ -17,3 +17,6 @@ export const updateCategoryOrder = async (categories: string[]) =>
 
 export const changeCategoryName = async (id: string, name: string) =>
   fetchApi.PATCH(`/categories/${id}`, { body: JSON.stringify(name) });
+
+export const deleteCategory = async (id: string) =>
+  fetchApi.DELETE(`/categories/${id}`);

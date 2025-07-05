@@ -13,7 +13,6 @@ namespace SushiZume.Services;
 public class ProductService(
     IProductRepository productRepository,
     IMapper mapper,
-    ICategoryRepository categoryRepo,
     IProductItemRepository productItemRepository,
     IValidator<Product> productValidator,
     IValidator<ProductItem> productItemValidator)
@@ -53,17 +52,26 @@ public class ProductService(
         return product;
     }
 
+    public async Task RemoveAsync(Guid productId, CancellationToken cancellationToken)
+    {
+        var product = await GetByIdAsync(productId, cancellationToken);
+        if (product == null)
+            throw new KeyNotFoundException($"Produkt o ID [{productId}] nie został znaleziony.");
+
+        productRepository.Delete(product);
+        await productRepository.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<Product> UpdateAsync(Guid productId, ProductUpdateDto dto, CancellationToken cancellationToken)
     {
         var product = await GetByIdAsync(productId, cancellationToken);
 
-        product.Name = dto.Name ?? product.Name;
-        product.ImageUrl = dto.ImageUrl ?? product.ImageUrl;
-        product.AmountUnit = dto.AmountUnit ?? product.AmountUnit;
-        product.Price = dto.Price ?? product.Price;
-        product.Amount = dto.Amount ?? product.Amount;
-        product.Description = dto.Description ?? product.Description;
-        product.IsAvailable = dto.Available ?? product.IsAvailable;
+        product.Name = dto.Name;
+        product.Price = dto.Price;
+        product.ImageUrl = dto.ImageUrl;
+        product.Amount = dto.Amount;
+        product.AmountUnit = dto.AmountUnit;
+        product.Description = dto.Description;
 
         if (dto.Items != null)
         {

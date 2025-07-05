@@ -6,12 +6,11 @@ using SushiZume.Models;
 namespace SushiZume.DTOs;
 
 public record ProductUpdateDto(
-    string? Name,
+    string Name,
+    decimal Price,
     string? ImageUrl,
-    string? AmountUnit,
-    decimal? Price,
-    string? Description,
     double? Amount,
-    bool? Available,
+    string? AmountUnit,
+    string? Description,
     List<ProductItemPostDto>? Items
 );

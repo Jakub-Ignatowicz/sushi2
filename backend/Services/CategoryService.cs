@@ -90,4 +90,14 @@ public class CategoryService(
         categoryRepository.Update(category);
         await categoryRepository.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task RemoveAsync(Guid categoryId, CancellationToken cancellationToken = default)
+    {
+        var category = await GetByIdAsync(categoryId, cancellationToken);
+        if (category == null)
+            throw new KeyNotFoundException($"Category with ID {categoryId} not found.");
+
+        categoryRepository.Delete(category);
+        await categoryRepository.SaveChangesAsync(cancellationToken);
+    }
 }

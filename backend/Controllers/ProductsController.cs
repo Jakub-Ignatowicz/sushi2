@@ -52,6 +52,13 @@ public class ProductsController(
         return Ok(mapper.Map<ProductDto>(created));
     }
 
+    [HttpDelete("{productId:guid}")]
+    public async Task<IActionResult> DeleteProduct(Guid productId, CancellationToken cancellationToken)
+    {
+        await productService.RemoveAsync(productId, cancellationToken);
+        return Ok();
+    }
+
     [HttpPatch("{productId:guid}/available")]
     public async Task<IActionResult> SetProductAvailable(Guid productId, [FromBody] bool available,
         CancellationToken cancellationToken)

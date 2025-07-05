@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { deleteProduct } from "@/lib/api/products";
 import { Product } from "@/types/api";
 import {
   ChevronRightIcon,
@@ -9,6 +10,7 @@ import {
   Info,
   Trash2,
 } from "lucide-react";
+import { toast } from "sonner";
 
 type Props = {
   product: Product;
@@ -30,7 +32,19 @@ const ProductDeleteDialog = ({ product, categoryId }: Props) => {
           <span className="font-bold">{product.name}</span> należący do
           kategorii <span className="font-bold">{product.category.name}</span>.
         </p>
-        <Button variant="destructive" className="">
+        <Button
+          variant="destructive"
+          className=""
+          onClick={async () => {
+            try {
+              await deleteProduct(product.id);
+              toast.success("Produkt został pomyślnie usunięty.");
+            } catch (error) {
+              console.error("Błąd podczas usuwania produktu:", error);
+              toast.error("Wystąpił błąd podczas usuwania produktu.");
+            }
+          }}
+        >
           Potwierdź usunięcie
         </Button>
       </DialogContent>

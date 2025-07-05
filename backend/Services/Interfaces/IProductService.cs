@@ -10,6 +10,7 @@ public interface IProductService
     Task<List<Product>> GetRangeAsync(ICollection<Guid> productIds, CancellationToken cancellationToken = default);
     Task<Product> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Product> AddAsync(ProductPostDto dto, CancellationToken cancellationToken = default);
+    Task RemoveAsync(Guid productId, CancellationToken cancellationToken = default);
 
     Task<Product> UpdateAsync(Guid productId, ProductUpdateDto dto, CancellationToken cancellationToken = default);
 
