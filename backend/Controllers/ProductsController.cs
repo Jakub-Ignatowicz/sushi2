@@ -26,7 +26,7 @@ public class ProductsController(
         return mapper.Map<List<ProductDto>>(all);
     }
 
-    [HttpGet("range")]
+    [HttpPost("range")]
     public async Task<IActionResult> GetProductsRange([FromBody] List<Guid> productIds,
         CancellationToken cancellationToken)
     {

@@ -14,6 +14,7 @@ using SushiZume.Services;
 using SushiZume.Services.Interfaces;
 using Microsoft.Extensions.FileProviders;
 using SushiZume.Models;
+using SushiZume.Options;
 
 const string allowLocalhostOrigins = "_myAllowSpecificOrigins";
 
@@ -27,12 +28,22 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddOpenApi();
 var config = builder.Configuration;
 
+builder.Services.Configure<JwtOptions>(
+    builder.Configuration.GetSection(JwtOptions.JwtOptionsKey));
+
 // DB
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
-builder.Services.AddIdentityCore<User>()
-    .AddEntityFrameworkStores<SushiContext>()
-    .AddApiEndpoints();
+// builder.Services.AddAuthorization();
+// builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme)
+//     .AddBearerToken(IdentityConstants.BearerScheme);
+builder.Services.AddIdentity<User, IdentityRole<Guid>>(opt =>
+{
+    opt.Password.RequireDigit = true;
+    opt.Password.RequireLowercase = true;
+    opt.Password.RequireNonAlphanumeric = true;
+    opt.Password.RequireUppercase = true;
+    opt.Password.RequiredLength = 8;
+    // opt.User.RequireUniqueEmail = true;
+}).AddEntityFrameworkStores<SushiContext>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<SushiContext>(options =>
@@ -44,11 +55,14 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductItemRepository, ProductItemRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Register services
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -60,6 +74,7 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddControllers();
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
+builder.Services.AddHttpContextAccessor();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -96,7 +111,6 @@ else
     app.MapControllers();
 }
 
-app.MapIdentityApi<User>();
 app.UseConfiguredStaticImages(config);
 
 app.Run();

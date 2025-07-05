@@ -82,7 +82,7 @@ BEGIN
                     -1,
                     rec.email,
                     rec.phone,
-                    rec."paymentMethod",
+                    'Cash',
                     'Completed',
                     rec."createdAt",
                     rec."notesForOrder");

@@ -22,10 +22,11 @@ namespace SushiZume.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -53,7 +54,7 @@ namespace SushiZume.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,9 +71,8 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("claim_value");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
                         .HasColumnName("role_id");
 
                     b.HasKey("Id")
@@ -84,7 +84,7 @@ namespace SushiZume.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -101,9 +101,8 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("claim_value");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
@@ -115,7 +114,7 @@ namespace SushiZume.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text")
@@ -129,9 +128,8 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("provider_display_name");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
                     b.HasKey("LoginProvider", "ProviderKey")
@@ -143,14 +141,14 @@ namespace SushiZume.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("text")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("text")
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
                         .HasColumnName("role_id");
 
                     b.HasKey("UserId", "RoleId")
@@ -162,10 +160,10 @@ namespace SushiZume.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("text")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
                     b.Property<string>("LoginProvider")
@@ -436,8 +434,9 @@ namespace SushiZume.Migrations
 
             modelBuilder.Entity("SushiZume.Models.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<int>("AccessFailedCount")
@@ -488,6 +487,14 @@ namespace SushiZume.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("phone_number_confirmed");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("text")
+                        .HasColumnName("refresh_token");
+
+                    b.Property<DateTime?>("RefreshTokenExpiresAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("refresh_token_expires_at_utc");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text")
                         .HasColumnName("security_stamp");
@@ -514,9 +521,9 @@ namespace SushiZume.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -524,7 +531,7 @@ namespace SushiZume.Migrations
                         .HasConstraintName("fk_asp_net_role_claims_asp_net_roles_role_id");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.HasOne("SushiZume.Models.User", null)
                         .WithMany()
@@ -534,7 +541,7 @@ namespace SushiZume.Migrations
                         .HasConstraintName("fk_asp_net_user_claims_asp_net_users_user_id");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.HasOne("SushiZume.Models.User", null)
                         .WithMany()
@@ -544,9 +551,9 @@ namespace SushiZume.Migrations
                         .HasConstraintName("fk_asp_net_user_logins_asp_net_users_user_id");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -561,7 +568,7 @@ namespace SushiZume.Migrations
                         .HasConstraintName("fk_asp_net_user_roles_asp_net_users_user_id");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.HasOne("SushiZume.Models.User", null)
                         .WithMany()
