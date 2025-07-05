@@ -15,7 +15,7 @@ export default function InProgressOrdersPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await getOrders();
+        const res = await getInProgressOrders();
         setOrders(res);
       } catch (error) {
         toast.error("Błąd pobierania zamówień");

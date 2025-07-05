@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using SushiZume.Repositories.Interfaces;
 using SushiZume.Services;
 
-[Authorize(Roles = nameof(UserType.Admin))]
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class OrdersController(

@@ -1,3 +1,6 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using SushiZume.Services.Interfaces;
@@ -21,6 +24,14 @@ public class AuthController(IAccountService accountService) : ControllerBase
     {
         var refreshToken = Request.Cookies["REFRESH_TOKEN"];
         await accountService.RefreshTokenAsync(refreshToken, cancellationToken);
+        return Ok();
+    }
+
+    [Authorize]
+    [HttpPost("me")]
+    public IActionResult Me(CancellationToken cancellationToken)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         return Ok();
     }
 }

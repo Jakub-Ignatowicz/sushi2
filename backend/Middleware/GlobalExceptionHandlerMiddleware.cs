@@ -48,6 +48,16 @@ public class GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<Glob
 
             await context.Response.WriteAsJsonAsync(problem);
         }
+        catch (UnauthorizedAccessException ex)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsJsonAsync(new ProblemDetails
+            {
+                Status = 401,
+                Title = "Unauthorized",
+                Detail = ex.Message
+            });
+        }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unexpected error");

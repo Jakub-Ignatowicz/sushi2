@@ -29,7 +29,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Items, opt => opt.Ignore())
             .AfterMap((src, dest, context) =>
             {
-                var items = context.Mapper.Map<List<ProductItem>>(src.ProductItems);
+                var items = context.Mapper.Map<List<ProductItem>>(src.Items);
                 foreach (var item in items)
                     item.ProductId = dest.Id;
 

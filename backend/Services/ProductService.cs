@@ -27,19 +27,19 @@ public class ProductService(
         return product;
     }
 
-    public async Task<List<Product>> GetAllAsync(CancellationToken cancellationToken)
+    public Task<List<Product>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await productRepository.GetAllAsync(cancellationToken);
+        return productRepository.GetAllAsync(cancellationToken);
     }
 
-    public async Task<List<Product>> GetAllAvailableAsync(CancellationToken cancellationToken)
+    public Task<List<Product>> GetAllAvailableAsync(CancellationToken cancellationToken)
     {
-        return await productRepository.GetAllAvailableAsync(cancellationToken);
+        return productRepository.GetAllAvailableAsync(cancellationToken);
     }
 
-    public async Task<List<Product>> GetRangeAsync(ICollection<Guid> productIds, CancellationToken cancellationToken)
+    public Task<List<Product>> GetRangeAsync(ICollection<Guid> productIds, CancellationToken cancellationToken)
     {
-        return await productRepository.GetRangeAsync(productIds, cancellationToken);
+        return productRepository.GetRangeAsync(productIds, cancellationToken);
     }
 
     public async Task<Product> AddAsync(ProductPostDto dto, CancellationToken cancellationToken)
@@ -78,6 +78,7 @@ public class ProductService(
                 };
 
                 product.Items.Add(newItem);
+                productItemRepository.Add(newItem);
             }
         }
 

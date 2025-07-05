@@ -43,7 +43,7 @@ const ProductComponent = ({ product, isPreview, isFeatured }: Props) => {
           <div>
             {product.items.map((item) => (
               <div className="flex items-start gap-2" key={item.id}>
-                <p className="font-semibold">{item.number}x</p>
+                <p className="font-semibold">{item.quantity}x</p>
                 <p>{item.description}</p>
               </div>
             ))}

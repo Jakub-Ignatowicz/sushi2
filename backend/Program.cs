@@ -1,10 +1,7 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using SushiZume.Data;
 using Microsoft.EntityFrameworkCore;
-using SushiZume.Exceptions;
 using SushiZume.Extensions;
 using SushiZume.Mapping;
 using SushiZume.Middleware;
@@ -12,7 +9,6 @@ using SushiZume.Repositories;
 using SushiZume.Repositories.Interfaces;
 using SushiZume.Services;
 using SushiZume.Services.Interfaces;
-using Microsoft.Extensions.FileProviders;
 using SushiZume.Models;
 using SushiZume.Options;
 
@@ -32,9 +28,6 @@ builder.Services.Configure<JwtOptions>(
     builder.Configuration.GetSection(JwtOptions.JwtOptionsKey));
 
 // DB
-// builder.Services.AddAuthorization();
-// builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme)
-//     .AddBearerToken(IdentityConstants.BearerScheme);
 builder.Services.AddIdentity<User, IdentityRole<Guid>>(opt =>
 {
     opt.Password.RequireDigit = true;
@@ -64,13 +57,20 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddAuth(config);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allowLocalhostOrigins,
-        policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                .AllowCredentials()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithExposedHeaders("Token-expired");
+        });
 });
 builder.Services.AddControllers();
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
@@ -86,6 +86,9 @@ var app = builder.Build();
 
 app.ApplyMigrations();
 
+app.UseCors(allowLocalhostOrigins);
+
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
@@ -95,8 +98,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    app.UseCors(allowLocalhostOrigins);
-    app.MapControllers().AllowAnonymous();
+    app.MapControllers();
 }
 else if (app.Environment.IsStaging())
 {
@@ -104,7 +106,7 @@ else if (app.Environment.IsStaging())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    app.MapControllers().AllowAnonymous();
+    app.MapControllers();
 }
 else
 {

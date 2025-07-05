@@ -11,7 +11,7 @@ using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Controllers;
 
-[Authorize(Roles = nameof(UserType.Admin))]
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ProductsController(
@@ -20,13 +20,15 @@ public class ProductsController(
 ) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<ProductDto>>> GetProducts(CancellationToken cancellationToken)
+    [AllowAnonymous]
+    public async Task<IActionResult> GetProducts(CancellationToken cancellationToken)
     {
         var all = await productService.GetAllAsync(cancellationToken);
-        return mapper.Map<List<ProductDto>>(all);
+        return Ok(mapper.Map<List<ProductDto>>(all));
     }
 
     [HttpPost("range")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetProductsRange([FromBody] List<Guid> productIds,
         CancellationToken cancellationToken)
     {
@@ -34,7 +36,8 @@ public class ProductsController(
         return Ok(mapper.Map<List<ProductDto>>(ranged));
     }
 
-    [HttpGet("/available")]
+    [HttpGet("available")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAvailableProducts(CancellationToken cancellationToken)
     {
         var all = await productService.GetAllAvailableAsync(cancellationToken);

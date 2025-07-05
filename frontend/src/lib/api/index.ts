@@ -81,8 +81,6 @@ export const fetchApi = {
         ...(await prepareOptions(options)),
       });
 
-      console.log(response);
-
       if (response.status == 401 && !isRetry) {
         const refreshed = await authRefresh();
         if (refreshed) {

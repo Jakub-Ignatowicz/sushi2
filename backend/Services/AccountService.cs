@@ -13,7 +13,8 @@ public class AccountService(
     UserManager<User> userManager,
     ITokenService tokenService,
     IOptions<JwtOptions> jwtOptions,
-    IUserRepository userRepository)
+    IUserRepository userRepository
+)
     : IAccountService
 {
     private readonly JwtOptions _jwtOptions = jwtOptions.Value;
@@ -33,6 +34,12 @@ public class AccountService(
         tokenService.WriteAuthTokenAsHttpOnlyCookie("REFRESH_TOKEN", refreshToken, refreshTokenExpiresAt);
     }
 
+    private void RevokeTokens()
+    {
+        tokenService.DeleteAuthTokenCookie("ACCESS_TOKEN");
+        tokenService.DeleteAuthTokenCookie("REFRESH_TOKEN");
+    }
+
     public async Task LoginAsync(LoginRequest request, CancellationToken cancellationToken)
     {
         var user = await userManager.FindByNameAsync(request.Username);
@@ -48,18 +55,20 @@ public class AccountService(
     {
         if (string.IsNullOrEmpty(refreshToken))
         {
-            throw new InvalidOperationException("Refresh token is required.");
+            throw new UnauthorizedAccessException("Refresh token is required.");
         }
 
         var user = await userRepository.GetByRefreshTokenAsync(refreshToken, cancellationToken);
         if (user == null)
         {
-            throw new InvalidOperationException("Refresh token not associated with any user.");
+            RevokeTokens();
+            throw new UnauthorizedAccessException("Refresh token not associated with any user.");
         }
 
         if (!user.RefreshTokenIsValid)
         {
-            throw new InvalidOperationException("Refresh token is invalid or expired.");
+            RevokeTokens();
+            throw new UnauthorizedAccessException("Refresh token is invalid or expired.");
         }
 
         await IssueTokensAsync(user);

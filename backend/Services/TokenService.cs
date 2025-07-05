@@ -56,9 +56,13 @@ public class TokenService(IOptions<JwtOptions> jwtOptions, IHttpContextAccessor 
             {
                 HttpOnly = true,
                 Expires = expiration,
-                IsEssential = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict
+                SameSite = SameSiteMode.None,
             });
+    }
+
+    public void DeleteAuthTokenCookie(string cookieName)
+    {
+        httpContextAccessor.HttpContext?.Response.Cookies.Delete(cookieName);
     }
 }

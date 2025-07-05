@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Tag } from "lucide-react";
 import { categorizeProducts } from "@/lib/utils";
 import FetchError from "@/components/fetch-error";
+import ProductDialog from "./product-dialog";
 
 const ProductsPage = async () => {
   let products;
@@ -16,7 +17,8 @@ const ProductsPage = async () => {
   const categories = categorizeProducts(products);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mt-32">
+      <ProductDialog />
       {categories.map((cat) => {
         return (
           <div>

@@ -17,7 +17,7 @@ public class ProductRepository(SushiContext context) : Repository<Product>(conte
     public Task<List<Product>> GetAllAvailableAsync(CancellationToken cancellationToken)
     {
         return DefaultQuery
-            .Where(p => p.IsAvailable)
+            .Where(p => p.IsAvailable == true)
             .ToListAsync(cancellationToken);
     }
 

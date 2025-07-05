@@ -14,6 +14,17 @@ export type Product = {
   fakePath?: string; // Used for previewing products without an image
 };
 
+export type ProductPost = {
+  name: string;
+  price: number;
+  imageUrl?: string;
+  amount?: number;
+  amountUnit?: string;
+  description?: string;
+  categoryId: string;
+  items: ProductItem[];
+};
+
 export type CategoryPost = {
   name: string;
   description?: string;
@@ -29,7 +40,7 @@ export type Category = {
 export type ProductItem = {
   id: string;
   description: string;
-  number: number;
+  quantity: number;
 };
 
 export type OrderProduct = {

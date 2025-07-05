@@ -7,42 +7,10 @@ using SushiZume.Options;
 
 namespace SushiZume.Extensions;
 
-public static class JwtExtensions
+public static class AuthExtensions
 {
-    public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration config)
+    public static void AddAuth(this IServiceCollection services, IConfiguration config)
     {
-        var secret = config["Jwt:Secret"]!;
-        //
-        // services.AddAuthentication("Bearer")
-        //     .AddJwtBearer("Bearer", options =>
-        //     {
-        //         options.TokenValidationParameters = new TokenValidationParameters
-        //         {
-        //             ValidateIssuer = true,
-        //             ValidateAudience = true,
-        //             ValidateLifetime = true,
-        //             ValidateIssuerSigningKey = true,
-        //
-        //             ValidIssuer = "sushizume",
-        //             ValidAudience = "sushizume",
-        //             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
-        //         };
-        //
-        //         options.Events = new JwtBearerEvents
-        //         {
-        //             OnAuthenticationFailed = context =>
-        //             {
-        //                 if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-        //                 {
-        //                     context.Response.Headers.Append("Token-expired", "true");
-        //                 }
-        //
-        //                 return Task.CompletedTask;
-        //             }
-        //         };
-        //     });
-        //
-
         services.AddAuthentication(opt =>
         {
             opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -69,6 +37,18 @@ public static class JwtExtensions
                 OnMessageReceived = context =>
                 {
                     context.Token = context.Request.Cookies["ACCESS_TOKEN"];
+                    return Task.CompletedTask;
+                },
+                OnAuthenticationFailed = context =>
+                {
+                    if (context.Exception is SecurityTokenExpiredException)
+                    {
+                        context.Response.Headers.Append("Token-expired", "true");
+                    }
+
+                    context.Response.StatusCode = 401;
+                    context.Response.Cookies.Delete("ACCESS_TOKEN");
+                    context.Response.Cookies.Delete("REFRESH_TOKEN");
                     return Task.CompletedTask;
                 }
             };

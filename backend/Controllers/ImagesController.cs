@@ -6,7 +6,6 @@ using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Controllers;
 
-[Authorize(Roles = nameof(UserType.Admin))]
 [ApiController]
 [Route("api/[controller]")]
 public class ImagesController(IConfiguration config) : ControllerBase

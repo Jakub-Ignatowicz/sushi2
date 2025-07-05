@@ -19,8 +19,8 @@ const CategoriesClient = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       const categories = await getCategories();
+      setOriginalItems([...categories]);
       setItems([...categories].sort((a, b) => a.orderIndex - b.orderIndex));
-      setOriginalItems(categories);
     };
 
     fetchCategories();
@@ -32,7 +32,7 @@ const CategoriesClient = () => {
     const originalIds = originalItems.map((c) => c.id);
     const changed = originalIds.some((id, i) => id !== currentIds[i]);
     setChanged(changed);
-  }, [items]);
+  }, [items, originalItems]);
 
   if (items === null) {
     return <PageLoader />;

@@ -8,7 +8,6 @@ public static class DataInitializer
 {
     public static async Task SeedAsync(SushiContext context)
     {
-        return;
         if (await context.Products.AnyAsync())
             return;
 
