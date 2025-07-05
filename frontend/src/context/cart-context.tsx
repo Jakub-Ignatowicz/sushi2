@@ -50,7 +50,7 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
         setAreProductsLoaded(true);
       } catch (error) {
         setAreProductsLoaded(false);
-        toast.error("Nie udało się pobrać produktów");
+        toast.error("Nie udało się pobrać produktów w koszyku.");
       }
     };
 
@@ -111,7 +111,7 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = () => {
     clearCartSilent();
-    toast.success("Koszyk został wyczyszczony");
+    toast.info("Koszyk został wyczyszczony");
   };
 
   const getOrderProducts = () => {

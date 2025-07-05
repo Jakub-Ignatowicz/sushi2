@@ -1,7 +1,9 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { authMe } from "@/lib/api/auth";
+import { toast } from "sonner";
 
 const AuthContext = createContext<{ loggedIn: boolean }>({ loggedIn: false });
 
@@ -9,12 +11,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   const user = localStorage.getItem("user"); // or token/cookie/etc.
-  //   if (user) setLoggedIn(true);
-  //   else router.push("/admin");
-  // }, []);
-  // console.log("AuthProvider rendered, loggedIn:", loggedIn);
+  useEffect(() => {
+    const fetchMe = async () => {
+      try {
+        await authMe();
+        setLoggedIn(true);
+      } catch (error) {
+        toast.error(
+          "Nie masz uprawnień do tej strony. Zaloguj się jako administrator.",
+        );
+        router.push("/admin");
+      }
+    };
+
+    fetchMe();
+  }, []);
+
+  if (!loggedIn) {
+    return null;
+  }
 
   return (
     <AuthContext.Provider value={{ loggedIn }}>

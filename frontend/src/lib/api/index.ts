@@ -68,6 +68,7 @@ export const fetchApi = {
 
       const response = await fetch(url, {
         method: requestType,
+        credentials: "include",
         ...prepareOptions(options),
       });
 

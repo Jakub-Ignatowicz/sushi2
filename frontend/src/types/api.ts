@@ -75,6 +75,11 @@ export function orderStatusToString(status: OrderStatus): string {
   }
 }
 
+export type AuthResponse = {
+  accessToken: string;
+  refreshToken: string;
+};
+
 export type Order = {
   id: string;
   email: string;
