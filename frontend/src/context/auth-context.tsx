@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { authMe } from "@/lib/api/auth";
 import { toast } from "sonner";
+import PageLoader from "@/components/page-loader";
 
 const AuthContext = createContext<{ loggedIn: boolean }>({ loggedIn: false });
 
@@ -28,7 +29,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   if (!loggedIn) {
-    return null;
+    return <PageLoader />;
   }
 
   return (

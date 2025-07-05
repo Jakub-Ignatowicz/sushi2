@@ -1,17 +1,33 @@
 "use client";
 
 import LabelInput from "@/components/label-input";
+import PageLoader from "@/components/page-loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { authLogin } from "@/lib/api/auth";
+import { authLogin, authMe } from "@/lib/api/auth";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const AdminPage = () => {
+  const [showForm, setShowForm] = useState(false);
   const router = useRouter();
   const { register, handleSubmit } = useForm();
+
+  useEffect(() => {
+    const fetchMe = async () => {
+      try {
+        await authMe();
+        router.push("/admin/dashboard/orders/new");
+      } catch (error) {
+        setShowForm(true);
+      }
+    };
+
+    fetchMe();
+  }, []);
 
   const onSubmit = async (data: any) => {
     try {
@@ -21,6 +37,10 @@ const AdminPage = () => {
       toast.error("Błąd logowania. Sprawdź dane i spróbuj ponownie.");
     }
   };
+
+  if (!showForm) {
+    return <PageLoader />;
+  }
 
   return (
     <div className="flex w-full h-full flex-col items-center justify-center">

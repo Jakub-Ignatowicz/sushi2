@@ -1,5 +1,4 @@
-import { API_URL, fetchApi } from ".";
-import { env } from "next-runtime-env";
+import { API_URL } from ".";
 
 export const uploadImage = async (file: File): Promise<string> => {
   const formData = new FormData();

@@ -1,19 +1,15 @@
-import ProductComponent from "@/app/(main)/order/product";
+import ProductComponent from "@/app/(main)/(box)/order/product";
 import LabelFile from "@/components/label-file";
 import LabelInput from "@/components/label-input";
 import LabelTextarea from "@/components/label-textarea";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { uploadImage } from "@/lib/api/images";
-import { createProduct, updateProduct } from "@/lib/api/products";
 import { Product } from "@/types/api";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 type Props = {
   product: Product;

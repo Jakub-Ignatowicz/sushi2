@@ -1,10 +1,10 @@
-import { getProducts } from "@/lib/api/products";
 import { Product } from "@/types/api";
 import ProductComponent from "./product";
 import { categorizeProducts, cn, FEATURED_CATEGORY_ID } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Star, Tag } from "lucide-react";
 import FetchError from "@/components/fetch-error";
+import { getProducts } from "@/lib/api/products";
 
 export default async function OrderPage() {
   let products;

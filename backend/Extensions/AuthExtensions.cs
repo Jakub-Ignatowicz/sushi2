@@ -73,7 +73,6 @@ public static class JwtExtensions
                 }
             };
         });
-
         services.AddAuthorization();
     }
 }
