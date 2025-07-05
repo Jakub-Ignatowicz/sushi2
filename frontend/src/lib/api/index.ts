@@ -58,7 +58,7 @@ const prepareOptions = async (options?: RequestInit): Promise<RequestInit> => {
   return newOptions;
 };
 
-type RequestMethod = "GET" | "POST" | "PATCH" | "PUT";
+type RequestMethod = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
 export const fetchApi = {
   request: async <T>(
@@ -108,6 +108,8 @@ export const fetchApi = {
     fetchApi.request<T>(endpoint, "PATCH", options),
   PUT: <T>(endpoint: string, options?: RequestInit) =>
     fetchApi.request<T>(endpoint, "PUT", options),
+  DELETE: <T>(endpoint: string, options?: RequestInit) =>
+    fetchApi.request<T>(endpoint, "DELETE", options),
 };
 
 // decorator pattern

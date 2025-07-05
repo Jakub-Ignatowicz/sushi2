@@ -3,6 +3,6 @@ using SushiZume.Models;
 namespace SushiZume.DTOs;
 
 public record ProductItemPostDto(
-    string? Description,
+    string Description,
     int Quantity
 );

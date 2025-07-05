@@ -65,11 +65,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: allowLocalhostOrigins,
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000")
+            policy.WithOrigins(["http://localhost:3000", "http://frontend"])
                 .AllowCredentials()
                 .AllowAnyHeader()
-                .AllowAnyMethod()
-                .WithExposedHeaders("Token-expired");
+                .AllowAnyMethod();
         });
 });
 builder.Services.AddControllers();
@@ -92,15 +91,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
-    app.MapControllers();
-}
-else if (app.Environment.IsStaging())
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.MapOpenApi();
     app.UseSwagger();

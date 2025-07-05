@@ -21,6 +21,9 @@ export const createProduct = (product: Product) =>
     body: JSON.stringify(product),
   });
 
+export const deleteProduct = (productId: string) =>
+  fetchApi.DELETE(`products/${productId}`);
+
 export const featureProduct = (productId: string, featured: boolean) =>
   fetchApi.PATCH<Product>(`products/${productId}/featured`, {
     body: JSON.stringify(featured),

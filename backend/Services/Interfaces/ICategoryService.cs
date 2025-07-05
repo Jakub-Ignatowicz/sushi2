@@ -11,4 +11,5 @@ public interface ICategoryService
     Task ChangeNameAsync(Guid categoryId, string name, CancellationToken cancellationToken = default);
     Task<Guid> CreateAsync(CategoryPostDto dto, CancellationToken cancellationToken = default);
     Task UpdateAsync(Guid categoryId, CategoryPostDto dto, CancellationToken cancellationToken = default);
+    Task RemoveAsync(Guid categoryId, CancellationToken cancellationToken = default);
 }

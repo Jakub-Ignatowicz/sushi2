@@ -1,3 +1,7 @@
 backend.Tests/
 .env*
 .idea/
+<<<<<<< HEAD
+SushiZume.sln.DotSettings.user
+=======
+>>>>>>> 4bc6a11 (gitignore)

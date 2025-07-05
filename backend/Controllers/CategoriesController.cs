@@ -35,6 +35,13 @@ public class CategoriesController(ICategoryService categoryService)
         return Ok(category);
     }
 
+    [HttpDelete("{categoryId:guid}")]
+    public async Task<IActionResult> DeleteCategory(Guid categoryId, CancellationToken cancellationToken)
+    {
+        await categoryService.RemoveAsync(categoryId, cancellationToken);
+        return Ok();
+    }
+    
     [HttpPut("{categoryId:guid}")]
     public async Task<IActionResult> UpdateCategory(Guid categoryId, [FromBody] CategoryPostDto dto,
         CancellationToken cancellationToken)
