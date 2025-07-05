@@ -5,8 +5,9 @@ import { motion } from "framer-motion";
 
 export default function HeroImage() {
   return (
-    <div className="z-[-10]">
-      <div className="hidden xl:inline">
+    <>
+      {/* Desktop animation */}
+      <div className="hidden xl:inline pointer-events-none -z-999">
         <motion.div
           initial={{ x: "100%" }}
           animate={{ x: "40%" }}
@@ -15,7 +16,7 @@ export default function HeroImage() {
             delay: 0.1,
             ease: [0.25, 0.8, 0.25, 1],
           }}
-          className="absolute right-0 top-0 hidden xl:flex"
+          className="absolute right-0 top-1/2 -translate-y-1/2 hidden xl:flex"
         >
           <motion.div
             animate={{ rotate: 360 }}
@@ -24,7 +25,7 @@ export default function HeroImage() {
               duration: 240,
               ease: "linear",
             }}
-            className="w-[850px] h-[850px]"
+            className="w-[800px] h-[800px]"
           >
             <Image src={"/icon.svg"} fill alt="logo" />
           </motion.div>
@@ -38,7 +39,7 @@ export default function HeroImage() {
             delay: 0.3,
             ease: [0.25, 0.8, 0.25, 1],
           }}
-          className="absolute right-0 top-0 hidden xl:flex"
+          className="absolute right-0 top-1/2 -translate-y-1/2 hidden xl:flex"
         >
           <motion.div
             animate={{
@@ -49,7 +50,7 @@ export default function HeroImage() {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="w-[850px] h-[850px]"
+            className="w-[800px] h-[800px]"
           >
             <Image
               src={"/chopsticks.webp"}
@@ -61,8 +62,9 @@ export default function HeroImage() {
         </motion.div>
       </div>
 
+      {/* Mobile animation */}
       <motion.div
-        className="absolute left-1/2 top-1/4 -translate-x-1/2 -translate-y-1/4  xl:hidden "
+        className="absolute -z-999 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2  xl:hidden"
         initial={{ y: "200%" }}
         animate={{ y: "0%" }}
         transition={{
@@ -83,6 +85,6 @@ export default function HeroImage() {
           <Image src="/icon.svg" width={500} height={500} alt="logo" />
         </motion.div>
       </motion.div>
-    </div>
+    </>
   );
 }

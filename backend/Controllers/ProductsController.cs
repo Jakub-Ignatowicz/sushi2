@@ -11,98 +11,84 @@ using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ProductsController(
     IProductService productService,
-    IMapper mapper,
-    IValidator<ProductItemPostDto> productItemValidator,
-    IValidator<ProductUpdateDto> productUpdateValidator,
-    IValidator<ProductPostDto> validator
+    IMapper mapper
 ) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<ProductDto>>> GetProducts()
+    [AllowAnonymous]
+    public async Task<IActionResult> GetProducts(CancellationToken cancellationToken)
     {
-        var all = await productService.GetAllAsync();
-        return mapper.Map<List<ProductDto>>(all);
+        var all = await productService.GetAllAsync(cancellationToken);
+        return Ok(mapper.Map<List<ProductDto>>(all));
     }
 
     [HttpPost("range")]
-    public async Task<IActionResult> GetProductsRange([FromBody] List<Guid> productIds)
+    [AllowAnonymous]
+    public async Task<IActionResult> GetProductsRange([FromBody] List<Guid> productIds,
+        CancellationToken cancellationToken)
     {
-        var ranged = await productService.GetRangeAsync(productIds);
+        var ranged = await productService.GetRangeAsync(productIds, cancellationToken);
         return Ok(mapper.Map<List<ProductDto>>(ranged));
     }
 
-    [Authorize(Roles = nameof(UserType.Admin))]
-    [HttpGet("/available")]
-    public async Task<ActionResult<List<ProductDto>>> GetAvailableProducts()
+    [HttpGet("available")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAvailableProducts(CancellationToken cancellationToken)
     {
-        var all = await productService.GetAllAvailableAsync();
-        return mapper.Map<List<ProductDto>>(all);
+        var all = await productService.GetAllAvailableAsync(cancellationToken);
+        return Ok(mapper.Map<List<ProductDto>>(all));
     }
 
-    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpPost]
-    public async Task<ActionResult<ProductDto>> CreateProduct(ProductPostDto dto)
+    public async Task<IActionResult> CreateProduct(ProductPostDto dto, CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(dto);
-
-        var product = await productService.AddAsync(dto);
-        var created = await productService.GetByIdAsync(product.Id);
-        return mapper.Map<ProductDto>(created);
+        var product = await productService.AddAsync(dto, cancellationToken);
+        var created = await productService.GetByIdAsync(product.Id, cancellationToken);
+        return Ok(mapper.Map<ProductDto>(created));
     }
 
-    [Authorize(Roles = nameof(UserType.Admin))]
-    [HttpPost("{productId:guid}/available")]
-    public async Task<IActionResult> SetProductAvailable(Guid productId, [FromBody] bool available)
+    [HttpPatch("{productId:guid}/available")]
+    public async Task<IActionResult> SetProductAvailable(Guid productId, [FromBody] bool available,
+        CancellationToken cancellationToken)
     {
-        await productService.SetAvailableAsync(productId, available);
+        await productService.SetAvailableAsync(productId, available, cancellationToken);
         return NoContent();
     }
 
-    [Authorize(Roles = nameof(UserType.Admin))]
-    [HttpPost("{productId:guid}/visible")]
-    public async Task<IActionResult> SetProductVisible(Guid productId, [FromBody] bool visible)
+    [HttpPatch("{productId:guid}/featured")]
+    public async Task<IActionResult> SetProductFeatured(Guid productId, [FromBody] bool featured,
+        CancellationToken cancellationToken)
     {
-        await productService.SetVisibleAsync(productId, visible);
+        await productService.SetFeaturedAsync(productId, featured, cancellationToken);
         return NoContent();
     }
 
-    [Authorize(Roles = nameof(UserType.Admin))]
-    [HttpPost("{productId:guid}/featured")]
-    public async Task<IActionResult> SetProductFeatured(Guid productId, [FromBody] bool featured)
+    [HttpPut("{productId:guid}")]
+    public async Task<IActionResult> UpdateProduct(Guid productId, [FromBody] ProductUpdateDto dto,
+        CancellationToken cancellationToken)
     {
-        await productService.SetFeaturedAsync(productId, featured);
-        return NoContent();
+        var product = await productService.UpdateAsync(productId, dto, cancellationToken);
+        return Ok(mapper.Map<ProductDto>(product));
     }
 
-    [Authorize(Roles = nameof(UserType.Admin))]
-    [HttpPost("{productId:guid}")]
-    public async Task<ActionResult<ProductDto>> UpdateProduct(Guid productId, [FromBody] ProductUpdateDto dto)
-    {
-        await productUpdateValidator.ValidateAndThrowAsync(dto);
-
-        var product = await productService.UpdateAsync(productId, dto);
-        return mapper.Map<ProductDto>(product);
-    }
-
-    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpPost("{productId:guid}/items")]
-    public async Task<ActionResult> AddProductItems(Guid productId, [FromBody] List<ProductItemPostDto> dtos)
+    public async Task<IActionResult> AddProductItems(Guid productId, [FromBody] List<ProductItemPostDto> dtos,
+        CancellationToken cancellationToken)
     {
-        await Task.WhenAll(dtos.Select(dto => productItemValidator.ValidateAndThrowAsync(dto)));
-
-        await productService.AddItemsAsync(productId, dtos);
+        await productService.AddItemsAsync(productId, dtos, cancellationToken);
         return NoContent();
     }
 
-    [Authorize(Roles = nameof(UserType.Admin))]
     [HttpDelete("{productId:guid}/items")]
-    public async Task<ActionResult> RemoveProductItems(Guid productId, [FromBody] List<Guid> itemIds)
+    public async Task<IActionResult> RemoveProductItems(Guid productId, [FromBody] List<Guid> itemIds,
+        CancellationToken cancellationToken)
     {
-        await productService.RemoveItemsAsync(productId, itemIds);
+        await productService.RemoveItemsAsync(productId, itemIds, cancellationToken);
         return NoContent();
     }
 }

@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/context/auth-context";
 import AdminDashboardSidePanel from "./side-panel";
 
 type Props = {
@@ -6,10 +7,12 @@ type Props = {
 
 const AdminDashboardLayoutPage = ({ children }: Props) => {
   return (
-    <div className="flex min-h-screen">
-      <AdminDashboardSidePanel />
-      <div className="my-2 mx-auto w-[50%] px-2">{children}</div>
-    </div>
+    <AuthProvider>
+      <div className="flex min-h-screen">
+        <AdminDashboardSidePanel />
+        <div className="my-2 mx-auto w-[50%] px-2">{children}</div>
+      </div>
+    </AuthProvider>
   );
 };
 

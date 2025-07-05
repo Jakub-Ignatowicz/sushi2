@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 
 namespace SushiZume.Repositories;
 
@@ -13,23 +14,17 @@ public class ProductRepository(SushiContext context) : Repository<Product>(conte
             .Include(p => p.Category)
             .Include(p => p.Items);
 
-    public new async Task<List<Product>> GetAllAsync()
+    public Task<List<Product>> GetAllAvailableAsync(CancellationToken cancellationToken)
     {
-        return await DefaultQuery
-            .ToListAsync();
+        return DefaultQuery
+            .Where(p => p.IsAvailable == true)
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<List<Product>> GetAllAvailableAsync()
+    public Task<List<Product>> GetRangeAsync(ICollection<Guid> productIds, CancellationToken cancellationToken)
     {
-        return await DefaultQuery
-            .Where(p => p.IsAvailable)
-            .ToListAsync();
-    }
-
-    public async Task<List<Product>> GetRangeAsync(List<Guid> productIds)
-    {
-        return await DefaultQuery
+        return DefaultQuery
             .Where(p => productIds.Contains(p.Id))
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

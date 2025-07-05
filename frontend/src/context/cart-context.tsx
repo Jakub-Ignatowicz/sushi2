@@ -1,7 +1,7 @@
 "use client";
 
 import { getProductsRange } from "@/lib/api/products";
-import { OrderProduct, Product } from "@/types/api";
+import { Product } from "@/types/api";
 import {
   createContext,
   useContext,
@@ -27,6 +27,7 @@ type CartStateType = {
   addToCart: (item: Product) => void;
   removeFromCart: (productId: string) => void;
   clearCart: () => void;
+  clearCartSilent: () => void;
   areProductsLoaded: boolean;
   total: number;
   cartItems: CartProduct[];
@@ -49,7 +50,7 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
         setAreProductsLoaded(true);
       } catch (error) {
         setAreProductsLoaded(false);
-        toast.error("Nie udało się pobrać produktów");
+        toast.error("Nie udało się pobrać produktów w koszyku.");
       }
     };
 
@@ -103,10 +104,14 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const clearCart = () => {
+  const clearCartSilent = () => {
     setCart({});
     setProducts([]);
-    toast.success("Koszyk został wyczyszczony");
+  };
+
+  const clearCart = () => {
+    clearCartSilent();
+    toast.info("Koszyk został wyczyszczony");
   };
 
   const getOrderProducts = () => {
@@ -139,6 +144,7 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
     areProductsLoaded,
     addToCart,
     clearCart,
+    clearCartSilent,
     removeFromCart,
     total: getTotal(),
     cartItems: getOrderProducts(),

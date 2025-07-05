@@ -4,18 +4,12 @@ import FetchError from "@/components/fetch-error";
 import CategoryActionPanel from "./action-panel";
 
 const CategoriesPage = async () => {
-  try {
-    const categories = await getCategories();
-
-    return (
-      <div className="space-y-4">
-        <CategoryActionPanel />
-        <CategoriesClient categories={categories} />
-      </div>
-    );
-  } catch (error: any) {
-    return <FetchError error={error} />;
-  }
+  return (
+    <div className="space-y-4">
+      <CategoryActionPanel />
+      <CategoriesClient />
+    </div>
+  );
 };
 
 export default CategoriesPage;

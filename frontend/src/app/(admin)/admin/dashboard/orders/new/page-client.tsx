@@ -7,13 +7,10 @@ import { formatDate } from "@/lib/utils";
 import { PackageX } from "lucide-react";
 import { OrdersTable } from "../data-table";
 import { columns } from "../columns";
+import PageLoader from "@/components/page-loader";
 
-type Props = {
-  orders: OrderType[];
-};
-
-const OrdersClientPage = ({ orders: initOrders }: Props) => {
-  const [orders, setOrders] = useState<OrderType[]>(initOrders);
+const OrdersClientPage = () => {
+  const [orders, setOrders] = useState<OrderType[] | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [isLive, setIsLive] = useState<boolean>(true);
 
@@ -33,6 +30,10 @@ const OrdersClientPage = ({ orders: initOrders }: Props) => {
     const interval = setInterval(fetchOrders, 5_000);
     return () => clearInterval(interval);
   }, []);
+
+  if (orders === null) {
+    return <PageLoader />;
+  }
 
   return (
     <div className="flex flex-col gap-4 w-full">

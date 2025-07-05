@@ -4,5 +4,6 @@ namespace SushiZume.Repositories.Interfaces;
 
 public interface ICategoryRepository : IRepository<Category>
 {
-    Task<List<Category>> GetAllWithProductsAsync();
+    Task<List<Category>> GetAllWithProductsAsync(CancellationToken cancellationToken = default);
+    Task<int> GetMaxIndexOrderValueAsync(CancellationToken cancellationToken = default);
 }

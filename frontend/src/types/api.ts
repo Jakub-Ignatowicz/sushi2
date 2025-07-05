@@ -4,6 +4,7 @@ export type Product = {
   price: number;
   imageUrl?: string;
   isFeatured?: boolean;
+  isAvailable?: boolean;
   amount?: number;
   amountUnit?: string;
   description?: string;
@@ -11,6 +12,17 @@ export type Product = {
   category: Category;
   items: ProductItem[];
   fakePath?: string; // Used for previewing products without an image
+};
+
+export type ProductPost = {
+  name: string;
+  price: number;
+  imageUrl?: string;
+  amount?: number;
+  amountUnit?: string;
+  description?: string;
+  categoryId: string;
+  items: ProductItem[];
 };
 
 export type CategoryPost = {
@@ -28,7 +40,7 @@ export type Category = {
 export type ProductItem = {
   id: string;
   description: string;
-  number: number;
+  quantity: number;
 };
 
 export type OrderProduct = {
@@ -74,34 +86,32 @@ export function orderStatusToString(status: OrderStatus): string {
   }
 }
 
+export type AuthResponse = {
+  accessToken: string;
+  refreshToken: string;
+};
+
 export type Order = {
   id: string;
+  email: string;
+  phoneNumber: string;
   address: Address;
   peopleCount: number;
   notes: string;
   createdAt: Date;
   orderProducts: OrderProduct[];
-  totalPrice: number;
+  totalCost: number;
   paymentMethod: PaymentMethod;
   status: OrderStatus;
-  user: User;
 };
 
-export type PostOrder = {
+export type OrderPost = {
   peopleCount: number;
+  email: string;
+  phoneNumber: string;
   notes: string;
   paymentMethod: number;
-  addressId: string;
-  userId: string;
-  orderProducts: { productId: string; quantity: number }[];
-};
-
-export type PostOrderWithAddress = {
-  peopleCount: number;
-  notes: string;
-  paymentMethod: number;
-  address: PostAddress;
-  userId: string;
+  address: AddressPost;
   orderProducts: { productId: string; quantity: number }[];
 };
 
@@ -115,39 +125,13 @@ export type Address = {
   floor?: number | null;
 };
 
-export type PostAddress = {
+export type AddressPost = {
   city: string;
   district: string;
   street: string;
   homeNumber: string;
-  apartmentNumber: string;
+  apartmentNumber: string | null;
   floor: number | null;
-};
-
-export type User = {
-  id: string;
-  email?: string | null;
-  phoneNumber?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  fullName?: string | null;
-  createdAt: Date;
-  type: "Admin" | "Regular" | "Guest";
-};
-
-export type PostUser = {
-  normal?: {
-    password: string;
-    confirmPassword: string;
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    email: string;
-  };
-  guest?: {
-    phoneNumber: string;
-    email: string;
-  };
 };
 
 export type ErrorResponse = {

@@ -1,13 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { addressToString, formatDate, priceToString } from "@/lib/utils";
 import { Address, Order } from "@/types/api";
 import { ColumnDef } from "@tanstack/react-table";
 import OrderStatus from "./order-status";
-import CartDialog from "@/app/(main)/cart/cart-dialog";
-import OrderDialog from "./dialog";
-import { Check } from "lucide-react";
 import OrderActions from "./order-actions";
 
 // This type is used to define the shape of our data.
@@ -38,11 +34,11 @@ export const columns: ColumnDef<Order>[] = [
     },
   },
   {
-    accessorKey: "totalPrice",
+    accessorKey: "totalCost",
     header: "Kwota",
     cell: ({ row }) => {
-      const totalPrice = row.getValue("totalPrice") as number;
-      return priceToString(totalPrice);
+      const totalCost = row.getValue("totalCost") as number;
+      return priceToString(totalCost);
     },
   },
   {

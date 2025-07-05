@@ -9,7 +9,6 @@ public record ProductDto(
     string? AmountUnit,
     bool IsFeatured,
     bool IsAvailable,
-    bool IsVisible,
     decimal Price,
     double? Amount,
     string? Description,

@@ -6,27 +6,37 @@ import { Info, RefreshCw, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import DraggableCategoryList from "./draggable";
 import { Category, Product } from "@/types/api";
-import { updateCategoryOrder } from "@/lib/api/categories";
+import { getCategories, updateCategoryOrder } from "@/lib/api/categories";
 import { toast } from "sonner";
 import TooltipButton from "@/components/tooltip-button";
+import PageLoader from "@/components/page-loader";
 
-type Props = {
-  categories: Category[];
-};
-
-const CategoriesClient = ({ categories }: Props) => {
+const CategoriesClient = () => {
   const [changed, setChanged] = useState(false);
-  const [items, setItems] = useState(
-    [...categories].sort((a, b) => a.orderIndex - b.orderIndex),
-  );
-  const [originalItems, setOriginalItems] = useState(items);
+  const [items, setItems] = useState<Category[] | null>(null);
+  const [originalItems, setOriginalItems] = useState<Category[] | null>(null);
 
   useEffect(() => {
+    const fetchCategories = async () => {
+      const categories = await getCategories();
+      setOriginalItems([...categories]);
+      setItems([...categories].sort((a, b) => a.orderIndex - b.orderIndex));
+    };
+
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    if (items === null || originalItems === null) return;
     const currentIds = items.map((c) => c.id);
     const originalIds = originalItems.map((c) => c.id);
     const changed = originalIds.some((id, i) => id !== currentIds[i]);
     setChanged(changed);
-  }, [items]);
+  }, [items, originalItems]);
+
+  if (items === null) {
+    return <PageLoader />;
+  }
 
   return (
     <div>

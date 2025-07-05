@@ -36,12 +36,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <CartStateProvider>
-            <div className="h-full flex flex-col justify-start mx-auto">
-              <div className="flex-grow">{children}</div>
-            </div>
-          </CartStateProvider>
-          <Toaster theme="system" />
+          <Toaster richColors toastOptions={{}} theme="system" />
+          <div className="h-full flex flex-col justify-start mx-auto">
+            <div className="flex-grow">{children}</div>
+          </div>
         </ThemeProvider>
       </body>
     </html>

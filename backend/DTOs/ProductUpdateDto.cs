@@ -13,6 +13,5 @@ public record ProductUpdateDto(
     string? Description,
     double? Amount,
     bool? Available,
-    bool? Visible,
     List<ProductItemPostDto>? Items
 );

@@ -9,5 +9,5 @@ export const uploadImage = async (file: File): Promise<string> => {
     body: formData,
   });
 
-  return (await res.text()) as string;
+  return await res.json();
 };

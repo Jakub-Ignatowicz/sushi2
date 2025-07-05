@@ -2,9 +2,9 @@ import NavbarLinks from "./navbar-links";
 import MobileMenu from "./mobile-menu";
 import { ModeToggle } from "@/components/mode-toggle";
 import AppLogo from "@/components/logo";
-import CartDialog from "@/app/(main)/cart/cart-dialog";
+import CartDialog from "@/app/(main)/(box)/cart/cart-dialog";
 import { cva } from "class-variance-authority";
-import CartFloatDialog from "@/app/(main)/cart/cart-float-dialog";
+import CartFloatDialog from "@/app/(main)/(box)/cart/cart-float-dialog";
 
 const mapLinks = new Map<string, string>([
   ["/", "Strona Główna"],

@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SushiZume.Data;
+using SushiZume.Models;
 
 namespace SushiZume.Extensions;
 
@@ -14,5 +16,14 @@ public static class MigrationExtensions
 
         var context = scope.ServiceProvider.GetRequiredService<SushiContext>();
         await DataInitializer.SeedAsync(context);
+
+        using var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var user = await userManager.FindByNameAsync("admin");
+        if (user == null)
+        {
+            user = new User { UserName = "admin" };
+            await userManager.CreateAsync(user, "Admin123!");
+            // await userManager.AddToRoleAsync(user, "Admin");
+        }
     }
 }

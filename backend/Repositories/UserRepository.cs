@@ -1,17 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using SushiZume.Data;
-using SushiZume.Enums;
 using SushiZume.Models;
-using SushiZume.Repositories.Interfaces;
 
-namespace SushiZume.Repositories;
+namespace SushiZume.Repositories.Interfaces;
 
 public class UserRepository(SushiContext context) : Repository<User>(context), IUserRepository
 {
-    public Task<User?> GetByEmailAsync(string email)
-    {
-        return DefaultQuery
-            .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Email == email && u.Type == UserType.Regular);
-    }
+    public Task<User?> GetByRefreshTokenAsync(string refreshToken, CancellationToken cancellationToken) =>
+        DefaultQuery.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken, cancellationToken);
 }

@@ -1,7 +1,5 @@
 "use client";
 
-// import { AuthProvider } from "./auth-context";
-
 type Props = {
   children: React.ReactNode;
 };

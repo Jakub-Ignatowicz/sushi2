@@ -1,5 +1,6 @@
 import { env } from "next-runtime-env";
 import { toast } from "sonner";
+import { authRefresh } from "./auth";
 
 export const API_URL =
   env("NEXT_PUBLIC_API_URL") || "http://localhost:5152/api";
@@ -35,15 +36,22 @@ async function parseResponse(response: Response): Promise<any> {
   }
 }
 
-const prepareOptions = (options?: RequestInit): RequestInit => {
+const prepareOptions = async (options?: RequestInit): Promise<RequestInit> => {
   const newOptions = { ...options };
 
   if (newOptions.body && typeof newOptions.body !== "string") {
     newOptions.body = JSON.stringify(newOptions.body);
   }
 
+  let cookie;
+  if (typeof window === "undefined") {
+    const cookieStore = await (await import("next/headers")).cookies();
+    cookie = cookieStore.toString();
+  }
+
   newOptions.headers = {
     "Content-Type": "application/json",
+    Cookie: cookie || "",
     ...(newOptions.headers || {}),
   };
 
@@ -57,14 +65,28 @@ export const fetchApi = {
     endpoint: string,
     requestType: RequestMethod = "GET",
     options?: RequestInit,
+    isRetry = false,
   ): Promise<T> => {
     try {
-      const url = `${API_URL}/${endpoint.replace(/^\//, "")}`;
+      let url;
+      if (endpoint.startsWith("http")) {
+        url = endpoint;
+      } else {
+        url = `${API_URL}/${endpoint.replace(/^\//, "")}`;
+      }
 
       const response = await fetch(url, {
         method: requestType,
-        ...prepareOptions(options),
+        credentials: "include",
+        ...(await prepareOptions(options)),
       });
+
+      if (response.status == 401 && !isRetry) {
+        const refreshed = await authRefresh();
+        if (refreshed) {
+          return fetchApi.request<T>(endpoint, requestType, options, true);
+        }
+      }
 
       const data = await parseResponse(response);
       if (!response.ok) {

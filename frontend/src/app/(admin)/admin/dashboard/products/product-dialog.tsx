@@ -1,33 +1,64 @@
-import ProductComponent from "@/app/(main)/order/product";
+"use client";
+
+import ProductComponent from "@/app/(main)/(box)/order/product";
 import LabelFile from "@/components/label-file";
 import LabelInput from "@/components/label-input";
 import LabelTextarea from "@/components/label-textarea";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { uploadImage } from "@/lib/api/images";
 import { createProduct, updateProduct } from "@/lib/api/products";
-import { Product } from "@/types/api";
+import { Category, Product, ProductPost } from "@/types/api";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { getCategories } from "@/lib/api/categories";
 
 type Props = {
-  product: Product;
   isEdit?: boolean;
+  product?: Product;
 };
 
-const ProductDialog = ({ product, isEdit }: Props) => {
+const ProductDialog = ({ product, isEdit = false }: Props) => {
   const { register, control, handleSubmit, reset, watch, setValue } =
-    useForm<Product>({
-      defaultValues: { ...product },
+    useForm<any>({
+      defaultValues: {
+        ...(product || {
+          name: "Nowy produkt",
+          price: 5,
+          description: undefined,
+          amount: undefined,
+          amountUnit: undefined,
+          categoryId: undefined,
+          items: [],
+        }),
+      },
     });
   const [newAmount, setNewAmount] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [categories, setCategories] = useState<Category[] | null>(null);
+
+  const fetchCategories = async () => {
+    if (categories) return;
+    try {
+      const res = await getCategories();
+      setCategories(res);
+    } catch (err) {
+      toast.error("Nie udało się pobrać kategorii");
+    }
+  };
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -38,7 +69,7 @@ const ProductDialog = ({ product, isEdit }: Props) => {
     if (!newAmount || !newDescription) return;
 
     append({
-      number: Number(newAmount) || 0,
+      quantity: Number(newAmount) || 0,
       description: newDescription,
     } as any);
 
@@ -55,13 +86,22 @@ const ProductDialog = ({ product, isEdit }: Props) => {
   };
 
   const onSubmit = async (data: Product) => {
-    if (file) {
-      data.imageUrl = await uploadImage(file);
-    }
-
     try {
-      if (isEdit) product = await updateProduct(data);
-      else product = await createProduct(data);
+      if (file) {
+        const res = await uploadImage(file);
+        data.imageUrl = res.fileName;
+      }
+
+      data.amount = data.amount ? Number(data.amount) : undefined;
+
+      console.log(data);
+      if (isEdit) {
+        product = await updateProduct(data);
+        toast.success("Produkt został zaktualizowany");
+      } else {
+        product = await createProduct(data);
+        toast.success("Produkt został dodany");
+      }
     } catch (error) {
       toast.error(`Nie udało się ${isEdit ? "edytować" : "dodać"} produktu`);
       return;
@@ -72,7 +112,14 @@ const ProductDialog = ({ product, isEdit }: Props) => {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant={"outline"} onClick={() => reset()}>
-          Edytuj
+          {isEdit ? (
+            "Edytuj"
+          ) : (
+            <>
+              <Plus />
+              Dodaj nowy produkt
+            </>
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[75%]">
@@ -129,7 +176,7 @@ const ProductDialog = ({ product, isEdit }: Props) => {
                         className="flex items-center justify-between pl-4 pr-2 py-1 rounded-md shadow-sm border bg-sidebar"
                       >
                         <div className="flex gap-2">
-                          <div>{field.number}x</div>
+                          <div>{field.quantity}x</div>
                           <p className="wrap-normal">{field.description}</p>
                         </div>
                         <Button
@@ -142,6 +189,33 @@ const ProductDialog = ({ product, isEdit }: Props) => {
                       </div>
                     ))}
                   </div>
+                  {!isEdit && (
+                    <div>
+                      <Label className="my-2 text-xl">Wybierz kategorie</Label>
+                      <Select
+                        onOpenChange={(open) => open && fetchCategories()}
+                        onValueChange={(value) =>
+                          setValue("categoryId", value, {
+                            shouldValidate: true,
+                          })
+                        }
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Wybierz kategorie" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Kategorie</SelectLabel>
+                            {categories?.map((cat) => (
+                              <SelectItem key={cat.id} value={cat.id}>
+                                {cat.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
                 </div>
               </div>
               <Button className="mt-4 w-full" type="submit" variant="secondary">

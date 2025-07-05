@@ -4,7 +4,7 @@ using SushiZume.Models;
 
 namespace SushiZume.Validators;
 
-public class OrderProductValidator : AbstractValidator<OrderProductPostDto>
+public class OrderProductValidator : AbstractValidator<OrderProduct>
 {
     public OrderProductValidator()
     {

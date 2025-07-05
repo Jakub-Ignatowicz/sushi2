@@ -51,6 +51,7 @@ jobs:
             export JWT_REFRESH_EXPIRY_DAYS="${{ vars.JWT_REFRESH_EXPIRY_DAYS }}"
             export CONNECTION_STRINGS_DEFAULT_CONN="${{ secrets.CONNECTION_STRINGS_DEFAULT_CONN }}"
             export CONNECTION_STRINGS_SOURCE_CONN="${{ secrets.CONNECTION_STRINGS_SOURCE_CONN }}"
+            export UPLOADTHING_API_KEY="${{ secrets.UPLOADTHING_API_KEY }}"
             chmod +x .github/scripts/set-secrets.sh
             chmod +x .github/scripts/deploy.sh
             bash .github/scripts/set-secrets.sh

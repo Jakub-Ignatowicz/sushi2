@@ -18,16 +18,20 @@ public class Repository<T> : IRepository<T> where T : class
         _dbSet = context.Set<T>();
     }
 
-    public Task<List<T>> GetAllAsync() => DefaultQuery.ToListAsync();
+    public Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default) =>
+        DefaultQuery.ToListAsync(cancellationToken);
 
-    public Task<T?> GetByIdAsync(Guid id) =>
-        DefaultQuery.FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id") == id);
+    public Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
+        DefaultQuery.FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id") == id, cancellationToken);
 
-    public async Task AddAsync(T entity) => await _dbSet.AddAsync(entity);
+    public async Task AddAsync(T entity, CancellationToken cancellationToken = default) =>
+        await _dbSet.AddAsync(entity, cancellationToken);
 
     public void Update(T entity) => _dbSet.Update(entity);
 
     public void Delete(T entity) => _dbSet.Remove(entity);
+
+    public void Add(T entity) => _dbSet.Add(entity);
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -44,5 +48,6 @@ public class Repository<T> : IRepository<T> where T : class
         return await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public Task<int> GetCountAsync() => DefaultQuery.CountAsync();
+    public Task<int> GetCountAsync(CancellationToken cancellationToken = default) =>
+        DefaultQuery.CountAsync(cancellationToken);
 }

@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 using SushiZume.Data;
@@ -10,49 +11,51 @@ using SushiZume.Services.Interfaces;
 namespace SushiZume.Services;
 
 public class ProductService(
-    IProductRepository productRepo,
+    IProductRepository productRepository,
     IMapper mapper,
     ICategoryRepository categoryRepo,
-    IProductItemRepository productItemRepo,
-    SushiContext context)
+    IProductItemRepository productItemRepository,
+    IValidator<Product> productValidator,
+    IValidator<ProductItem> productItemValidator)
     : IProductService
 {
-    public async Task<Product> GetByIdAsync(Guid id)
+    public async Task<Product> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var product = await productRepo.GetByIdAsync(id);
+        var product = await productRepository.GetByIdAsync(id, cancellationToken);
         if (product == null)
             throw new KeyNotFoundException($"Produkt o ID [{id}] nie został znaleziony.");
         return product;
     }
 
-    public async Task<List<Product>> GetAllAsync()
+    public Task<List<Product>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await productRepo.GetAllAsync();
+        return productRepository.GetAllAsync(cancellationToken);
     }
 
-    public async Task<List<Product>> GetAllAvailableAsync()
+    public Task<List<Product>> GetAllAvailableAsync(CancellationToken cancellationToken)
     {
-        return await productRepo.GetAllAvailableAsync();
+        return productRepository.GetAllAvailableAsync(cancellationToken);
     }
 
-    public async Task<List<Product>> GetRangeAsync(List<Guid> productIds)
+    public Task<List<Product>> GetRangeAsync(ICollection<Guid> productIds, CancellationToken cancellationToken)
     {
-        return await productRepo.GetRangeAsync(productIds);
+        return productRepository.GetRangeAsync(productIds, cancellationToken);
     }
 
-    public async Task<Product> AddAsync(ProductPostDto dto)
+    public async Task<Product> AddAsync(ProductPostDto dto, CancellationToken cancellationToken)
     {
         var product = mapper.Map<Product>(dto);
 
-        await productRepo.AddAsync(product);
-        await productRepo.SaveChangesAsync();
+        await productValidator.ValidateAndThrowAsync(product, cancellationToken);
 
+        await productRepository.AddAsync(product, cancellationToken);
+        await productRepository.SaveChangesAsync(cancellationToken);
         return product;
     }
 
-    public async Task<Product> UpdateAsync(Guid productId, ProductUpdateDto dto)
+    public async Task<Product> UpdateAsync(Guid productId, ProductUpdateDto dto, CancellationToken cancellationToken)
     {
-        var product = await GetByIdAsync(productId);
+        var product = await GetByIdAsync(productId, cancellationToken);
 
         product.Name = dto.Name ?? product.Name;
         product.ImageUrl = dto.ImageUrl ?? product.ImageUrl;
@@ -61,79 +64,82 @@ public class ProductService(
         product.Amount = dto.Amount ?? product.Amount;
         product.Description = dto.Description ?? product.Description;
         product.IsAvailable = dto.Available ?? product.IsAvailable;
-        product.IsVisible = dto.Visible ?? product.IsVisible;
 
         if (dto.Items != null)
         {
             product.Items.Clear();
+
             foreach (var item in dto.Items)
             {
                 var newItem = new ProductItem
                 {
-                    ProductId = product.Id,
                     Description = item.Description,
                     Quantity = item.Quantity,
                 };
 
                 product.Items.Add(newItem);
-                context.Entry(newItem).State = EntityState.Added;
+                productItemRepository.Add(newItem);
             }
-
-            context.Entry(product).State = EntityState.Modified;
         }
 
-        productRepo.Update(product);
-        await context.SaveChangesAsync();
+        await productValidator.ValidateAndThrowAsync(product, cancellationToken);
+
+        productRepository.Update(product);
+        await productRepository.SaveChangesAsync(cancellationToken);
         return product;
     }
 
-    public async Task<bool> AddItemsAsync(Guid productId, List<ProductItemPostDto> dtos)
+    public async Task<bool> AddItemsAsync(Guid productId, List<ProductItemPostDto> dtos,
+        CancellationToken cancellationToken)
     {
+        var product = await GetByIdAsync(productId, cancellationToken);
         var productItems = mapper.Map<List<ProductItem>>(dtos);
+
         foreach (var item in productItems)
-            item.ProductId = productId;
-        context.ProductItems.AddRange(productItems);
+        {
+            if (item.ProductId != productId)
+                item.ProductId = productId;
 
-        await context.SaveChangesAsync();
+            await productItemValidator.ValidateAndThrowAsync(item, cancellationToken);
+            product.Items.Add(item);
+            productItemRepository.Add(item);
+        }
+
+        await productRepository.SaveChangesAsync(cancellationToken);
         return true;
     }
 
-    public async Task<bool> RemoveItemsAsync(Guid productId, List<Guid> itemIds)
+    public async Task<bool> RemoveItemsAsync(Guid productId, List<Guid> itemIds, CancellationToken cancellationToken)
     {
-        var productItems = context.ProductItems
-            .Where(i => i.ProductId == productId && itemIds.Contains(i.Id))
-            .ToList();
-        context.ProductItems.RemoveRange(productItems);
+        var product = await GetByIdAsync(productId, cancellationToken);
 
-        await context.SaveChangesAsync();
+        foreach (var removeItemId in itemIds)
+        {
+            var item = product.Items.FirstOrDefault(i => i.Id == removeItemId);
+            if (item != null)
+                product.Items.Remove(item);
+        }
+
+        productRepository.Update(product);
+        await productRepository.SaveChangesAsync(cancellationToken);
         return true;
     }
 
-    public async Task<Product> SetAvailableAsync(Guid productId, bool available)
+    public async Task SetAvailableAsync(Guid productId, bool available, CancellationToken cancellationToken)
     {
-        var product = await GetByIdAsync(productId);
+        var product = await GetByIdAsync(productId, cancellationToken);
         product.IsAvailable = available;
 
-        context.Products.Update(product);
-        await context.SaveChangesAsync();
-        return product;
+        productRepository.Update(product);
+        await productRepository.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Product> SetVisibleAsync(Guid productId, bool visible)
+    public async Task SetFeaturedAsync(Guid productId, bool featured, CancellationToken cancellationToken)
     {
-        var product = await GetByIdAsync(productId);
-        product.IsVisible = visible;
-
-        await context.SaveChangesAsync();
-        return product;
-    }
-
-    public async Task SetFeaturedAsync(Guid productId, bool featured)
-    {
-        var product = await GetByIdAsync(productId);
-        Console.WriteLine($"Setting product {productId} featured: {featured}");
+        var product = await GetByIdAsync(productId, cancellationToken);
         product.IsFeatured = featured;
 
-        await context.SaveChangesAsync();
+        productRepository.Update(product);
+        await productRepository.SaveChangesAsync(cancellationToken);
     }
 }

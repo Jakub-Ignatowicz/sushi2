@@ -1,4 +1,6 @@
 using AutoMapper;
+using EFCore.NamingConventions.Internal;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using SushiZume.Data;
 using SushiZume.Models;
@@ -7,64 +9,75 @@ using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Services;
 
-public class CategoryService(ICategoryRepository categoryRepo, SushiContext context, IMapper mapper) : ICategoryService
+public class CategoryService(
+    ICategoryRepository categoryRepository,
+    IMapper mapper,
+    IValidator<Category> categoryValidator)
+    : ICategoryService
 {
-    public async Task<List<Category>> GetAllAsync()
+    public Task<List<Category>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await categoryRepo.GetAllAsync();
+        return categoryRepository.GetAllAsync(cancellationToken);
     }
 
-    public async Task<List<Category>> GetAllWithProductsAsync()
+    public Task<List<Category>> GetAllWithProductsAsync(CancellationToken cancellationToken)
     {
-        return await categoryRepo.GetAllWithProductsAsync();
+        return categoryRepository.GetAllWithProductsAsync(cancellationToken);
     }
 
-    public async Task<Category> GetByIdAsync(Guid categoryId)
+    public async Task<Category> GetByIdAsync(Guid categoryId, CancellationToken cancellationToken)
     {
-        var category = await categoryRepo.GetByIdAsync(categoryId);
+        var category = await categoryRepository.GetByIdAsync(categoryId, cancellationToken);
         if (category == null)
             throw new KeyNotFoundException($"Category with ID {categoryId} not found.");
         return category;
     }
 
-    public async Task OrderCategoriesAsync(List<string> categoryIds)
+    public async Task OrderCategoriesAsync(List<string> categoryIds, CancellationToken cancellationToken)
     {
-        var categories = await GetAllAsync();
+        var categories = await GetAllAsync(cancellationToken);
         if (categoryIds.Count != categories.Count)
             throw new ArgumentException("The number of category IDs must match the total number of categories.");
 
         foreach (var category in categories)
         {
             var index = categoryIds.IndexOf(category.Id.ToString());
+            if (index == -1)
+                throw new ArgumentException($"Category ID {category.Id} not found in the provided list.");
             category.OrderIndex = index;
+            categoryRepository.Update(category);
         }
 
-        await context.SaveChangesAsync();
+        await categoryRepository.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task ChangeNameAsync(Guid categoryId, string name)
+    public async Task ChangeNameAsync(Guid categoryId, string name, CancellationToken cancellationToken)
     {
-        var category = await categoryRepo.GetByIdAsync(categoryId);
+        var category = await categoryRepository.GetByIdAsync(categoryId, cancellationToken);
         if (category == null)
             throw new KeyNotFoundException($"Category with ID {categoryId} not found.");
-
         category.Name = name;
-        await context.SaveChangesAsync();
+
+        categoryRepository.Update(category);
+        await categoryRepository.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Guid> CreateAsync(CategoryPostDto dto)
+    public async Task<Guid> CreateAsync(CategoryPostDto dto, CancellationToken cancellationToken)
     {
         var category = mapper.Map<Category>(dto);
-        var maxOrderIndex = await context.Categories.MaxAsync(c => (int?)c.OrderIndex) ?? 0;
+        var maxOrderIndex = await categoryRepository.GetMaxIndexOrderValueAsync(cancellationToken);
         category.OrderIndex = maxOrderIndex + 1;
-        await categoryRepo.AddAsync(category);
-        await context.SaveChangesAsync();
+
+        await categoryValidator.ValidateAndThrowAsync(category, cancellationToken);
+
+        await categoryRepository.AddAsync(category, cancellationToken);
+        await categoryRepository.SaveChangesAsync(cancellationToken);
         return category.Id;
     }
 
-    public async Task UpdateAsync(Guid categoryId, CategoryPostDto dto)
+    public async Task UpdateAsync(Guid categoryId, CategoryPostDto dto, CancellationToken cancellationToken)
     {
-        var category = await GetByIdAsync(categoryId);
+        var category = await GetByIdAsync(categoryId, cancellationToken);
 
         category.Name = dto.Name;
         if (!string.IsNullOrWhiteSpace(dto.Description))
@@ -72,7 +85,9 @@ public class CategoryService(ICategoryRepository categoryRepo, SushiContext cont
             category.Description = dto.Description;
         }
 
-        context.Entry(category).State = EntityState.Modified;
-        await context.SaveChangesAsync();
+        await categoryValidator.ValidateAndThrowAsync(category, cancellationToken);
+
+        categoryRepository.Update(category);
+        await categoryRepository.SaveChangesAsync(cancellationToken);
     }
 }

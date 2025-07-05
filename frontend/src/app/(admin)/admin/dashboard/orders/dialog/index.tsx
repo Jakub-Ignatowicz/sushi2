@@ -10,7 +10,7 @@ import {
   priceToString,
 } from "@/lib/utils";
 import { Order } from "@/types/api";
-import { Info, Tag, Trash2 } from "lucide-react";
+import { Info, Tag } from "lucide-react";
 
 type Props = {
   order: Order;
@@ -48,7 +48,7 @@ const OrderDialog = ({ order }: Props) => {
             <OrderDetailRow label="Data" value={formatDate(order.createdAt)} />
             <OrderDetailRow
               label="Kwota"
-              value={priceToString(order.totalPrice)}
+              value={priceToString(order.totalCost)}
             />
           </div>
           <Separator className="my-4" />
@@ -56,13 +56,10 @@ const OrderDialog = ({ order }: Props) => {
           <div>
             {/* <Label className="text-base font-bold">Dane kontaktowe</Label> */}
             <div>
-              <OrderDetailRow
-                label="Email"
-                value={order.user.email || "Brak"}
-              />
+              <OrderDetailRow label="Email" value={order.email || "Brak"} />
               <OrderDetailRow
                 label="Telefon"
-                value={order.user.phoneNumber || "Brak"}
+                value={order.phoneNumber || "Brak"}
               />
               <OrderDetailRow
                 label="Adres"
