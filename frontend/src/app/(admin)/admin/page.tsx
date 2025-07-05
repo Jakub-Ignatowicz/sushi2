@@ -1,6 +1,5 @@
 "use client";
 
-import LabelInput from "@/components/label-input";
 import PageLoader from "@/components/page-loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

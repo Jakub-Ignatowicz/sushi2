@@ -81,7 +81,9 @@ export const fetchApi = {
         ...(await prepareOptions(options)),
       });
 
-      if (response.headers.get("Token-expired") === "true" && !isRetry) {
+      console.log(response);
+
+      if (response.status == 401 && !isRetry) {
         const refreshed = await authRefresh();
         if (refreshed) {
           return fetchApi.request<T>(endpoint, requestType, options, true);

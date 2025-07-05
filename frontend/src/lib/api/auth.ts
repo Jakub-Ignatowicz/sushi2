@@ -8,7 +8,7 @@ export const authLogin = async (username: string, password: string) =>
 
 export const authRefresh = async () => {
   try {
-    await fetchApi.POST<AuthResponse>("/auth/refresh");
+    await fetchApi.request("/auth/refresh", "POST", undefined, true);
     return true;
   } catch {
     return false;
