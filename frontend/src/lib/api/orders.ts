@@ -6,8 +6,7 @@ export const getOrders = async (page: number = 1, pageSize: number = 25) =>
     `/orders?${new URLSearchParams({ page: `${page}`, pageSize: `${pageSize}` })}`,
   );
 
-export const getNewOrders = (...opts: any) =>
-  fetchApi.GET<Order[]>("orders/new", opts);
+export const getNewOrders = () => fetchApi.GET<Order[]>("orders/new");
 
 export const createOrder = (order: OrderPost) =>
   fetchApi.POST<Order>("orders", { body: JSON.stringify(order) });

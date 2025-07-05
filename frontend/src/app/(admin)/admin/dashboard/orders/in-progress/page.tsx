@@ -3,7 +3,7 @@ import FetchError from "@/components/fetch-error";
 import { OrdersTable } from "../data-table";
 import { columns } from "../columns";
 
-const NewOrdersPage = async () => {
+export default async function InProgressOrdersPage() {
   try {
     const orders = await getInProgressOrders();
 
@@ -11,6 +11,4 @@ const NewOrdersPage = async () => {
   } catch (error: any) {
     return <FetchError error={error} />;
   }
-};
-
-export default NewOrdersPage;
+}

@@ -30,7 +30,7 @@ const OrdersClientPage = ({ orders: initOrders }: Props) => {
 
   useEffect(() => {
     fetchOrders();
-    const interval = setInterval(fetchOrders, 5_000);
+    const interval = setInterval(fetchOrders, 30_000);
     return () => clearInterval(interval);
   }, []);
 

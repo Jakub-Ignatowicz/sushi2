@@ -35,15 +35,22 @@ async function parseResponse(response: Response): Promise<any> {
   }
 }
 
-const prepareOptions = (options?: RequestInit): RequestInit => {
+const prepareOptions = async (options?: RequestInit): Promise<RequestInit> => {
   const newOptions = { ...options };
 
   if (newOptions.body && typeof newOptions.body !== "string") {
     newOptions.body = JSON.stringify(newOptions.body);
   }
 
+  let cookie;
+  if (typeof window === "undefined") {
+    const cookieStore = await (await import("next/headers")).cookies();
+    cookie = cookieStore.toString();
+  }
+
   newOptions.headers = {
     "Content-Type": "application/json",
+    Cookie: cookie || "",
     ...(newOptions.headers || {}),
   };
 
@@ -69,7 +76,7 @@ export const fetchApi = {
       const response = await fetch(url, {
         method: requestType,
         credentials: "include",
-        ...prepareOptions(options),
+        ...(await prepareOptions(options)),
       });
 
       const data = await parseResponse(response);
