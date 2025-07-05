@@ -3,6 +3,9 @@ import { fetchApi } from ".";
 
 export const getProducts = () => fetchApi.GET<Product[]>("products");
 
+export const getAvailableProducts = () =>
+  fetchApi.GET<Product[]>("products/available");
+
 export const getProductsRange = (productIds: string[]) =>
   fetchApi.POST<Product[]>("products/range", {
     body: JSON.stringify(productIds),
@@ -21,4 +24,9 @@ export const createProduct = (product: Product) =>
 export const featureProduct = (productId: string, featured: boolean) =>
   fetchApi.PATCH<Product>(`products/${productId}/featured`, {
     body: JSON.stringify(featured),
+  });
+
+export const availableProduct = (productId: string, available: boolean) =>
+  fetchApi.PATCH<Product>(`products/${productId}/available`, {
+    body: JSON.stringify(available),
   });

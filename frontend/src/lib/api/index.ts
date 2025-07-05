@@ -1,5 +1,6 @@
 import { env } from "next-runtime-env";
 import { toast } from "sonner";
+import { authRefresh } from "./auth";
 
 export const API_URL =
   env("NEXT_PUBLIC_API_URL") || "http://localhost:5152/api";
@@ -64,6 +65,7 @@ export const fetchApi = {
     endpoint: string,
     requestType: RequestMethod = "GET",
     options?: RequestInit,
+    isRetry = false,
   ): Promise<T> => {
     try {
       let url;
@@ -78,6 +80,13 @@ export const fetchApi = {
         credentials: "include",
         ...(await prepareOptions(options)),
       });
+
+      if (response.headers.get("Token-expired") === "true" && !isRetry) {
+        const refreshed = await authRefresh();
+        if (refreshed) {
+          return fetchApi.request<T>(endpoint, requestType, options, true);
+        }
+      }
 
       const data = await parseResponse(response);
       if (!response.ok) {

@@ -6,4 +6,13 @@ export const authLogin = async (username: string, password: string) =>
     body: JSON.stringify({ username, password }),
   });
 
+export const authRefresh = async () => {
+  try {
+    await fetchApi.POST<AuthResponse>("/auth/refresh");
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 export const authMe = async () => fetchApi.POST<AuthResponse>("/auth/me");

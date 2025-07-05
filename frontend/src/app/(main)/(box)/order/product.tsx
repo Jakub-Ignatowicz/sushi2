@@ -1,6 +1,6 @@
 import { priceToString } from "@/lib/utils";
 import { Product } from "@/types/api";
-import AddToCartButton from "./add-to-cart";
+import AddToCartButton, { AddToCartButtonPreview } from "./add-to-cart";
 import { Tag } from "lucide-react";
 
 type Props = {
@@ -32,7 +32,11 @@ const ProductComponent = ({ product, isPreview, isFeatured }: Props) => {
           <p className="text-xl font-medium text-zume dark:text-red-400">
             {priceToString(product.price)}
           </p>
-          <AddToCartButton product={product} isPreview={isPreview} />
+          {isPreview ? (
+            <AddToCartButtonPreview isDisabled />
+          ) : (
+            <AddToCartButton product={product} />
+          )}
         </div>
         {product.description && <p>{product.description}</p>}
         {product.items.length > 0 && (

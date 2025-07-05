@@ -7,22 +7,33 @@ import { Product } from "@/types/api";
 import { Plus } from "lucide-react";
 
 type Props = {
-  isPreview?: boolean;
   product: Product;
 };
 
-export default function AddToCartButton({ isPreview, product }: Props) {
-  const { addToCart } = useCartState();
+// Avoid "useCartState must be used within CartStateProvider" error
+export const AddToCartButtonPreview = ({
+  onClick,
+  isDisabled = false,
+}: {
+  onClick?: () => void;
+  isDisabled?: boolean;
+}) => {
   return (
     <TooltipButton label="Dodaj do koszyka">
       <Button
-        disabled={isPreview}
+        disabled={isDisabled}
         variant="outline"
         className="size-8"
-        onClick={() => addToCart(product)}
+        onClick={onClick}
       >
         <Plus />
       </Button>
     </TooltipButton>
   );
+};
+
+export default function AddToCartButton({ product }: Props) {
+  const { addToCart } = useCartState();
+
+  return <AddToCartButtonPreview onClick={() => addToCart(product)} />;
 }
