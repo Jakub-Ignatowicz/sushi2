@@ -25,7 +25,7 @@ export default async function OrderPage() {
   };
 
   return (
-    <div className="space-y-16 mt-16 lg:mt-32">
+    <div className="space-y-16">
       {categories.map((cat) => {
         const isFeatured = cat.id === FEATURED_CATEGORY_ID;
 

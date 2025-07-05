@@ -37,11 +37,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Toaster richColors toastOptions={{}} theme="system" />
-          <CartStateProvider>
-            <div className="h-full flex flex-col justify-start mx-auto">
-              <div className="flex-grow">{children}</div>
-            </div>
-          </CartStateProvider>
+          <div className="h-full flex flex-col justify-start mx-auto">
+            <div className="flex-grow">{children}</div>
+          </div>
         </ThemeProvider>
       </body>
     </html>

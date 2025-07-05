@@ -13,7 +13,7 @@ export default function CartPageClient() {
   const categories = categorizeProducts(cartItems.map((item) => item.product));
 
   return (
-    <div className="mt-16">
+    <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <h1 className="text-3xl font-bold">Twój koszyk 🍣</h1>
         {cartItems.length > 0 && (

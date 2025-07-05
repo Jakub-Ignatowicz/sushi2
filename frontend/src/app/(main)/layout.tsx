@@ -1,4 +1,5 @@
 import Navbar from "@/components/general/navbar";
+import { CartStateProvider } from "@/context/cart-context";
 
 export default function MainLayout({
   children,
@@ -6,9 +7,11 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-col">
-      <Navbar />
-      <div className="w-[85%] max-w-[1000px] mx-auto">{children}</div>
-    </div>
+    <CartStateProvider>
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <div className="flex-1 flex">{children}</div>
+      </div>
+    </CartStateProvider>
   );
 }

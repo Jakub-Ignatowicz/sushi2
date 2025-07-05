@@ -13,11 +13,11 @@ import Link from "next/link";
 export default function Page() {
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Sushi Zume Tarchomin
+            Sushi Zume<div className="text-zume">Tarchomin</div>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Tradycja, jakość i pasja w każdym kęsie
@@ -28,7 +28,7 @@ export default function Page() {
           <Card className="shadow-lg border-border bg-card">
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3 mb-2">
-                <Heart className="h-6 w-6 text-[color:var(--zume)]" />
+                <Heart className="h-6 w-6 text-zume fill-zume" />
                 <CardTitle className="text-2xl text-card-foreground">
                   O nas
                 </CardTitle>
@@ -73,9 +73,7 @@ export default function Page() {
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3 mb-2">
                 <MapPin className="h-6 w-6 text-primary" />
-                <CardTitle className="text-2xl text-card-foreground">
-                  Lokalizacja
-                </CardTitle>
+                <CardTitle className="text-2xl">Lokalizacja</CardTitle>
               </div>
               <CardDescription className="text-base">
                 Znajdź nas w Warszawie

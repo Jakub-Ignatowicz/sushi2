@@ -1,7 +1,7 @@
 "use client";
 
 import { getProductsRange } from "@/lib/api/products";
-import { OrderProduct, Product } from "@/types/api";
+import { Product } from "@/types/api";
 import {
   createContext,
   useContext,
