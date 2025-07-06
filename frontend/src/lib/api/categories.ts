@@ -5,7 +5,7 @@ export const createCategory = async (dto: CategoryPost) =>
   fetchApi.POST<Category>("/categories", { body: JSON.stringify(dto) });
 
 export const editCategory = async (categoryId: string, dto: CategoryPost) =>
-  fetchApi.PATCH<Category>(`/categories/${categoryId}`, {
+  fetchApi.PUT<Category>(`/categories/${categoryId}`, {
     body: JSON.stringify(dto),
   });
 

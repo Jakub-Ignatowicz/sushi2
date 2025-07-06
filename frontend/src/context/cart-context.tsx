@@ -51,6 +51,7 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
       } catch (error) {
         setAreProductsLoaded(false);
         toast.error("Nie udało się pobrać produktów w koszyku.");
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
       }
     };
 
