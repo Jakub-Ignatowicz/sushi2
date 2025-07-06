@@ -41,7 +41,9 @@ async function parseResponse(response: Response): Promise<any> {
 const prepareOptions = async (options?: RequestInit): Promise<RequestInit> => {
   const newOptions = { ...options };
 
-  if (newOptions.body && typeof newOptions.body !== "string") {
+  const isFormData = newOptions.body instanceof FormData;
+
+  if (newOptions.body && typeof newOptions.body !== "string" && !isFormData) {
     newOptions.body = JSON.stringify(newOptions.body);
   }
 
@@ -52,7 +54,7 @@ const prepareOptions = async (options?: RequestInit): Promise<RequestInit> => {
   }
 
   newOptions.headers = {
-    "Content-Type": "application/json",
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
     Cookie: cookie || "",
     ...(newOptions.headers || {}),
   };
@@ -92,7 +94,6 @@ export const fetchApi = {
 
       const data = await parseResponse(response);
       if (!response.ok) {
-        console.log(data);
         throw new ProblemDetails(data);
       }
 

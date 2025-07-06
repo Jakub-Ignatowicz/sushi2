@@ -11,7 +11,7 @@ export type Product = {
   categories: Category[];
   category: Category;
   items: ProductItem[];
-  fakePath?: string; // Used for previewing products without an image
+  fakePath?: string;
 };
 
 export type ProductPost = {
@@ -134,4 +134,9 @@ export type AddressPost = {
 export type ErrorResponse = {
   status: number;
   errors: string[];
+};
+
+export type ImageUploadResponse = {
+  fileName: string;
+  url: string;
 };

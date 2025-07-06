@@ -1,19 +1,11 @@
-import { API_URL } from ".";
+import { ImageUploadResponse } from "@/types/api";
+import { fetchApi } from ".";
 
-type postImageDTO = {
-  fileName: string;
-  url: string;
-};
-
-export const uploadImage = async (file: File): Promise<postImageDTO> => {
+export const uploadImage = async (file: File) => {
   const formData = new FormData();
   formData.append("image", file);
 
-  const res = await fetch(`${API_URL}/images/upload`, {
-    method: "POST",
-    credentials: "include",
+  return fetchApi.POST<ImageUploadResponse>("/images/upload", {
     body: formData,
   });
-
-  return res.json();
 };
