@@ -1,6 +1,11 @@
 import { API_URL } from ".";
 
-export const uploadImage = async (file: File): Promise<string> => {
+type postImageDTO = {
+  fileName: string;
+  url: string;
+};
+
+export const uploadImage = async (file: File): Promise<postImageDTO> => {
   const formData = new FormData();
   formData.append("image", file);
 
@@ -10,5 +15,5 @@ export const uploadImage = async (file: File): Promise<string> => {
     body: formData,
   });
 
-  return await res.json();
+  return res.json();
 };
