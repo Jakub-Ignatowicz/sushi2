@@ -9,6 +9,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
     depends_on:
       - db
+    volumes:
+      - /home/dev/static:/app/wwwroot
     networks:
       - sushinet
 
@@ -30,6 +32,8 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     # ports:
     #   - "5432:5432"
+    volumes:
+      - /home/dev/postgres-data:/var/lib/postgresql/data
     networks:
       - sushinet
 

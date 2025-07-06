@@ -2,7 +2,7 @@ services:
   frontend:
     build:
       args:
-        NEXT_PUBLIC_API_URL: "http://161.35.212.253:3000/api"
+        API_URL: "http://161.35.212.253:3000/api"
 
   db:
     ports:
@@ -13,5 +13,9 @@ services:
       - ASPNETCORE_ENVIRONMENT=Staging
 
   nginx:
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - sushinet
     ports:
       - "3000:80"

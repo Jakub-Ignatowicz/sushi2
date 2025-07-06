@@ -65,12 +65,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: allowLocalhostOrigins,
         policy =>
         {
-            policy.WithOrigins(["http://localhost:3000", "http://frontend"])
+            policy.WithOrigins("http://localhost:3000")
                 .AllowCredentials()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
 });
+
 builder.Services.AddControllers();
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 builder.Services.AddHttpContextAccessor();
@@ -85,25 +86,28 @@ var app = builder.Build();
 
 app.ApplyMigrations();
 
-app.UseCors(allowLocalhostOrigins);
-
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
-
-if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+if (app.Environment.IsDevelopment())
 {
+    app.UseCors(allowLocalhostOrigins);
+
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+
     app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    app.MapControllers();
 }
 else
 {
-    app.MapControllers();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 }
 
-app.UseConfiguredStaticImages(config);
+app.MapControllers();
+
+// app.UseConfiguredStaticImages(config);
+app.UseStaticFiles();
 
 app.Run();

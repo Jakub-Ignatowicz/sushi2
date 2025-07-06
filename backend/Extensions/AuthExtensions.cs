@@ -23,8 +23,8 @@ public static class AuthExtensions
 
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
+                ValidateIssuer = false,
+                ValidateAudience = false,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = jwtOptions.Issuer,
@@ -47,8 +47,6 @@ public static class AuthExtensions
                     }
 
                     context.Response.StatusCode = 401;
-                    context.Response.Cookies.Delete("ACCESS_TOKEN");
-                    context.Response.Cookies.Delete("REFRESH_TOKEN");
                     return Task.CompletedTask;
                 }
             };

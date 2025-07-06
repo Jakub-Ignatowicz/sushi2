@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using SushiZume.Models;
 using SushiZume.Services.Interfaces;
 using LoginRequest = SushiZume.DTOs.LoginRequest;
 
@@ -10,7 +11,7 @@ namespace SushiZume.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IAccountService accountService) : ControllerBase
+public class AuthController(IAccountService accountService, UserManager<User> userManager) : ControllerBase
 {
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request, CancellationToken cancellationToken)
@@ -32,6 +33,17 @@ public class AuthController(IAccountService accountService) : ControllerBase
     public IActionResult Me(CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var user = userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            return Unauthorized();
+        }
+
         return Ok();
     }
 }

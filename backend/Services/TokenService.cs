@@ -10,7 +10,7 @@ using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Services;
 
-public class TokenService(IOptions<JwtOptions> jwtOptions, IHttpContextAccessor httpContextAccessor) : ITokenService
+public class TokenService(IOptions<JwtOptions> jwtOptions, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment environment) : ITokenService
 {
     private readonly JwtOptions _jwtOptions = jwtOptions.Value;
 
@@ -23,13 +23,10 @@ public class TokenService(IOptions<JwtOptions> jwtOptions, IHttpContextAccessor 
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.UserName),
-            // new Claim(ClaimTypes.Role, user.Type.ToString())
+            new Claim(JwtRegisteredClaimNames.Email, user.UserName!),
         };
 
         var token = new JwtSecurityToken(
-            issuer: _jwtOptions.Issuer,
-            audience: _jwtOptions.Audience,
             claims: claims,
             expires: expires,
             signingCredentials: credentials
@@ -51,14 +48,15 @@ public class TokenService(IOptions<JwtOptions> jwtOptions, IHttpContextAccessor 
     public void WriteAuthTokenAsHttpOnlyCookie(string cookieName, string token,
         DateTime expiration)
     {
-        httpContextAccessor.HttpContext?.Response.Cookies.Append(cookieName,
-            token, new CookieOptions
-            {
-                HttpOnly = true,
-                Expires = expiration,
-                Secure = true,
-                SameSite = SameSiteMode.None,
-            });
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = expiration,
+            Secure = environment.IsProduction(),
+            SameSite = SameSiteMode.Strict,
+        };
+
+        httpContextAccessor.HttpContext?.Response.Cookies.Append(cookieName, token, cookieOptions);
     }
 
     public void DeleteAuthTokenCookie(string cookieName)
