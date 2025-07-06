@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getCategories } from "@/lib/api/categories";
+import { withToast } from "@/lib/api";
 
 type Props = {
   isEdit?: boolean;
@@ -86,25 +87,28 @@ const ProductDialog = ({ product, isEdit = false }: Props) => {
   };
 
   const onSubmit = async (data: Product) => {
-    try {
-      if (file) {
-        const res = (await uploadImage(file)) as any;
-        data.imageName = res.fileName;
+    if (file) {
+      let res = await uploadImage(file);
+
+      if (res === undefined) {
+        return;
       }
 
-      data.amount = data.amount ? Number(data.amount) : undefined;
+      data.imageName = res.fileName;
+    }
 
-      if (isEdit) {
-        product = await updateProduct(data);
-        toast.success("Produkt został zaktualizowany");
-      } else {
-        product = await createProduct(data);
-        toast.success("Produkt został dodany");
-      }
-    } catch (error) {
-      toast.error(`Nie udało się ${isEdit ? "edytować" : "dodać"} produktu`);
+    data.amount = data.amount ? Number(data.amount) : undefined;
+
+    if (isEdit) {
+      product = await withToast(() => updateProduct(data));
+    } else {
+      product = await withToast(() => createProduct(data));
+    }
+
+    if (product === undefined) {
       return;
     }
+    toast.success(`Produkt został ${isEdit ? "zedytowany" : "dodany"}`);
   };
 
   return (
