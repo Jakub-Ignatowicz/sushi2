@@ -72,7 +72,7 @@ export const CartStateProvider = ({ children }: { children: ReactNode }) => {
       return acc;
     }, {} as CartState);
     localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [products]);
+  }, [products, cart]);
 
   const addToCart = (product: Product) => {
     setCart((prev) => ({ ...prev, [product.id]: (prev[product.id] ?? 0) + 1 }));

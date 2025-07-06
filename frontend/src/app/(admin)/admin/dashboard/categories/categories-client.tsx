@@ -19,8 +19,11 @@ const CategoriesClient = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       const categories = await getCategories();
-      setOriginalItems([...categories]);
-      setItems([...categories].sort((a, b) => a.orderIndex - b.orderIndex));
+      const sortedCategories = categories.sort(
+        (a, b) => a.orderIndex - b.orderIndex,
+      );
+      setItems(sortedCategories);
+      setOriginalItems(sortedCategories);
     };
 
     fetchCategories();
