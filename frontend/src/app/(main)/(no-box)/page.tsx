@@ -12,8 +12,8 @@ export default function Home() {
         <div className="flex flex-col xl:items-start items-center">
           <div className="text-5xl xl:text-6xl font-bold text-center xl:text-left max-w-[800px]">
             Zanurz się w świecie{" "}
-            <span className="text-zume text-shadow-lg/75">sushi</span> z
-            <span className="text-zume text-shadow-lg/75"> naszą </span>
+            <span className="text-zume not-xl:text-shadow-lg/60">sushi</span> z
+            <span className="text-zume not-xl:text-shadow-lg/60"> naszą </span>
             restauracją
           </div>
           <div className="text-lg xl:text-xl font-medium text-center xl:text-left max-w-xl my-4">

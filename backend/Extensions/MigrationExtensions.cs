@@ -23,7 +23,7 @@ public static class MigrationExtensions
         {
             user = new User { UserName = "admin" };
             var pass = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
-            if (string.IsNullOrEmpty(pass))
+            if (string.IsNullOrWhiteSpace(pass))
             {
                 throw new InvalidOperationException("ADMIN_PASSWORD environment variable is not set.");
             }

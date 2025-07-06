@@ -106,7 +106,6 @@ else
 
 app.MapControllers();
 
-// app.UseConfiguredStaticImages(config);
 app.UseStaticFiles();
 
 app.Run();
