@@ -35,7 +35,6 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>(opt =>
     opt.Password.RequireNonAlphanumeric = true;
     opt.Password.RequireUppercase = true;
     opt.Password.RequiredLength = 8;
-    // opt.User.RequireUniqueEmail = true;
 }).AddEntityFrameworkStores<SushiContext>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

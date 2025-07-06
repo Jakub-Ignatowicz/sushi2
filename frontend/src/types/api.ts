@@ -50,7 +50,6 @@ export type OrderProduct = {
 
 export enum PaymentMethod {
   Cash = 0,
-  Cash2 = 1,
 }
 
 export enum OrderStatus {
@@ -60,12 +59,10 @@ export enum OrderStatus {
   Cancelled = 3,
 }
 
-export function paymentMethodToString(method: PaymentMethod): string {
+export function paymentMethodToString(method?: PaymentMethod): string {
   switch (method) {
     case PaymentMethod.Cash:
       return "Gotówka";
-    case PaymentMethod.Cash2:
-      return "Gotówka 2";
     default:
       return "Nieznana metoda płatności";
   }

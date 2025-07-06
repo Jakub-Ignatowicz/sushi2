@@ -10,7 +10,7 @@ import {
   categorizeProducts,
   priceToString,
 } from "@/lib/utils";
-import { Order, OrderPost } from "@/types/api";
+import { Order, OrderPost, paymentMethodToString } from "@/types/api";
 import { Info, Tag, Trash2 } from "lucide-react";
 import { Control, UseFormReturn, useWatch } from "react-hook-form";
 import { CartFormSchemaType } from "./form";
@@ -105,7 +105,7 @@ const CartSummaryDialog = ({ form }: Props) => {
               />
               <OrderDetailRow
                 label="Metoda płatności"
-                value={values.paymentMethod || "Brak"}
+                value={paymentMethodToString(values.paymentMethod)}
               />
               {values.notes && (
                 <OrderDetailRow label="Uwagi" value={values.notes} />

@@ -230,16 +230,17 @@ export default function CartForm() {
                       <Select
                         onValueChange={(val) => field.onChange(Number(val))}
                         value={String(field.value)}
+                        disabled={true}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Gotówka" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="0">Gotówka</SelectItem>
-                          <SelectItem value="1">Karta</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
+                    <FormDescription>Płatność tylko gotówką.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

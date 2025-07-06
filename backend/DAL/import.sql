@@ -49,8 +49,8 @@ CREATE OR REPLACE FUNCTION import_users_from_orders()
 AS
 $$
 DECLARE
-    rec         RECORD;
-    new_user_id uuid;
+    rec            RECORD;
+    new_total_cost numeric;
 BEGIN
     FOR rec IN
         SELECT *
@@ -107,3 +107,12 @@ select "orderId", "productId", quantity
 from dblink('source_conn',
             'SELECT "orderId", "productId", quantity from "OrderProduct"')
          as source("orderId" uuid, "productId" uuid, quantity integer);
+
+update orders
+set total_cost = sub.new_total_cost
+from (select o.id as order_id, COALESCE(sum(op.quantity * p.price), 0) as new_total_cost
+      from orders o
+               left join order_products op on o.id = op.order_id
+               left join products p on op.product_id = p.id
+      group by o.id) as sub
+where orders.id = sub.order_id;

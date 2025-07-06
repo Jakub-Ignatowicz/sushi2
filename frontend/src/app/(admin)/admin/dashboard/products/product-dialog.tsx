@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { uploadImage } from "@/lib/api/images";
 import { createProduct, updateProduct } from "@/lib/api/products";
-import { Category, Product, ProductPost } from "@/types/api";
+import { Category, Product, ProductItem, ProductPost } from "@/types/api";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -170,7 +170,7 @@ const ProductDialog = ({ product, isEdit = false }: Props) => {
                     </Button>
                   </div>
                   <div className="mt-2 flex flex-col gap-2">
-                    {fields.map((field, index) => (
+                    {fields.map((field: any, index) => (
                       <div
                         key={field.id}
                         className="flex items-center justify-between pl-4 pr-2 py-1 rounded-md shadow-sm border bg-sidebar"

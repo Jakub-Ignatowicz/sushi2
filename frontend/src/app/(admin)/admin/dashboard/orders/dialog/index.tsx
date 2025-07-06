@@ -9,7 +9,7 @@ import {
   categorizeProducts,
   priceToString,
 } from "@/lib/utils";
-import { Order } from "@/types/api";
+import { Order, paymentMethodToString } from "@/types/api";
 import { Info, Tag } from "lucide-react";
 
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
 
 const OrderDetailRow = ({ label, value }: { label: string; value: any }) => {
   return (
-    <div key={label} className="mt-1 flex items-center gap-2 text-sm">
+    <div key={label} className="flex items-center gap-2 text-sm">
       <Label className="font-semibold">{label}:</Label>
       <span>{value}</span>
     </div>
@@ -50,12 +50,16 @@ const OrderDialog = ({ order }: Props) => {
               label="Kwota"
               value={priceToString(order.totalCost)}
             />
+            <OrderDetailRow
+              label="Metoda płatności"
+              value={paymentMethodToString(order.paymentMethod)}
+            />
           </div>
           <Separator className="my-4" />
 
           <div>
             {/* <Label className="text-base font-bold">Dane kontaktowe</Label> */}
-            <div>
+            <div className="space-y-1">
               <OrderDetailRow label="Email" value={order.email || "Brak"} />
               <OrderDetailRow
                 label="Telefon"
@@ -73,7 +77,10 @@ const OrderDialog = ({ order }: Props) => {
                 value={order.peopleCount || "Brak"}
               />
               {order.notes && (
-                <OrderDetailRow label="Uwagi" value={order.notes} />
+                <div className="text-sm">
+                  <Label className="font-semibold mb-1 text-zume">Uwagi:</Label>
+                  <div>{order.notes}</div>
+                </div>
               )}
             </div>
           </div>
