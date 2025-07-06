@@ -9,8 +9,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: production
-    env:
-      STAGE: production
 
     steps:
       - name: Checkout code
@@ -31,7 +29,7 @@ jobs:
           jwt_refresh_expiry_days: ${{ vars.JWT_REFRESH_EXPIRY_DAYS }}
           conn_str_default: ${{ secrets.CONNECTION_STRINGS_DEFAULT_CONN }}
           conn_str_source: ${{ secrets.CONNECTION_STRINGS_SOURCE_CONN }}
-          aspnetcore_environment: Pevelopment
+          aspnetcore_environment: Production
           nginx_port: 80
           db_port: 5432
           host_url: http://${{ secrets.VPS_HOST }}

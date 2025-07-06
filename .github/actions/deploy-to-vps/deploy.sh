@@ -3,7 +3,7 @@
 PROJECT_NAME="prod"
 COMPOSE_FILES="-f docker-compose.yaml"
 
-if [ "$STAGE" != "production" ]; then
+if [ "$STAGE" != "Production" ]; then
 	PROJECT_NAME="dev"
 	COMPOSE_FILES="$COMPOSE_FILES -f docker-compose.dev.yaml"
 fi

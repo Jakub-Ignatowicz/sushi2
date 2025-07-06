@@ -9,8 +9,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: development
-    env:
-      STAGE: development
 
     steps:
       - name: Checkout code
