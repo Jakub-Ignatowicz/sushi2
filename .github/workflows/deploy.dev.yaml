@@ -35,3 +35,4 @@ jobs:
           nginx_port: 3000
           db_port: 5433
           host_url: http://${{ secrets.VPS_HOST }}:3000
+          admin_password: ${{ secrets.ADMIN_PASSWORD }}

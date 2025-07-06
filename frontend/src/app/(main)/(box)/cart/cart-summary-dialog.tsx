@@ -91,7 +91,7 @@ const CartSummaryDialog = ({ form }: Props) => {
                     label="Adres"
                     value={addressToString(values.address as any)}
                   />
-                  {values.address.floor && (
+                  {values.address.floor !== null && (
                     <OrderDetailRow
                       label="Piętro"
                       value={values.address.floor}

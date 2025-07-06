@@ -34,6 +34,8 @@ inputs:
     required: true
   host_url:
     required: true
+  admin_password:
+    required: true
 
 runs:
   using: "composite"
@@ -69,6 +71,7 @@ runs:
           export NGINX_PORT="${{ inputs.nginx_port }}"
           export DB_PORT="${{ inputs.db_port }}"
           export HOST_URL="${{ inputs.host_url }}"
+          export ADMIN_PASSWORD="${{ inputs.admin_password }}"
           chmod +x .github/actions/deploy-to-vps/set-secrets.sh
           chmod +x .github/actions/deploy-to-vps/deploy.sh
           bash .github/actions/deploy-to-vps/set-secrets.sh

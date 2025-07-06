@@ -69,7 +69,7 @@ const OrderDialog = ({ order }: Props) => {
                 label="Adres"
                 value={addressToString(order.address)}
               />
-              {order.address.floor && (
+              {order.address.floor !== null && (
                 <OrderDetailRow label="Piętro" value={order.address.floor} />
               )}
               <OrderDetailRow

@@ -22,7 +22,13 @@ public static class MigrationExtensions
         if (user is null)
         {
             user = new User { UserName = "admin" };
-            await userManager.CreateAsync(user, "Admin123!");
+            var pass = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
+            if (string.IsNullOrEmpty(pass))
+            {
+                throw new InvalidOperationException("ADMIN_PASSWORD environment variable is not set.");
+            }
+
+            await userManager.CreateAsync(user, pass);
         }
     }
 }

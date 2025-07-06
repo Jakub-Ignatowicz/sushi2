@@ -94,7 +94,6 @@ const ProductDialog = ({ product, isEdit = false }: Props) => {
 
       data.amount = data.amount ? Number(data.amount) : undefined;
 
-      console.log(data);
       if (isEdit) {
         product = await updateProduct(data);
         toast.success("Produkt został zaktualizowany");
