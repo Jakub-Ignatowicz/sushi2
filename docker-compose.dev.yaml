@@ -1,21 +1,4 @@
 services:
-  frontend:
-    build:
-      args:
-        HOST_URL: http://161.35.212.253:3000
-
-  db:
-    ports:
-      - "5433:5432"
-
-  backend:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Staging
-
   nginx:
     volumes:
       - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
-    networks:
-      - sushinet
-    ports:
-      - "3000:80"

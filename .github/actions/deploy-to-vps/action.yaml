@@ -1,0 +1,75 @@
+name: "Deploy to VPS"
+description: "Sync code to VPS and run deploy scripts"
+
+inputs:
+  remote_path:
+    required: true
+  remote_host:
+    required: true
+  remote_user:
+    required: true
+  remote_key:
+    required: true
+  postgres_user:
+    required: true
+  postgres_password:
+    required: true
+  postgres_db:
+    required: true
+  jwt_secret:
+    required: true
+  jwt_expiry_minutes:
+    required: true
+  jwt_refresh_expiry_days:
+    required: true
+  conn_str_default:
+    required: true
+  conn_str_source:
+    required: true
+  aspnetcore_environment:
+    required: true
+  db_port:
+    required: true
+  nginx_port:
+    required: true
+  host_url:
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Rsync files to VPS
+      uses: burnett01/rsync-deployments@7.0.2
+      with:
+        switches: -avz --delete
+        path: ./
+        remote_path: ${{ inputs.remote_path }}
+        remote_host: ${{ inputs.remote_host }}
+        remote_user: ${{ inputs.remote_user }}
+        remote_key: ${{ inputs.remote_key }}
+
+    - name: SSH and deploy
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ inputs.remote_host }}
+        username: ${{ inputs.remote_user }}
+        key: ${{ inputs.remote_key }}
+        script: |
+          cd ${{ inputs.remote_path }}
+          export POSTGRES_USER="${{ inputs.postgres_user }}"
+          export POSTGRES_PASSWORD="${{ inputs.postgres_password }}"
+          export POSTGRES_DB="${{ inputs.postgres_db }}"
+          export JWT_SECRET="${{ inputs.jwt_secret }}"
+          export JWT_EXPIRY_MINUTES="${{ inputs.jwt_expiry_minutes }}"
+          export JWT_REFRESH_EXPIRY_DAYS="${{ inputs.jwt_refresh_expiry_days }}"
+          export CONNECTION_STRINGS_DEFAULT_CONN="${{ inputs.conn_str_default }}"
+          export CONNECTION_STRINGS_SOURCE_CONN="${{ inputs.conn_str_source }}"
+          export ASPNETCORE_ENVIRONMENT="${{ inputs.aspnetcore_environment }}"
+          export NGINX_PORT="${{ inputs.nginx_port }}"
+          export DB_PORT="${{ inputs.db_port }}"
+          export HOST_URL="${{ inputs.host_url }}"
+          chmod +x .github/actions/deploy-to-vps/set-secrets.sh
+          chmod +x .github/actions/deploy-to-vps/deploy.sh
+          bash .github/actions/deploy-to-vps/set-secrets.sh
+          bash .github/actions/deploy-to-vps/deploy.sh
