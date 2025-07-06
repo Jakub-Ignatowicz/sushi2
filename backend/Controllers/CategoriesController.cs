@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SushiZume.DTOs;
 using SushiZume.Models;
@@ -7,6 +8,7 @@ using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class CategoriesController(ICategoryService categoryService)
@@ -41,7 +43,7 @@ public class CategoriesController(ICategoryService categoryService)
         await categoryService.RemoveAsync(categoryId, cancellationToken);
         return Ok();
     }
-    
+
     [HttpPut("{categoryId:guid}")]
     public async Task<IActionResult> UpdateCategory(Guid categoryId, [FromBody] CategoryPostDto dto,
         CancellationToken cancellationToken)

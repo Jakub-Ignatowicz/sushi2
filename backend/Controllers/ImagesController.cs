@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
-using SushiZume.Enums;
-using SushiZume.Services.Interfaces;
 
 namespace SushiZume.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ImagesController(IConfiguration config) : ControllerBase
