@@ -6,6 +6,7 @@ export const uploadImage = async (file: File): Promise<string> => {
 
   const res = await fetch(`${API_URL}/images/upload`, {
     method: "POST",
+    credentials: "include",
     body: formData,
   });
 
