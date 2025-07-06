@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SushiZume.Enums;
 using SushiZume.Models;
@@ -20,5 +21,21 @@ public static class DataInitializer
         await context.Database.ExecuteSqlRawAsync(sql);
 
         await context.SaveChangesAsync();
+    }
+
+    public static async Task SeedAdminAsync(IServiceScope scope)
+    {
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var user = await userManager.FindByNameAsync("admin");
+
+        if (user is null)
+        {
+            user = new User { UserName = "admin" };
+            var pass = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
+            if (string.IsNullOrWhiteSpace(pass))
+                throw new InvalidOperationException("ADMIN_PASSWORD environment variable is not set.");
+
+            await userManager.CreateAsync(user, pass);
+        }
     }
 }

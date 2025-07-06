@@ -83,7 +83,7 @@ builder.WebHost.ConfigureKestrel(options => { options.ListenAnyIP(5152); });
 
 var app = builder.Build();
 
-app.ApplyMigrations();
+await app.ApplyMigrations();
 
 if (app.Environment.IsDevelopment())
 {

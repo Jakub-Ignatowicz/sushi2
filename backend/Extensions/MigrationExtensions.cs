@@ -7,28 +7,14 @@ namespace SushiZume.Extensions;
 
 public static class MigrationExtensions
 {
-    public async static void ApplyMigrations(this WebApplication app)
+    public static async Task ApplyMigrations(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
-        await using var dbContext = scope.ServiceProvider.GetRequiredService<SushiContext>();
-
-        await dbContext.Database.MigrateAsync();
 
         var context = scope.ServiceProvider.GetRequiredService<SushiContext>();
+        await context.Database.MigrateAsync();
+
         await DataInitializer.SeedAsync(context);
-
-        using var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-        var user = await userManager.FindByNameAsync("admin");
-        if (user is null)
-        {
-            user = new User { UserName = "admin" };
-            var pass = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
-            if (string.IsNullOrWhiteSpace(pass))
-            {
-                throw new InvalidOperationException("ADMIN_PASSWORD environment variable is not set.");
-            }
-
-            await userManager.CreateAsync(user, pass);
-        }
+        await DataInitializer.SeedAdminAsync(scope);
     }
 }

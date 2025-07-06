@@ -30,19 +30,15 @@ public class AuthController(IAccountService accountService, UserManager<User> us
 
     [Authorize]
     [HttpPost("me")]
-    public IActionResult Me(CancellationToken cancellationToken)
+    public async Task<IActionResult> Me(CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
-        {
             return Unauthorized();
-        }
 
-        var user = userManager.FindByIdAsync(userId);
-        if (user is null)
-        {
+        var user = await userManager.FindByIdAsync(userId);
+        if (user == null)
             return Unauthorized();
-        }
 
         return Ok();
     }
