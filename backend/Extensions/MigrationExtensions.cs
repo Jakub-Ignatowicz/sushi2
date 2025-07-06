@@ -19,11 +19,10 @@ public static class MigrationExtensions
 
         using var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
         var user = await userManager.FindByNameAsync("admin");
-        if (user == null)
+        if (user is null)
         {
             user = new User { UserName = "admin" };
             await userManager.CreateAsync(user, "Admin123!");
-            // await userManager.AddToRoleAsync(user, "Admin");
         }
     }
 }
