@@ -27,6 +27,10 @@ public class OrderService(
     public async Task<Order> AddAsync(OrderPostDto dto, CancellationToken cancellationToken)
     {
         var productsRange = dto.OrderProducts.Select(op => op.ProductId).ToList();
+
+        if (productsRange.Count == 0)
+            throw new ArgumentException("Zamówienie musi zawierać co najmniej jeden produkt.");
+
         var products = await productRepository.GetRangeAsync(productsRange, cancellationToken);
         if (products.Count != dto.OrderProducts.Count)
             throw new KeyNotFoundException("Produkty z zamówienia nie zostały znalezione.");
