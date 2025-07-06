@@ -8,7 +8,7 @@ namespace SushiZume.DTOs;
 public record ProductUpdateDto(
     string Name,
     decimal Price,
-    string? ImageUrl,
+    string? ImageName,
     double? Amount,
     string? AmountUnit,
     string? Description,

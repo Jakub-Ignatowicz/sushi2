@@ -18,7 +18,7 @@ services:
     build:
       context: ./frontend
       args:
-        API_URL: http://161.35.212.253/api
+        HOST_URL: http://161.35.212.253
     depends_on:
       - backend
     networks:

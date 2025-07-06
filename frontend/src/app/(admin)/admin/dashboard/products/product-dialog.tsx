@@ -88,8 +88,8 @@ const ProductDialog = ({ product, isEdit = false }: Props) => {
   const onSubmit = async (data: Product) => {
     try {
       if (file) {
-        const res = await uploadImage(file);
-        data.imageUrl = res.fileName;
+        const res = (await uploadImage(file)) as any;
+        data.imageName = res.fileName;
       }
 
       data.amount = data.amount ? Number(data.amount) : undefined;

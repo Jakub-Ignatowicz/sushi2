@@ -2,7 +2,7 @@ export type Product = {
   id: string;
   name: string;
   price: number;
-  imageUrl?: string;
+  imageName?: string;
   isFeatured?: boolean;
   isAvailable?: boolean;
   amount?: number;
@@ -17,7 +17,7 @@ export type Product = {
 export type ProductPost = {
   name: string;
   price: number;
-  imageUrl?: string;
+  imageName?: string;
   amount?: number;
   amountUnit?: string;
   description?: string;

@@ -68,7 +68,7 @@ public class ProductService(
 
         product.Name = dto.Name;
         product.Price = dto.Price;
-        product.ImageUrl = dto.ImageUrl;
+        product.ImageName = dto.ImageName;
         product.Amount = dto.Amount;
         product.AmountUnit = dto.AmountUnit;
         product.Description = dto.Description;

@@ -20,7 +20,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.IsFeatured)
             .HasDefaultValue(false);
 
-        builder.Property(p => p.ImageUrl)
+        builder.Property(p => p.ImageName)
             .IsRequired(false);
 
         builder.Property(p => p.Amount)

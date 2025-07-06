@@ -11,7 +11,7 @@ public class Product
     public decimal Price { get; set; }
     public bool IsAvailable { get; set; }
     public bool IsFeatured { get; set; }
-    public string? ImageUrl { get; set; }
+    public string? ImageName { get; set; }
     public double? Amount { get; set; }
     public string? AmountUnit { get; set; }
     public string? Description { get; set; }

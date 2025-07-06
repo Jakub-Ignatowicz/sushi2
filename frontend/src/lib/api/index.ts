@@ -2,8 +2,10 @@ import { env } from "next-runtime-env";
 import { toast } from "sonner";
 import { authRefresh } from "./auth";
 
-export const API_URL =
-  env("NEXT_PUBLIC_API_URL") || "http://localhost:5152/api";
+export const HOST_URL = env("NEXT_PUBLIC_HOST_URL") || "http://localhost:5152";
+
+export const API_URL = HOST_URL + "/api";
+export const IMAGES_URL = HOST_URL + "/images/";
 
 export interface IProblemDetails {
   detail?: string;
@@ -133,3 +135,5 @@ export const withToast = async <T>(
     }
   }
 };
+
+export const getImageUrl = (imageName: string) => IMAGES_URL + imageName;

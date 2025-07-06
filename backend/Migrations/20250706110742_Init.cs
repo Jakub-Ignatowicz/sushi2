@@ -201,7 +201,7 @@ namespace SushiZume.Migrations
                     price = table.Column<decimal>(type: "numeric", nullable: false),
                     is_available = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
                     is_featured = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    image_url = table.Column<string>(type: "text", nullable: true),
+                    image_name = table.Column<string>(type: "text", nullable: true),
                     amount = table.Column<double>(type: "double precision", nullable: true),
                     amount_unit = table.Column<string>(type: "text", nullable: true),
                     description = table.Column<string>(type: "text", nullable: true),

@@ -39,9 +39,9 @@ public class ImagesController(IConfiguration config) : ControllerBase
             return BadRequest("Invalid image file.");
         }
 
-        var saveFolder = config["StaticFiles:ImagesPath"];
-        if (string.IsNullOrWhiteSpace(saveFolder))
-            return StatusCode(500, "Image save path not configured.");
+        var saveFolder = "wwwroot/images";
+        // if (string.IsNullOrWhiteSpace(saveFolder))
+        //     return StatusCode(500, "Image save path not configured.");
 
         if (!Path.IsPathRooted(saveFolder))
             saveFolder = Path.Combine(Directory.GetCurrentDirectory(), saveFolder);

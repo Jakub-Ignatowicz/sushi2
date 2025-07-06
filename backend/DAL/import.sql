@@ -9,13 +9,13 @@ from dblink('source_conn',
             'SELECT id, name from "Category"')
          AS source(id text, name text);
 
-INSERT INTO products (id, name, price, is_available, image_url, amount, amount_unit,
+INSERT INTO products (id, name, price, is_available, image_name, amount, amount_unit,
                       description, category_id)
 SELECT id,             -- cast id from text to uuid
        name,
        price::numeric, -- cast price from integer to numeric
        available,
-       imagePath,
+       null,
        amount,
        amountName,
        description,

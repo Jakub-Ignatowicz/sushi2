@@ -368,9 +368,9 @@ namespace SushiZume.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("ImageName")
                         .HasColumnType("text")
-                        .HasColumnName("image_url");
+                        .HasColumnName("image_name");
 
                     b.Property<bool>("IsAvailable")
                         .ValueGeneratedOnAdd()

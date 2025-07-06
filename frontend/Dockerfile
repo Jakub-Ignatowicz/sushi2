@@ -15,8 +15,8 @@ COPY . .
 # RUN npm run build
 RUN npx next build --experimental-build-mode compile
 
-ARG API_URL
-ENV NEXT_PUBLIC_API_URL=${API_URL}
+ARG HOST_URL
+ENV NEXT_PUBLIC_HOST_URL=${HOST_URL}
 
 # Expose port 3000 (default Next.js port)
 EXPOSE 3000

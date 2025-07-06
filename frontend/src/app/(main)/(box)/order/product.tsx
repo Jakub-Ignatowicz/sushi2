@@ -2,6 +2,7 @@ import { priceToString } from "@/lib/utils";
 import { Product } from "@/types/api";
 import AddToCartButton, { AddToCartButtonPreview } from "./add-to-cart";
 import { Tag } from "lucide-react";
+import { getImageUrl, IMAGES_URL } from "@/lib/api";
 
 type Props = {
   product: Product;
@@ -50,9 +51,9 @@ const ProductComponent = ({ product, isPreview, isFeatured }: Props) => {
           </div>
         )}
       </div>
-      {((isPreview && product.fakePath) || product.imageUrl) && (
+      {((isPreview && product.fakePath) || product.imageName) && (
         <img
-          src={product.fakePath || product.imageUrl}
+          src={product.fakePath || getImageUrl(product.imageName!)}
           alt={product.name}
           className="w-50 h-full object-cover rounded-lg mx-auto sm:my-auto"
         />
