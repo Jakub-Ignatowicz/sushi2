@@ -94,6 +94,7 @@ export const fetchApi = {
 
       const data = await parseResponse(response);
       if (!response.ok) {
+        console.log(data);
         throw new ProblemDetails(data);
       }
 
