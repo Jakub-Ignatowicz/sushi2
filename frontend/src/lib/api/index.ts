@@ -92,6 +92,7 @@ export const fetchApi = {
 
       const data = await parseResponse(response);
       if (!response.ok) {
+        console.log(data);
         throw new ProblemDetails(data);
       }
 
@@ -122,7 +123,7 @@ export const withToast = async <T>(
     return await fn();
   } catch (error) {
     if (error instanceof ProblemDetails) {
-      toast.error(error.statusCode, {
+      toast.error(error.status, {
         description: error.message,
       });
       return;
