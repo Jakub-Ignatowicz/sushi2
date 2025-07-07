@@ -88,7 +88,7 @@ const ProductDialog = ({ product, isEdit = false }: Props) => {
 
   const onSubmit = async (data: Product) => {
     if (file) {
-      let res = await uploadImage(file);
+      let res = await withToast(() => uploadImage(file));
 
       if (res === undefined) {
         return;
