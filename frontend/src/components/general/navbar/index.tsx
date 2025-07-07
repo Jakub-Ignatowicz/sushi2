@@ -9,7 +9,6 @@ import CartFloatDialog from "@/app/(main)/(box)/cart/cart-float-dialog";
 const mapLinks = new Map<string, string>([
   ["/", "Strona Główna"],
   ["/order", "Zamów Online"],
-  ["/news", "Aktualności"],
   ["/about", "O nas"],
 ]);
 
