@@ -22,8 +22,6 @@ inputs:
     required: true
   jwt_refresh_expiry_days:
     required: true
-  conn_str_default:
-    required: true
   conn_str_source:
     required: true
   aspnetcore_environment:
@@ -65,7 +63,6 @@ runs:
           export JWT_SECRET="${{ inputs.jwt_secret }}"
           export JWT_EXPIRY_MINUTES="${{ inputs.jwt_expiry_minutes }}"
           export JWT_REFRESH_EXPIRY_DAYS="${{ inputs.jwt_refresh_expiry_days }}"
-          export CONNECTION_STRINGS_DEFAULT_CONN="${{ inputs.conn_str_default }}"
           export CONNECTION_STRINGS_SOURCE_CONN="${{ inputs.conn_str_source }}"
           export ASPNETCORE_ENVIRONMENT="${{ inputs.aspnetcore_environment }}"
           export NGINX_PORT="${{ inputs.nginx_port }}"

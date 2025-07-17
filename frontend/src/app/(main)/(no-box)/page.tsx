@@ -27,12 +27,12 @@ export default function Home() {
                 Zamów online
               </Button>
             </Link>
-            <Link href="/news">
-              <Button className="shadow-md/40" size="homePage">
-                <FaNewspaper />
-                Aktualności
-              </Button>
-            </Link>
+            {/* <Link href="/news"> */}
+            {/*   <Button className="shadow-md/40" size="homePage"> */}
+            {/*     <FaNewspaper /> */}
+            {/*     Aktualności */}
+            {/*   </Button> */}
+            {/* </Link> */}
           </div>
           <HeroImage />
         </div>
