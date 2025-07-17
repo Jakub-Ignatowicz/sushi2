@@ -30,6 +30,7 @@ jobs:
           conn_str_source: ${{ secrets.CONNECTION_STRINGS_SOURCE_CONN }}
           aspnetcore_environment: Development
           nginx_port: 3000
+          nginx_https_port: 3443
           db_port: 5433
-          host_url: http://${{ vars.VPS_HOST }}:3000
+          host_url: https://test.sushizume.pl:3443
           admin_password: ${{ secrets.ADMIN_PASSWORD }}

@@ -99,6 +99,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
+    app.UseHttpsRedirection();
     app.UseAuthentication();
     app.UseAuthorization();
     app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
