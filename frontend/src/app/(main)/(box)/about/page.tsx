@@ -161,10 +161,9 @@ export default function Page() {
                 href="/order"
                 className="relative h-48 rounded-lg overflow-hidden group"
               >
-                <Image
+                <img
                   src={getImageUrl("7ebc5de3-5fb9-4c44-a38c-7a9d4f3329de.png")}
                   alt="Świeży zestaw kampai"
-                  fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
@@ -176,10 +175,9 @@ export default function Page() {
                 href="/order"
                 className="relative h-48 rounded-lg overflow-hidden group"
               >
-                <Image
+                <img
                   src={getImageUrl("b55d996f-793f-4631-9a16-35212e2cdb3d.png")}
                   alt="Wyśmienity zestaw kendo"
-                  fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
@@ -191,10 +189,9 @@ export default function Page() {
                 href="/order"
                 className="relative h-48 rounded-lg overflow-hidden group"
               >
-                <Image
+                <img
                   src={getImageUrl("3073e0ed-49e7-439a-8e93-27ac43e76876.png")}
                   alt="Elegancki zestaw hibana"
-                  fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
