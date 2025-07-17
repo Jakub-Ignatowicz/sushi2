@@ -32,5 +32,5 @@ jobs:
           nginx_port: 80
           nginx_https_port: 443
           db_port: 5432
-          host_url: https://test.sushizume.pl
+          host_url: https://sushizume.pl
           admin_password: ${{ secrets.ADMIN_PASSWORD }}
