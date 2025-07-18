@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { MapPin, Phone, Clock, Heart, Utensils } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { getImageUrl } from "@/lib/api";
 
 export default function Page() {
   return (
@@ -83,8 +84,17 @@ export default function Page() {
               <div className="relative h-48 rounded-lg overflow-hidden bg-muted">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
-                    <Image src="/map.png" fill alt="mapa" />
-                    <p className="text-muted-foreground">Mapa lokalizacji</p>
+                    <div>
+                      <iframe
+                        className="w-[500px] h-[500px]"
+                        scrolling="no"
+                        src="https://maps.google.com/maps?width=100%%26amp;height=600&amp;hl=en&amp;q=Strumykowa%14+Warszawa&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                      >
+                        <a href="https://www.mapsdirections.info/fr/calculer-la-population-sur-une-carte">
+                          Carte démographique
+                        </a>
+                      </iframe>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -151,10 +161,9 @@ export default function Page() {
                 href="/order"
                 className="relative h-48 rounded-lg overflow-hidden group"
               >
-                <Image
-                  src="https://utfs.io/f/6e4a8f42-4872-4a3b-a6bd-0c206b6c84d3-xzedtr.png"
-                  alt="Świeży zestaw kempai"
-                  fill
+                <img
+                  src={getImageUrl("7ebc5de3-5fb9-4c44-a38c-7a9d4f3329de.png")}
+                  alt="Świeży zestaw kampai"
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
@@ -166,10 +175,9 @@ export default function Page() {
                 href="/order"
                 className="relative h-48 rounded-lg overflow-hidden group"
               >
-                <Image
-                  src="https://utfs.io/f/87624c77-093f-4530-8cf9-d17d484f91a8-173e7z.png"
+                <img
+                  src={getImageUrl("b55d996f-793f-4631-9a16-35212e2cdb3d.png")}
                   alt="Wyśmienity zestaw kendo"
-                  fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
@@ -181,10 +189,9 @@ export default function Page() {
                 href="/order"
                 className="relative h-48 rounded-lg overflow-hidden group"
               >
-                <Image
-                  src="https://utfs.io/f/64689771-ef4e-4501-9335-46e793d485c6-zac7xp.png"
+                <img
+                  src={getImageUrl("3073e0ed-49e7-439a-8e93-27ac43e76876.png")}
                   alt="Elegancki zestaw hibana"
-                  fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />

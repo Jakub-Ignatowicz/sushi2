@@ -140,7 +140,7 @@ const ProductDialog = ({ product, isEdit = false }: Props) => {
             <div className="flex flex-col items-center">
               <div className="overflow-auto w-full max-h-[50vh] flex flex-col gap-2 pr-3">
                 <LabelInput label="Nazwa" {...register("name")} />
-                <LabelFile label="Zdjęcie" onChange={onFileChange} />
+                <LabelFile label="Zdjęcie (max. 5MB)" onChange={onFileChange} />
                 <LabelInput label="Cena" type="number" {...register("price")} />
                 <LabelInput
                   label="Ilość"
