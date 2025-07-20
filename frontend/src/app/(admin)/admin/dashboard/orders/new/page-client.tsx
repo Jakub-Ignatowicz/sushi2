@@ -8,46 +8,42 @@ import { PackageX } from "lucide-react";
 import { OrdersTable } from "../data-table";
 import { columns } from "../columns";
 import PageLoader from "@/components/page-loader";
+import { toast } from "sonner";
 
 const OrdersClientPage = () => {
   const [orders, setOrders] = useState<OrderType[] | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [isLive, setIsLive] = useState<boolean>(true);
-  const [firstLoad, setFirstLoad] = useState<boolean>(true);
+  const ordersRef = useRef<OrderType[] | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const fetchOrders = useCallback(async () => {
-    try {
-      const res = await getNewOrders();
-      let containsNew = false;
-      if (!firstLoad && orders) {
-        for (let i = 0; i < res.length; i++) {
-          if (!orders.some((order) => order.id === res[i].id)) {
-            containsNew = true;
-            break;
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await getNewOrders();
+        if (ordersRef.current !== null && audioRef.current) {
+          const oldIds = ordersRef.current.map((order) => order.id);
+          if (res.map((order) => order.id).some((id) => !oldIds.includes(id))) {
+            audioRef.current.play().catch(() =>
+              toast.error("Błąd odtwarzania dźwięku", {
+                description: "Sprawdź ustawienia dźwięku w przeglądarce.",
+              }),
+            );
           }
         }
-      }
-      if (audioRef.current && !firstLoad && containsNew) {
-        console.log("sound");
-        audioRef.current.play().catch((err) => {
-          console.warn("Błąd odtwarzania dźwięku:", err);
-        });
-      }
-      setOrders(res);
-      setLastUpdate(new Date());
-      setIsLive(true);
-    } catch (error: any) {
-      setIsLive(false);
-    }
-    setFirstLoad(false);
-  }, [orders, firstLoad]);
 
-  useEffect(() => {
+        ordersRef.current = res;
+        setOrders(res);
+        setLastUpdate(new Date());
+        setIsLive(true);
+      } catch (error: any) {
+        setIsLive(false);
+      }
+    };
     fetchOrders();
     const interval = setInterval(fetchOrders, 30_000);
     return () => clearInterval(interval);
-  }, [fetchOrders]);
+  }, []);
 
   if (orders === null) {
     return <PageLoader />;
