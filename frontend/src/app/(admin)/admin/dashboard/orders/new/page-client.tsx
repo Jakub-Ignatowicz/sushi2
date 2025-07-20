@@ -1,7 +1,7 @@
 "use client";
 
 import { Order as OrderType } from "@/types/api";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getNewOrders } from "@/lib/api/orders";
 import { formatDate } from "@/lib/utils";
 import { PackageX } from "lucide-react";
@@ -16,21 +16,23 @@ const OrdersClientPage = () => {
   const [firstLoad, setFirstLoad] = useState<boolean>(true);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       const res = await getNewOrders();
       let containsNew = false;
-      if (!firstLoad) {
+      if (!firstLoad && orders) {
         for (let i = 0; i < res.length; i++) {
-          if (!orders?.some((order) => order.id === res[i].id)) {
+          if (!orders.some((order) => order.id === res[i].id)) {
             containsNew = true;
             break;
           }
         }
       }
-      if (audioRef.current && containsNew) {
-        console.log("sound")
-        audioRef.current.play();
+      if (audioRef.current && !firstLoad && containsNew) {
+        console.log("sound");
+        audioRef.current.play().catch((err) => {
+          console.warn("Błąd odtwarzania dźwięku:", err);
+        });
       }
       setOrders(res);
       setLastUpdate(new Date());
@@ -39,13 +41,13 @@ const OrdersClientPage = () => {
       setIsLive(false);
     }
     setFirstLoad(false);
-  };
+  }, [orders, firstLoad]);
 
   useEffect(() => {
     fetchOrders();
     const interval = setInterval(fetchOrders, 30_000);
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchOrders]);
 
   if (orders === null) {
     return <PageLoader />;
