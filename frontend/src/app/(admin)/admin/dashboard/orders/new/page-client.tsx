@@ -28,7 +28,8 @@ const OrdersClientPage = () => {
           }
         }
       }
-      if (audioRef.current && !firstLoad && containsNew) {
+      if (audioRef.current && containsNew) {
+        console.log("sound")
         audioRef.current.play();
       }
       setOrders(res);
