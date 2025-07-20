@@ -55,7 +55,7 @@ const OrdersClientPage = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <audio ref={audioRef} src="/bell.mp3"></audio>
+      <audio ref={audioRef} src="/ui-4.mp3"></audio>
       <OrdersTable columns={columns} data={orders} />
       <div className="mx-auto flex items-center gap-2 text-sm">
         {isLive ? (
