@@ -28,6 +28,9 @@ export function CartCostSummary({ form }: Props) {
           <p>Koszyk</p>
           <p>{priceToString(total)}</p>
         </div>
+        <p className="text-xs text-muted-foreground mt-1">
+          * Doliczane 2 zł do każdego opakowania
+        </p>
       </div>
       <Separator className="mt-2 mb-1" />
       <div className="flex justify-between">
@@ -38,6 +41,7 @@ export function CartCostSummary({ form }: Props) {
     </div>
   );
 }
+
 // export type Order = {
 //   id: string;
 //   address: Address;
