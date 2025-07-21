@@ -29,7 +29,7 @@ export function CartCostSummary({ form }: Props) {
           <p>{priceToString(total)}</p>
         </div>
         <p className="text-xs text-muted-foreground mt-1">
-          * Doliczane 2 zł do każdego opakowania
+          * Do każdego zamówienia zostanie doliczony koszt 2 zł za każde opakowanie
         </p>
       </div>
       <Separator className="mt-2 mb-1" />
