@@ -216,7 +216,6 @@ export default function CartForm() {
                       <Input {...field} type="number" />
                     </FormControl>
                     <FormMessage />
-                    <FormDescription>Koszt 2zł za osobę</FormDescription>
                   </FormItem>
                 )}
               />

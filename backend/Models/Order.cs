@@ -7,7 +7,6 @@ namespace SushiZume.Models;
 
 public class Order
 {
-    public const decimal PerPersonPrice = 2m; // Example price per person
     public const decimal DeliveryFee = 8m; // Example delivery fee
 
     public Guid Id { get; init; } = Guid.NewGuid();
@@ -25,7 +24,7 @@ public class Order
 
     public decimal CalculateTotalCost(ICollection<Product> products)
     {
-        var totalCost = (PeopleCount * PerPersonPrice) + DeliveryFee;
+        var totalCost = DeliveryFee;
         foreach (var product in products)
         {
             var quantity = OrderProducts.FirstOrDefault(op => op.ProductId == product.Id)?.Quantity ?? 0;
