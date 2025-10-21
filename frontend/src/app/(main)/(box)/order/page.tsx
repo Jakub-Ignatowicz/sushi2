@@ -16,6 +16,15 @@ export default async function OrderPage() {
 
   const categories = categorizeProducts(products, true);
 
+  const now = new Date();
+  const timeInPoland = new Date(
+    now.toLocaleString("en-US", { timeZone: "Europe/Warsaw" }),
+  );
+  const day = timeInPoland.getDay();
+  const hour = timeInPoland.getHours();
+
+  const isLunchTime = day >= 1 && day <= 5 && hour >= 12 && hour < 15;
+
   const CategoryIcon = (isFeatured: boolean) => {
     const Icon = isFeatured ? Star : Tag;
 
@@ -28,6 +37,10 @@ export default async function OrderPage() {
     <div className="space-y-16">
       {categories.map((cat) => {
         const isFeatured = cat.id === FEATURED_CATEGORY_ID;
+
+        if (cat.name === "Lunch" && !isLunchTime) {
+          return null;
+        }
 
         return (
           <div key={cat.id}>
