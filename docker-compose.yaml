@@ -25,7 +25,7 @@ services:
       - sushinet
 
   db:
-    image: postgres
+    image: postgres:17.5-alpine
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -38,7 +38,7 @@ services:
       - sushinet
 
   nginx:
-    image: nginx:alpine
+    image: nginx:1.27.2-alpine
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
