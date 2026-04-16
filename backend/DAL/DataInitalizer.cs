@@ -12,11 +12,11 @@ public static class DataInitializer
         if (await context.Products.AnyAsync())
             return;
 
-        var sql = await File.ReadAllTextAsync("DAL/import.sql");
         var sourceConnection = Environment.GetEnvironmentVariable("SOURCE_CONN");
-        if (string.IsNullOrEmpty(sourceConnection))
-            throw new InvalidOperationException("Source connection string is not configured.");
+        if (string.IsNullOrWhiteSpace(sourceConnection))
+            return;
 
+        var sql = await File.ReadAllTextAsync("DAL/import.sql");
         sql = sql.Replace("{{SOURCE_CONN}}", sourceConnection);
         await context.Database.ExecuteSqlRawAsync(sql);
 
